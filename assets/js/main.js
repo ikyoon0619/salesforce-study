@@ -7,9 +7,11 @@
 //   #/c/:cert/quiz/:scope       퀴즈 (scope = 섹션 id 또는 all)
 //   #/c/:cert/review            오답노트
 //   #/c/:cert/review/quiz       오답만 다시 풀기
+//   #/c/:cert/m/:note           Trailhead 모듈 노트
 import { store } from './store.js';
 import { runQuiz } from './quiz.js';
 import { esc, inline, crumb } from './format.js';
+import { renderNote } from './notes.js';
 
 const app = document.getElementById('app');
 const topnav = document.getElementById('topnav');
@@ -55,6 +57,7 @@ async function route() {
     if (sub === 'quiz') return renderQuiz(cert, arg);
     if (sub === 'review' && arg === 'quiz') return renderReviewQuiz(cert);
     if (sub === 'review') return renderReview(cert);
+    if (sub === 'm' && arg) return await renderModuleNote(cert, arg);
     return notFound();
   } catch (err) {
     console.error(err);
@@ -130,8 +133,13 @@ function trailBlock(cert, section) {
       return `<li class="trail-item">
         <input type="checkbox" id="${id}" data-url="${esc(m.url)}" ${done ? 'checked' : ''} aria-label="${esc(m.title)} 완료">
         <div class="trail-body">
-          <a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.title)}</a>
+          ${
+            m.note
+              ? `<a href="#/c/${cert.id}/m/${esc(m.note)}">${esc(m.title)}</a>`
+              : `<a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.title)}</a>`
+          }
           <span class="trail-topics">${inline(m.topics)}</span>
+          <span class="trail-links">${m.note ? '<span class="pill pill-ready">한국어 노트</span> ' : ''}<a href="${esc(m.url)}" target="_blank" rel="noopener">Trailhead 원문</a></span>
         </div>
         <span class="trail-meta">${m.kind === 'project' ? '<span class="pill">실습</span>' : ''}<span class="mono">${fmtMinutes(m.minutes)}</span></span>
       </li>`;
@@ -365,6 +373,26 @@ function renderSection(cert, sectionId) {
     const link = app.querySelector(`.side a[href="#/c/${cert.id}/s/${s.id}"]`);
     link?.classList.toggle('done', ev.target.checked);
   });
+}
+
+// ---------- 모듈 노트 ----------
+async function renderModuleNote(cert, noteId) {
+  let section;
+  let module;
+  for (const s of cert.sections) {
+    const m = (s.trail ?? []).find((t) => t.note === noteId);
+    if (m) {
+      section = s;
+      module = m;
+      break;
+    }
+  }
+  if (!module) return notFound();
+  const note = await getJSON(`data/notes/${cert.id}/${noteId}.json`);
+  setNav(cert, 'overview');
+  setTitle(module.title);
+  renderNote(app, { cert, section, module, note });
+  window.scrollTo(0, 0);
 }
 
 // ---------- 퀴즈 ----------

@@ -1,0 +1,67 @@
+{
+  "intro": "자동차 대리점의 고객 관심 차량 스프레드시트로 커스텀 오브젝트 Vehicle Interest를 만들고, Sales 앱에 탭을 추가하는 15분 실습입니다.",
+  "units": [
+    {
+      "title": "Import Data to Create a Custom Object",
+      "ko": "스프레드시트로 오브젝트 만들기",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/quick-start-customize-an-app-with-lightning-object-creator/import-data-to-create-a-custom-object",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 170\" role=\"img\" aria-label=\"Lightning Object Creator 흐름\"><rect class=\"d-box\" x=\"10\" y=\"40\" width=\"160\" height=\"86\" rx=\"10\"/><text class=\"d-strong\" x=\"90.0\" y=\"79.5\" text-anchor=\"middle\">스프레드시트</text><text class=\"d-sub\" x=\"90.0\" y=\"98.5\" text-anchor=\"middle\">CSV, Excel, Google Sheets</text><line class=\"d-line\" x1=\"172\" y1=\"83\" x2=\"186\" y2=\"83\"/><polygon class=\"d-arrow\" points=\"186.0,83.0 177.9,86.9 177.9,79.1\"/><rect class=\"d-box\" x=\"188\" y=\"40\" width=\"160\" height=\"86\" rx=\"10\"/><text class=\"d-strong\" x=\"268.0\" y=\"79.5\" text-anchor=\"middle\">필드 타입 확인</text><text class=\"d-sub\" x=\"268.0\" y=\"98.5\" text-anchor=\"middle\">예: 색상 → Multi-Select</text><line class=\"d-line\" x1=\"350\" y1=\"83\" x2=\"364\" y2=\"83\"/><polygon class=\"d-arrow\" points=\"364.0,83.0 355.9,86.9 355.9,79.1\"/><rect class=\"d-accent\" x=\"366\" y=\"40\" width=\"160\" height=\"86\" rx=\"10\"/><text class=\"d-strong\" x=\"446.0\" y=\"79.5\" text-anchor=\"middle\">오브젝트 + 데이터</text><text class=\"d-sub\" x=\"446.0\" y=\"98.5\" text-anchor=\"middle\">Vehicle Interest 생성</text><line class=\"d-line\" x1=\"528\" y1=\"83\" x2=\"542\" y2=\"83\"/><polygon class=\"d-arrow\" points=\"542.0,83.0 533.9,86.9 533.9,79.1\"/><rect class=\"d-box\" x=\"544\" y=\"40\" width=\"160\" height=\"86\" rx=\"10\"/><text class=\"d-strong\" x=\"624.0\" y=\"79.5\" text-anchor=\"middle\">앱에 탭 추가</text><text class=\"d-sub\" x=\"624.0\" y=\"98.5\" text-anchor=\"middle\">App Manager</text></svg>",
+          "caption": "Lightning Object Creator는 스프레드시트에서 필드 타입을 추정하고, 고친 뒤 오브젝트와 데이터를 함께 만듭니다."
+        },
+        {
+          "type": "steps",
+          "title": "따라 하기",
+          "items": [
+            "Setup > Object Manager > Create > Custom Object from Spreadsheet",
+            "Log in with Salesforce → Allow",
+            "Vehicle_Interest.csv 업로드 → 필요하면 Preview",
+            "필드 타입 수정: 차종 → **Picklist**, 외장 색상 → **Picklist (Multi-Select)** (고객이 여러 색을 고를 수 있게)",
+            "Label: Vehicle Interest, Plural: Vehicle Interests, API Name: Vehicle_Interest → Advanced Settings 모두 체크 → Finish"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "한 값만 고르면 Picklist, 여러 값을 고를 수 있으면 Multi-Select Picklist."
+        }
+      ]
+    },
+    {
+      "title": "View Your Custom Object",
+      "ko": "앱에 탭 추가하고 확인",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/quick-start-customize-an-app-with-lightning-object-creator/view-your-custom-object",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "커스텀 오브젝트는 **앱 내비게이션에 넣어야** 사용자가 볼 수 있습니다."
+        },
+        {
+          "type": "steps",
+          "title": "따라 하기",
+          "items": [
+            "Setup > App Manager > Sales 옆 ▼ > Edit > Navigation Items",
+            "Vehicle Interests를 Selected Items로 옮기고 Reports 위로 이동 → Save",
+            "Setup > Object Manager > Vehicle Interest > Details > Edit → Description 입력 → Save",
+            "App Launcher > Sales > Vehicle Interest 탭 > All Records로 가져온 데이터 확인"
+          ]
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Lightning Object Creator",
+      "스프레드시트로 오브젝트 생성"
+    ],
+    [
+      "Navigation Items",
+      "앱 상단 탭 목록"
+    ],
+    [
+      "App Manager",
+      "Lightning 앱 관리 화면"
+    ]
+  ]
+}
