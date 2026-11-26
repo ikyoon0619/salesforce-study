@@ -662,7 +662,7 @@
             [
               "한 번에 처리 건수",
               "최대 50,000건",
-              "최대 5,000,000건"
+              "최대 150,000,000건 (1억 5천만)"
             ],
             [
               "지원 오브젝트",
@@ -714,7 +714,7 @@
           "label": "Data Import Wizard 한 번 처리 한도"
         },
         {
-          "value": "5,000,000",
+          "value": "1억 5천만",
           "label": "Data Loader 한 번 처리 한도"
         },
         {
@@ -800,49 +800,56 @@
           "url": "https://trailhead.salesforce.com/content/learn/modules/data_modeling",
           "minutes": 45,
           "kind": "module",
-          "topics": "Standard/Custom Object, Lookup, Master-Detail, Junction Object, Schema Builder"
+          "topics": "Standard/Custom Object, Lookup, Master-Detail, Junction Object, Schema Builder",
+          "note": "data_modeling"
         },
         {
           "title": "Quick Start: Customize an App with Lightning Object Creator",
           "url": "https://trailhead.salesforce.com/content/learn/projects/quick-start-customize-an-app-with-lightning-object-creator",
           "minutes": 15,
           "kind": "project",
-          "topics": "스프레드시트로 커스텀 오브젝트와 데이터를 한 번에 만들기"
+          "topics": "스프레드시트로 커스텀 오브젝트와 데이터를 한 번에 만들기",
+          "note": "quick_start_loc"
         },
         {
           "title": "Picklist Administration",
           "url": "https://trailhead.salesforce.com/content/learn/modules/picklist_admin",
           "minutes": 50,
           "kind": "module",
-          "topics": "Picklist 값 관리, Global Value Set, Dependent Picklist, 값 비활성화·삭제·교체"
+          "topics": "Picklist 값 관리, Global Value Set, Dependent Picklist, 값 비활성화·삭제·교체",
+          "note": "picklist_admin"
         },
         {
           "title": "Data Management",
           "url": "https://trailhead.salesforce.com/content/learn/modules/lex_implementation_data_management",
           "minutes": 35,
           "kind": "module",
-          "topics": "Data Import Wizard, Data Loader, Data Export Service"
+          "topics": "Data Import Wizard, Data Loader, Data Export Service",
+          "note": "lex_implementation_data_management"
         },
         {
           "title": "Import and Export with Data Management Tools",
           "url": "https://trailhead.salesforce.com/content/learn/projects/import-and-export-with-data-management-tools",
           "minutes": 45,
           "kind": "project",
-          "topics": "가져오기·내보내기 실습"
+          "topics": "가져오기·내보내기 실습",
+          "note": "import_export_project"
         },
         {
           "title": "Build a Data Model for a Recruiting App",
           "url": "https://trailhead.salesforce.com/content/learn/projects/build-a-data-model-for-a-recruiting-app",
           "minutes": 75,
           "kind": "project",
-          "topics": "채용 앱 데이터 모델 실습 (오브젝트, 관계, Schema Builder)"
+          "topics": "채용 앱 데이터 모델 실습 (오브젝트, 관계, Schema Builder)",
+          "note": "recruiting_data_model"
         },
         {
           "title": "External Services",
           "url": "https://trailhead.salesforce.com/content/learn/modules/external-services",
           "minutes": 25,
           "kind": "module",
-          "topics": "OpenAPI 명세로 외부 API를 등록하고 Flow에서 클릭으로 호출"
+          "topics": "OpenAPI 명세로 외부 API를 등록하고 Flow에서 클릭으로 호출",
+          "note": "external_services"
         }
       ]
     },

@@ -53,6 +53,15 @@ def check_cert(path: Path) -> list[str]:
                 if len(row) != width:
                     errors.append(f"{name}: 표 '{t['title']}' 의 행 칸 수가 {len(row)} (헤더 {width})")
 
+    for s in data["sections"]:
+        for m in s.get("trail", []):
+            if m.get("note"):
+                note_path = ROOT / "data" / "notes" / data["id"] / f"{m['note']}.json"
+                if not note_path.exists():
+                    errors.append(f"{name}: 노트 파일 없음 {note_path.relative_to(ROOT)}")
+                    continue
+                errors += check_note(note_path)
+
     seen: set[str] = set()
     for q in data["questions"]:
         qid = q.get("id", "?")
@@ -79,6 +88,39 @@ def check_cert(path: Path) -> list[str]:
             errors.append(f"{where}: notes {len(notes)}개, 보기 {len(opts)}개")
         if not q.get("explain"):
             errors.append(f"{where}: 해설(explain) 없음")
+    return errors
+
+
+NOTE_BLOCKS = {"p": ("text",), "list": ("items",), "steps": ("items",), "table": ("headers", "rows"),
+               "figure": ("svg",), "tip": ("text",), "path": ("text",)}
+
+
+def check_note(path: Path) -> list[str]:
+    errors: list[str] = []
+    note = json.loads(path.read_text(encoding="utf-8"))
+    where = path.relative_to(ROOT)
+    if not note.get("intro") or not note.get("units"):
+        errors.append(f"{where}: intro 또는 units 없음")
+        return errors
+    for i, u in enumerate(note["units"], 1):
+        if not u.get("title") or not str(u.get("url", "")).startswith("https://trailhead.salesforce.com/"):
+            errors.append(f"{where}: unit {i} 제목 또는 Trailhead URL 없음")
+        for b in u.get("blocks", []):
+            need = NOTE_BLOCKS.get(b.get("type"))
+            if need is None:
+                errors.append(f"{where}: unit {i} 알 수 없는 블록 '{b.get('type')}'")
+                continue
+            for key in need:
+                if key not in b:
+                    errors.append(f"{where}: unit {i} '{b['type']}' 블록에 '{key}' 없음")
+            if b["type"] == "figure":
+                svg = b.get("svg", "")
+                if not svg.startswith("<svg") or "viewBox" not in svg or "<script" in svg:
+                    errors.append(f"{where}: unit {i} 다이어그램 SVG 형식 오류")
+            if b["type"] == "table":
+                for row in b.get("rows", []):
+                    if len(row) != len(b["headers"]):
+                        errors.append(f"{where}: unit {i} 표 행 칸 수 불일치")
     return errors
 
 

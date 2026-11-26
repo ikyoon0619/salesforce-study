@@ -1,0 +1,238 @@
+{
+  "intro": "채용 앱(Recruiting)의 데이터 모델을 만드는 실습입니다. Auto Number 이름, Junction Object로 만드는 다대다 관계, 같은 오브젝트를 가리키는 Self Relationship과 Lookup Filter, 용도에 맞는 필드 타입 고르기를 익힙니다.",
+  "units": [
+    {
+      "title": "Create a Custom Object for Reviews",
+      "ko": "면접 평가(Review) 오브젝트",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/build-a-data-model-for-a-recruiting-app/create-a-custom-object-for-reviews",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 330\" role=\"img\" aria-label=\"채용 앱 데이터 모델\"><rect class=\"d-box\" x=\"20\" y=\"30\" width=\"200\" height=\"70\" rx=\"10\"/><text class=\"d-strong\" x=\"120.0\" y=\"61.5\" text-anchor=\"middle\">Position</text><text class=\"d-sub\" x=\"120.0\" y=\"80.5\" text-anchor=\"middle\">직무</text><rect class=\"d-accent\" x=\"280\" y=\"30\" width=\"200\" height=\"70\" rx=\"10\"/><text class=\"d-strong\" x=\"380.0\" y=\"53.5\" text-anchor=\"middle\">Job Posting</text><text class=\"d-sub\" x=\"380.0\" y=\"72.5\" text-anchor=\"middle\">Junction Object</text><text class=\"d-sub\" x=\"380.0\" y=\"88.5\" text-anchor=\"middle\">JOBPOST-{0000}</text><rect class=\"d-box\" x=\"540\" y=\"30\" width=\"200\" height=\"70\" rx=\"10\"/><text class=\"d-strong\" x=\"640.0\" y=\"61.5\" text-anchor=\"middle\">Job Posting Site</text><text class=\"d-sub\" x=\"640.0\" y=\"80.5\" text-anchor=\"middle\">채용 사이트</text><line class=\"d-line-accent\" x1=\"276\" y1=\"65\" x2=\"224\" y2=\"65\"/><polygon class=\"d-arrow-accent\" points=\"224.0,65.0 232.1,61.1 232.1,68.9\"/><text class=\"d-sub\" x=\"250.0\" y=\"57.0\" text-anchor=\"middle\">M-D</text><line class=\"d-line-accent\" x1=\"484\" y1=\"65\" x2=\"536\" y2=\"65\"/><polygon class=\"d-arrow-accent\" points=\"536.0,65.0 527.9,68.9 527.9,61.1\"/><text class=\"d-sub\" x=\"510.0\" y=\"57.0\" text-anchor=\"middle\">M-D</text><path class=\"d-dash\" d=\"M 60 104 C 60 150, 180 150, 180 104\"/><text class=\"d-sub\" x=\"120\" y=\"162\" text-anchor=\"middle\">Related Position (Self Lookup)</text><rect class=\"d-box\" x=\"20\" y=\"220\" width=\"200\" height=\"70\" rx=\"10\"/><text class=\"d-strong\" x=\"120.0\" y=\"251.5\" text-anchor=\"middle\">Job Application</text><text class=\"d-sub\" x=\"120.0\" y=\"270.5\" text-anchor=\"middle\">지원서</text><rect class=\"d-accent\" x=\"280\" y=\"220\" width=\"200\" height=\"70\" rx=\"10\"/><text class=\"d-strong\" x=\"380.0\" y=\"243.5\" text-anchor=\"middle\">Review</text><text class=\"d-sub\" x=\"380.0\" y=\"262.5\" text-anchor=\"middle\">REV-{0000}</text><text class=\"d-sub\" x=\"380.0\" y=\"278.5\" text-anchor=\"middle\">평가 점수, 추천 여부</text><rect class=\"d-box\" x=\"540\" y=\"220\" width=\"200\" height=\"70\" rx=\"10\"/><text class=\"d-strong\" x=\"640.0\" y=\"251.5\" text-anchor=\"middle\">Interviewer</text><text class=\"d-sub\" x=\"640.0\" y=\"270.5\" text-anchor=\"middle\">면접관</text><line class=\"d-line-accent\" x1=\"276\" y1=\"255\" x2=\"224\" y2=\"255\"/><polygon class=\"d-arrow-accent\" points=\"224.0,255.0 232.1,251.1 232.1,258.9\"/><text class=\"d-sub\" x=\"250.0\" y=\"247.0\" text-anchor=\"middle\">M-D</text><line class=\"d-dash\" x1=\"484\" y1=\"255\" x2=\"536\" y2=\"255\"/><polygon class=\"d-arrow\" points=\"536.0,255.0 527.9,258.9 527.9,251.1\"/><text class=\"d-sub\" x=\"510.0\" y=\"247.0\" text-anchor=\"middle\">Lookup</text><text class=\"d-sub\" x=\"380\" y=\"318\" text-anchor=\"middle\">Position ↔ Job Posting Site 다대다 = Junction Object에 Master-Detail 2개</text></svg>",
+          "caption": "이 실습에서 완성하는 채용 앱 데이터 모델."
+        },
+        {
+          "type": "p",
+          "text": "먼저 채용 앱 기본 구성이 담긴 **Unmanaged Package** 를 설치합니다(Install for Admins Only). 그 뒤 Review 오브젝트를 만듭니다."
+        },
+        {
+          "type": "steps",
+          "title": "Review 오브젝트 설정",
+          "items": [
+            "Setup > Object Manager > Create > Custom Object",
+            "Label: Review, Plural: Reviews, Record Name: Review Number",
+            "Data Type: **Auto Number**, Display Format: `REV-{0000}`, Starting Number: 1",
+            "Allow Reports, Track Field History, Deployed, Allow Search 체크",
+            "Notes and Attachments 관련 목록 추가 → Save"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Record Name을 Auto Number로 하면 REV-0001, REV-0002처럼 자동으로 이름이 붙습니다."
+        }
+      ]
+    },
+    {
+      "title": "Create a Custom Object for Job Posting Sites",
+      "ko": "채용 사이트 오브젝트",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/build-a-data-model-for-a-recruiting-app/custom-object-job-posting-sites",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "Job Posting Site 오브젝트",
+          "items": [
+            "Setup > Object Manager > Create > Custom Object",
+            "Label: Job Posting Site, Record Name: Site Name (Text)",
+            "**Launch New Custom Tab Wizard** 체크 → 탭 스타일 선택"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "만드는 필드",
+          "headers": [
+            "필드",
+            "타입",
+            "이유"
+          ],
+          "rows": [
+            [
+              "Job Posting Site URL",
+              "URL",
+              "클릭하면 사이트로 이동"
+            ],
+            [
+              "Status",
+              "Picklist (Active, Inactive)",
+              "정해진 상태 값"
+            ],
+            [
+              "Technical Site",
+              "Checkbox",
+              "예/아니오"
+            ],
+            [
+              "Description",
+              "Text Area",
+              "긴 설명"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "앱에 탭 추가",
+          "items": [
+            "Setup > App Manager > Recruiting > Edit > Navigation Items",
+            "Job Posting Sites 추가 → Save"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Create a Custom Junction Object for Job Postings",
+      "ko": "Junction Object로 다대다",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/build-a-data-model-for-a-recruiting-app/junction-object-job-postings",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "한 직무(Position)는 여러 사이트에 올라가고, 한 사이트에는 여러 직무가 올라갑니다. 이런 **다대다** 관계는 가운데에 Junction Object(Job Posting)를 두고 양쪽에 Master-Detail을 겁니다."
+        },
+        {
+          "type": "steps",
+          "title": "Job Posting 만들기",
+          "items": [
+            "Setup > Object Manager > Create > Custom Object: Job Posting, Record Name: Job Posting Number (Auto Number `JOBPOST-{0000}`)",
+            "Fields & Relationships > New > **Master-Detail** → Position",
+            "Fields & Relationships > New > **Master-Detail** → Job Posting Site"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "관련 목록 다듬기",
+          "items": [
+            "Position 페이지 레이아웃의 Job Postings 관련 목록: Site Name, Status, Technical Site 추가, Job Posting Number 제거",
+            "Job Posting Site 레이아웃의 Job Postings 관련 목록: Position의 Status, Title 추가"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "관련 목록에 반대쪽 오브젝트 필드를 보여 주면 Junction Object가 훨씬 쓰기 편해집니다."
+        }
+      ]
+    },
+    {
+      "title": "Create a Self Relationship with the Position Object",
+      "ko": "Self Relationship과 Lookup Filter",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/build-a-data-model-for-a-recruiting-app/self-relationship-positions-object",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Lookup은 **같은 오브젝트**를 가리킬 수도 있습니다(Self Relationship). 여기서는 직무끼리 '관련 직무'를 연결합니다."
+        },
+        {
+          "type": "steps",
+          "title": "Related Position 필드",
+          "items": [
+            "Setup > Object Manager > Position > Fields & Relationships > New > Lookup Relationship → Related To: Position",
+            "Field Label: Related Position, Related List Label: Related Positions → Save",
+            "필드 Edit > **Lookup Filter** > Show Filter Settings"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "Lookup Filter 조건",
+          "headers": [
+            "조건",
+            "의미"
+          ],
+          "rows": [
+            [
+              "Related Position: Department = Position: Department",
+              "같은 부서 직무만 고를 수 있음"
+            ],
+            [
+              "Position: Record ID ≠ Related Position: Record ID",
+              "자기 자신은 고를 수 없음"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Filter Type을 **Required** 로 하면 조건에 안 맞는 값을 저장할 때 오류 메시지를 보여 줍니다."
+        },
+        {
+          "type": "tip",
+          "text": "Lookup Filter는 고를 수 있는 레코드를 좁혀 주는 기능입니다. Required는 강제, Optional은 기본 필터만."
+        }
+      ]
+    },
+    {
+      "title": "Create Custom Recruiting Fields",
+      "ko": "평가 필드 만들기",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/build-a-data-model-for-a-recruiting-app/create-custom-recruiting-fields",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "Review 오브젝트 필드",
+          "headers": [
+            "필드",
+            "타입",
+            "이유"
+          ],
+          "rows": [
+            [
+              "Core Competencies, Leadership Skills, Experience",
+              "Picklist (1~5)",
+              "정해진 점수 척도. Help Text로 기준 안내"
+            ],
+            [
+              "각 항목 Comments, Reason Recommended",
+              "Text Area",
+              "자유 의견"
+            ],
+            [
+              "Recommend for Hire",
+              "Checkbox",
+              "예/아니오"
+            ],
+            [
+              "Interviewer",
+              "Lookup",
+              "면접관과 느슨하게 연결"
+            ],
+            [
+              "Job Application",
+              "Master-Detail",
+              "평가는 지원서에 종속"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "데이터 성격에 맞는 타입: 척도는 Picklist, 의견은 Text Area, 예/아니오는 Checkbox, 종속 관계는 Master-Detail."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Auto Number",
+      "자동 일련번호 이름"
+    ],
+    [
+      "Junction Object",
+      "다대다 연결 오브젝트"
+    ],
+    [
+      "Self Relationship",
+      "같은 오브젝트를 가리키는 Lookup"
+    ],
+    [
+      "Lookup Filter",
+      "고를 수 있는 레코드 제한"
+    ],
+    [
+      "Unmanaged Package",
+      "설치 후 수정 가능한 패키지"
+    ]
+  ]
+}
