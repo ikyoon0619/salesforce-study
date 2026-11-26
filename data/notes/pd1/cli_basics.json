@@ -1,0 +1,111 @@
+{
+  "intro": "명령줄 인터페이스(CLI)의 기본 개념, 명령 구조, 디렉터리 이동, 그리고 Salesforce 개발 도구(VS Code, Node.js, npm, Salesforce CLI) 설치를 다룹니다.",
+  "units": [
+    {
+      "title": "Learn About the Command-Line Interface",
+      "ko": "CLI 알아보기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/cli-basics/cli-1",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "GUI는 화면과 버튼, **CLI는 텍스트 명령** 으로 컴퓨터나 프로그램을 다룹니다. 복잡한 작업을 빠르게, 스크립트로 자동화, Git·CI와 연동할 때 씁니다.",
+            "macOS·Linux는 Terminal, Windows는 Command Prompt·PowerShell. Salesforce CLI는 **VS Code 내장 터미널** 에서 쓰는 것을 권장합니다.",
+            "**shell** 은 명령을 해석하는 프로그램: PowerShell(Windows, 출력을 객체로), Zsh(macOS 기본, Bash 확장), Bash(POSIX)"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Explore Command Structure and Navigation",
+      "ko": "명령 구조와 이동",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/cli-basics/cli-2",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "명령은 **command, flag, argument** 세 부분입니다: `$ command -flag argument`"
+        },
+        {
+          "type": "table",
+          "title": "예시",
+          "headers": [
+            "명령",
+            "뜻"
+          ],
+          "rows": [
+            [
+              "`sf project generate -n MyProject`",
+              "Salesforce DX 프로젝트 생성 (`-n` 필수 flag, MyProject가 argument)"
+            ],
+            [
+              "`sf org create scratch -f project-scratch-def.json -d`",
+              "Scratch Org 생성, `-d` (= `--set-default`) 는 값 없는 **switch** 로 기본 org 지정"
+            ],
+            [
+              "`cd Documents`, `cd ..`",
+              "디렉터리 이동, 상위로"
+            ],
+            [
+              "`mkdir Resume`",
+              "디렉터리 생성"
+            ],
+            [
+              "`pwd`",
+              "현재 위치 (Windows는 `cd`)"
+            ],
+            [
+              "`history`",
+              "명령 기록 (Windows는 F7)"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "flag는 `-` 하나 또는 `--` 둘로 시작합니다. argument에 공백이 있으면 둘로 나뉘어 실패할 수 있습니다.",
+            "명령은 **대소문자를 구분** 합니다 (`myProject` ≠ `MyProject`)."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Set Up Command-Line Tools",
+      "ko": "명령줄 도구 설치",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/cli-basics/cli-3",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "설치 순서",
+          "items": [
+            "VS Code 설치",
+            "Extensions에서 **Salesforce Extension Pack** 설치 (코드 완성, 문법 강조, Apex 디버깅)",
+            "Node.js LTS 설치, `node -v`, `npm -v` 로 확인",
+            "Salesforce CLI 설치 후 `sf update` 로 최신 버전 확인"
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Salesforce Extensions for VS Code** 는 예전 Force.com IDE 플러그인의 후속입니다.",
+            "npm은 패키지를 설치하는 명령줄 도구입니다 (`npm install npm@latest -g`).",
+            "Salesforce CLI는 Scratch Org 생성, org와 소스 저장소 사이 **소스 동기화** 에 씁니다."
+          ]
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "CLI",
+      "명령줄 인터페이스"
+    ],
+    [
+      "Shell",
+      "명령을 해석하는 프로그램 (Bash, Zsh, PowerShell)"
+    ],
+    [
+      "Flag / Switch",
+      "명령 옵션 / 값이 없는 옵션"
+    ]
+  ]
+}

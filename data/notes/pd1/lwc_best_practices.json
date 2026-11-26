@@ -1,0 +1,133 @@
+{
+  "intro": "LWC를 **빠르고 가볍게** 만드는 방법: 데이터 접근 순서와 캐시, 늦게 만들기(progressive disclosure), 조건부 렌더링, 목록·이벤트·라이브러리 처리.",
+  "units": [
+    {
+      "title": "Work with Data",
+      "ko": "데이터 다루기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/best-practices-in-lightning-web-components/work-with-data-lwc",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 200\" role=\"img\" aria-label=\"데이터를 가져오는 우선순위\"><rect class=\"d-box\" x=\"20\" y=\"60\" width=\"150\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"95.0\" y=\"88.5\" text-anchor=\"middle\">1. 이미 있는 데이터</text><text class=\"d-sub\" x=\"95.0\" y=\"107.5\" text-anchor=\"middle\">부모 속성, 이벤트</text><text class=\"d-sub\" x=\"95.0\" y=\"123.5\" text-anchor=\"middle\">LDS 캐시</text><rect class=\"d-accent\" x=\"200\" y=\"60\" width=\"150\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"275.0\" y=\"88.5\" text-anchor=\"middle\">2. LDS · UI API</text><text class=\"d-sub\" x=\"275.0\" y=\"107.5\" text-anchor=\"middle\">getRecord(fields)</text><text class=\"d-sub\" x=\"275.0\" y=\"123.5\" text-anchor=\"middle\">base form 컴포넌트</text><rect class=\"d-box\" x=\"380\" y=\"60\" width=\"150\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"455.0\" y=\"88.5\" text-anchor=\"middle\">3. Apex</text><text class=\"d-sub\" x=\"455.0\" y=\"107.5\" text-anchor=\"middle\">@AuraEnabled</text><text class=\"d-sub\" x=\"455.0\" y=\"123.5\" text-anchor=\"middle\">(cacheable=true)</text><rect class=\"d-warn\" x=\"560\" y=\"60\" width=\"140\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"630.0\" y=\"88.5\" text-anchor=\"middle\">피하기</text><text class=\"d-sub\" x=\"630.0\" y=\"107.5\" text-anchor=\"middle\">layoutTypes 요청</text><text class=\"d-sub\" x=\"630.0\" y=\"123.5\" text-anchor=\"middle\">getRecordUi</text><line class=\"d-line\" x1=\"174\" y1=\"100\" x2=\"196\" y2=\"100\"/><polygon class=\"d-arrow\" points=\"196.0,100.0 187.9,103.9 187.9,96.1\"/><line class=\"d-line\" x1=\"354\" y1=\"100\" x2=\"376\" y2=\"100\"/><polygon class=\"d-arrow\" points=\"376.0,100.0 367.9,103.9 367.9,96.1\"/></svg>",
+          "caption": "서버 호출 전에 이미 있는 데이터와 LDS를 먼저"
+        },
+        {
+          "type": "list",
+          "items": [
+            "가능하면 **LDS나 캐시된 데이터** 를 쓰고, 서버 호출 전에 다른 출처(속성, 이벤트, 공유 서비스 컴포넌트)를 확인합니다.",
+            "필요한 필드와 행만: SELECT 필드 최소화, LIMIT, 페이지 나누기. 잘 안 쓰는 데이터는 **lazy load**.",
+            "페이지 나누지 않은 데이터는 JS 배열 함수로 **클라이언트에서 정렬·필터**.",
+            "레코드, 목록 뷰, 메타데이터, picklist 값은 Apex보다 **LDS와 UI API** 를 우선합니다.",
+            "`getRecord` 는 필요한 `fields` 만 요청. `layoutTypes: ['Full']` 은 수백 개 필드를 가져와 비쌉니다. `getRecordUi` 는 메타데이터가 데이터의 100~1,000배라 꼭 필요할 때만."
+          ]
+        },
+        {
+          "type": "table",
+          "title": "기본 캐시 두 가지",
+          "headers": [
+            "방식",
+            "특징"
+          ],
+          "rows": [
+            [
+              "Lightning Data Service",
+              "Apex 코드 불필요, **레코드·필드 보안 자동 적용**, 컴포넌트 간 공유, 레코드가 바뀌면 자동 갱신"
+            ],
+            [
+              "Cacheable Apex",
+              "`@AuraEnabled(cacheable=true)`. 값을 바꾸지 않는(idempotent) 읽기 전용 메서드에만. API 55.0+ 는 `scope='global'` 로 전역 캐시"
+            ]
+          ]
+        },
+        {
+          "type": "code",
+          "code": "@wire(getRecord, { recordId: '$recordId', fields: ['Contact.Name'] })   // 좋음\n@wire(getRecord, { recordId: '$recordId', layoutTypes: ['Full'] })     // 비쌈",
+          "lang": "javascript"
+        }
+      ]
+    },
+    {
+      "title": "Use Progressive Disclosure and Conditional Rendering",
+      "ko": "필요할 때 만들기와 조건부 렌더링",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/best-practices-in-lightning-web-components/use-progressive-disclosure-and-conditional-rendering",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "페이지의 컴포넌트는 로드 때 모두 만들어집니다. 당장 안 보이는 것은 **처음 쓸 때 만들기(lazy instantiation)**.",
+            "선언형: 표준 탭, Quick Action, Utility Bar. 코드: `<lightning-tabset>` 의 탭은 기본으로 lazy. (Console 하위 탭은 lazy가 아님)"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "조건부 렌더링 (위에서부터 우선)",
+          "headers": [
+            "방법",
+            "특징"
+          ],
+          "rows": [
+            [
+              "App Builder **컴포넌트 표시 조건**",
+              "선언형, App Builder 페이지에서만"
+            ],
+            [
+              "`lwc:if` / `lwc:elseif` / `lwc:else`",
+              "모든 컴포넌트. 바뀔 때 한쪽 트리를 **지우고 새로 만듦** → 상태 사라짐"
+            ],
+            [
+              "CSS로 숨기기 (`slds-hide`)",
+              "처음부터 만들어 둠 → 로드 이득 없음, 대신 **상태 유지**, 미리 로드해 두고 보여줄 때"
+            ]
+          ]
+        },
+        {
+          "type": "code",
+          "code": "<template>\n    <div lwc:if={something}>something이 true일 때</div>\n    <div lwc:else>false일 때</div>\n</template>",
+          "lang": "html"
+        },
+        {
+          "type": "tip",
+          "text": "예전 문법 `if:true` / `if:false` 도 시험에 나올 수 있습니다. 새 코드는 `lwc:if` 를 씁니다."
+        }
+      ]
+    },
+    {
+      "title": "Explore Additional Rendering Options",
+      "ko": "그 밖의 렌더링 최적화",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/best-practices-in-lightning-web-components/explore-additional-rendering-options",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "목록: `for:each` 또는 `iterator` (`first`, `last` 속성 제공). 형제 사이에 **고유한 key** 필수. 항목 수는 페이지 나누기나 가상화로 제한.",
+            "이벤트: 핸들러 수를 줄이고, 기본은 `bubbles: false, composed: false` (가장 덜 침범적). 목록은 부모 하나에서 버블링으로 처리.",
+            "형제 컴포넌트, 다른 페이지 영역, Visualforce·Aura·LWC 사이 통신은 **Lightning Message Service**.",
+            "window·document에 붙인 리스너는 `disconnectedCallback()` 에서 `removeEventListener()` 로 떼야 메모리 누수가 없습니다.",
+            "jQuery, Bootstrap 같은 라이브러리는 대부분 불필요. 꼭 쓰면 minified 버전. 커스텀 CSS는 SLDS로 안 될 때만.",
+            "**Base 컴포넌트**(`lightning-button` 등)는 미리 로드되어 있고 스타일, 반응형, 접근성, 입력 검증을 갖췄습니다.",
+            "이미지는 SLDS 아이콘(`lightning-icon`)을 쓰고 크기를 고정해 reflow를 막습니다."
+          ]
+        },
+        {
+          "type": "code",
+          "code": "<template for:each={contacts} for:item=\"contact\">\n    <li key={contact.Id}>{contact.Name}, {contact.Title}</li>\n</template>",
+          "lang": "html"
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Lazy instantiation",
+      "처음 쓸 때 컴포넌트를 만드는 방식"
+    ],
+    [
+      "Lightning Message Service",
+      "DOM 관계없이 컴포넌트·페이지 영역 간 통신"
+    ],
+    [
+      "cacheable=true",
+      "클라이언트 캐시를 쓰는 읽기 전용 Apex"
+    ]
+  ]
+}

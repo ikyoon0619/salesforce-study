@@ -1,0 +1,223 @@
+{
+  "intro": "웹 표준(HTML, JavaScript, CSS) 위에 만든 **Lightning Web Components** 의 파일 구조, 데코레이터, 배포, 이벤트, 스타일과 데이터를 익힙니다. PD1 UI 섹션의 중심 모듈입니다.",
+  "units": [
+    {
+      "title": "Discover Lightning Web Components",
+      "ko": "LWC 알아보기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning-web-components-basics/discover-lightning-web-components",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "LWC는 **Web Components 표준** 위에 만들어져 대부분 표준 JS와 HTML입니다. 예전 모델은 **Aura Components** (옛 이름 Lightning Components)입니다.",
+            "**Aura 안에 LWC는 넣을 수 있지만, LWC 안에 Aura는 넣을 수 없습니다.**",
+            "최소 구성: 같은 이름의 **HTML + JS** 파일 (CSS는 선택). HTML은 `<template>` 태그로 감쌉니다.",
+            "도구: Salesforce CLI, VS Code + Salesforce Extension Pack, Dev Hub와 Scratch Org, Code Builder, Component Library",
+            "**Lightning Data Service** 는 캐시와 변경 추적, **Lightning Locker** 는 네임스페이스 격리 보안을 제공합니다."
+          ]
+        },
+        {
+          "type": "code",
+          "code": "<template>\n    <p>Hello, {greeting}!</p>\n</template>",
+          "lang": "html",
+          "title": "hello.html"
+        },
+        {
+          "type": "code",
+          "code": "import { LightningElement } from 'lwc';\nexport default class Hello extends LightningElement {\n    greeting = 'World';\n}",
+          "lang": "javascript",
+          "title": "hello.js"
+        }
+      ]
+    },
+    {
+      "title": "Create Lightning Web Components",
+      "ko": "LWC 만들기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning-web-components-basics/create-lightning-web-components",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "VS Code에서 만들기",
+          "items": [
+            "SFDX: Create Project (Standard 템플릿)",
+            "`force-app/main/default/lwc` 우클릭 > **SFDX: Create Lightning Web Component**"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "이름 규칙",
+          "headers": [
+            "폴더·파일",
+            "마크업"
+          ],
+          "rows": [
+            [
+              "`app`",
+              "`<c-app>`"
+            ],
+            [
+              "`myComponent` (camelCase)",
+              "`<c-my-component>` (kebab-case)"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "폴더·파일 이름에 **하이픈을 쓸 수 없습니다**. 기본 네임스페이스는 `c`.",
+            "템플릿의 `{name}` 은 JS 클래스의 같은 이름 필드에 바인딩됩니다. 조건부 렌더링은 `<template lwc:if={ready}>` 와 `lwc:else`.",
+            "라이프사이클: `constructor()` → `connectedCallback()` (DOM에 들어갈 때) → `renderedCallback()` → `disconnectedCallback()` (DOM에서 빠질 때), 오류는 `errorCallback()`"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "데코레이터 (lwc에서 import, 속성 하나에 데코레이터 하나)",
+          "headers": [
+            "데코레이터",
+            "뜻"
+          ],
+          "rows": [
+            [
+              "`@api`",
+              "**public** 속성·메서드. 부모가 값을 넣거나 메서드를 호출. 반응형"
+            ],
+            [
+              "`@track`",
+              "객체·배열 **내부** 변경 감지. Spring '20부터 일반 필드는 자동 반응형이라 필요 없음"
+            ],
+            [
+              "`@wire`",
+              "org 데이터를 읽어 속성이나 함수에 연결 (LDS 기반)"
+            ]
+          ]
+        },
+        {
+          "type": "code",
+          "code": "import { LightningElement, api } from 'lwc';\nexport default class Bike extends LightningElement {\n    @api bike;          // 부모: <c-bike bike={bike}></c-bike>\n}",
+          "lang": "javascript"
+        },
+        {
+          "type": "tip",
+          "text": "한 속성에 `@api` 와 `@wire` 를 같이 쓸 수 없습니다. 일반 필드는 `@track` 없이도 다시 렌더링됩니다."
+        }
+      ]
+    },
+    {
+      "title": "Deploy Lightning Web Component Files",
+      "ko": "LWC 배포하기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning-web-components-basics/push-lightning-web-component-files",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 250\" role=\"img\" aria-label=\"LWC 컴포넌트 번들과 배포\"><rect class=\"d-box\" x=\"20\" y=\"30\" width=\"200\" height=\"190\" rx=\"10\"/><text class=\"d-strong\" x=\"120.0\" y=\"97.5\" text-anchor=\"middle\">lwc/bikeCard/</text><text class=\"d-sub\" x=\"120.0\" y=\"116.5\" text-anchor=\"middle\">bikeCard.html (template)</text><text class=\"d-sub\" x=\"120.0\" y=\"132.5\" text-anchor=\"middle\">bikeCard.js (클래스)</text><text class=\"d-sub\" x=\"120.0\" y=\"148.5\" text-anchor=\"middle\">bikeCard.css (선택)</text><text class=\"d-sub\" x=\"120.0\" y=\"164.5\" text-anchor=\"middle\">bikeCard.js-meta.xml</text><rect class=\"d-accent\" x=\"270\" y=\"30\" width=\"200\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"370.0\" y=\"58.5\" text-anchor=\"middle\">js-meta.xml</text><text class=\"d-sub\" x=\"370.0\" y=\"77.5\" text-anchor=\"middle\">apiVersion, isExposed</text><text class=\"d-sub\" x=\"370.0\" y=\"93.5\" text-anchor=\"middle\">targets (페이지 종류)</text><rect class=\"d-box\" x=\"270\" y=\"140\" width=\"200\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"370.0\" y=\"168.5\" text-anchor=\"middle\">SFDX: Deploy</text><text class=\"d-sub\" x=\"370.0\" y=\"187.5\" text-anchor=\"middle\">Deploy This Source</text><text class=\"d-sub\" x=\"370.0\" y=\"203.5\" text-anchor=\"middle\">to Org</text><rect class=\"d-accent\" x=\"520\" y=\"85\" width=\"180\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"610.0\" y=\"113.5\" text-anchor=\"middle\">Lightning App Builder</text><text class=\"d-sub\" x=\"610.0\" y=\"132.5\" text-anchor=\"middle\">isExposed=true +</text><text class=\"d-sub\" x=\"610.0\" y=\"148.5\" text-anchor=\"middle\">target이 있을 때만 보임</text><line class=\"d-line\" x1=\"224\" y1=\"70\" x2=\"266\" y2=\"70\"/><polygon class=\"d-arrow\" points=\"266.0,70.0 257.9,73.9 257.9,66.1\"/><line class=\"d-line\" x1=\"224\" y1=\"180\" x2=\"266\" y2=\"180\"/><polygon class=\"d-arrow\" points=\"266.0,180.0 257.9,183.9 257.9,176.1\"/><line class=\"d-line\" x1=\"474\" y1=\"70\" x2=\"516\" y2=\"110\"/><polygon class=\"d-arrow\" points=\"516.0,110.0 507.4,107.2 512.8,101.6\"/><line class=\"d-line\" x1=\"474\" y1=\"180\" x2=\"516\" y2=\"140\"/><polygon class=\"d-arrow\" points=\"516.0,140.0 512.8,148.4 507.4,142.8\"/></svg>",
+          "caption": "번들 파일, 설정 파일, 배포, App Builder"
+        },
+        {
+          "type": "list",
+          "items": [
+            "`.js-meta.xml` 은 필수. **apiVersion** 과 **isExposed** 가 필수 항목입니다.",
+            "App Builder나 Experience Builder에서 쓰려면 `isExposed=true` 이고 **target을 하나 이상** 지정해야 합니다. `targetConfigs` 로 페이지 종류별 설정(예: 오브젝트 제한)을 합니다.",
+            "화면에 띄우는 방법: ① 노출해서 Lightning App Builder로 페이지에 추가 ② Aura 컴포넌트로 감싸 탭에 넣기"
+          ]
+        },
+        {
+          "type": "code",
+          "code": "<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>63.0</apiVersion>\n    <isExposed>true</isExposed>\n    <masterLabel>Bike Card</masterLabel>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>",
+          "lang": "xml",
+          "title": "bikeCard.js-meta.xml"
+        },
+        {
+          "type": "steps",
+          "title": "배포와 확인",
+          "items": [
+            "SFDX: Authorize an Org",
+            "`force-app/main/default` 우클릭 > **SFDX: Deploy This Source to Org**",
+            "외부 이미지는 Setup > Quick Find 'Trusted URLs' > New Trusted URL (img-src 체크)",
+            "Setup > Lightning App Builder > New > App Page > 컴포넌트 끌어놓기 > Save > Activate"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Handle Events in Lightning Web Components",
+      "ko": "이벤트 처리",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning-web-components-basics/handle-events-in-lightning-web-components",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 230\" role=\"img\" aria-label=\"이벤트는 위로, 속성은 아래로\"><rect class=\"d-accent\" x=\"260\" y=\"20\" width=\"200\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"46.5\" text-anchor=\"middle\">selector (부모)</text><text class=\"d-sub\" x=\"360.0\" y=\"65.5\" text-anchor=\"middle\">selectedProductId 보관</text><rect class=\"d-box\" x=\"60\" y=\"150\" width=\"200\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"160.0\" y=\"176.5\" text-anchor=\"middle\">list → tile</text><text class=\"d-sub\" x=\"160.0\" y=\"195.5\" text-anchor=\"middle\">CustomEvent 발생</text><rect class=\"d-box\" x=\"460\" y=\"150\" width=\"200\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"560.0\" y=\"176.5\" text-anchor=\"middle\">detail</text><text class=\"d-sub\" x=\"560.0\" y=\"195.5\" text-anchor=\"middle\">@api productId</text><line class=\"d-line-accent\" x1=\"170\" y1=\"146\" x2=\"300\" y2=\"84\"/><polygon class=\"d-arrow-accent\" points=\"300.0,84.0 294.4,91.0 291.0,84.0\"/><text class=\"d-sub\" x=\"235.0\" y=\"107.0\" text-anchor=\"middle\">productselected</text><line class=\"d-line\" x1=\"420\" y1=\"84\" x2=\"550\" y2=\"146\"/><polygon class=\"d-arrow\" points=\"550.0,146.0 541.0,146.0 544.4,139.0\"/><text class=\"d-sub\" x=\"485.0\" y=\"107.0\" text-anchor=\"middle\">product-id={...}</text></svg>",
+          "caption": "자식은 이벤트로 알리고, 부모는 @api 속성으로 내려줌"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**이벤트는 위로(자식→부모), 속성은 아래로(부모→자식)**.",
+            "자식: `this.dispatchEvent(new CustomEvent('next'))`, 부모 HTML: `onnext={nextHandler}` (리스너는 `on` + 이벤트 이름)",
+            "이벤트 이름은 **소문자, 공백 없음**, 단어 구분은 밑줄. `detail` 에는 원시값만 담는 것이 좋습니다.",
+            "부모가 자식 메서드 호출: 자식의 `@api` 메서드를 `this.template.querySelector('c-video-player').play()` 로",
+            "속성 이름 `itemName` 은 마크업에서 `item-name`",
+            "반복: `<template for:each={bikes} for:item=\"bike\">` 안의 요소에 고유한 `key` 필수"
+          ]
+        },
+        {
+          "type": "code",
+          "code": "// tile.js\ntileClick() {\n    const evt = new CustomEvent('tileclick', { detail: this.product.fields.Id.value });\n    this.dispatchEvent(evt);\n}\n// list.html:  <c-tile product={bike} ontileclick={handleTileClick}></c-tile>",
+          "lang": "javascript"
+        }
+      ]
+    },
+    {
+      "title": "Add Styles and Data to a Lightning Web Component",
+      "ko": "스타일과 데이터 추가",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning-web-components-basics/add-styles-and-data-to-a-lightning-web-component",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "같은 이름의 CSS 파일은 자동 적용되고 **Shadow DOM** 으로 캡슐화되어 다른 컴포넌트에 새지 않습니다.",
+            "Lightning Experience와 모바일 앱에서는 **SLDS** 클래스를 import 없이 바로 씁니다. 예: `slds-text-heading_small`",
+            "**Wire service** 는 LDS 위에서 데이터 스트림을 줍니다. 순서: wire adapter import → `@wire(adapterId, config)` 로 속성이나 함수에 연결",
+            "속성에 연결하면 결과가 `.data` / `.error` 로, 함수에 연결하면 `{ data, error }` 객체로 들어옵니다.",
+            "config의 `'$userId'` 처럼 **$ 접두사** 는 반응형 값: 값이 바뀌면 다시 불러옵니다."
+          ]
+        },
+        {
+          "type": "code",
+          "code": "import { LightningElement, wire } from 'lwc';\nimport { getRecord, getFieldValue } from 'lightning/uiRecordApi';\nimport Id from '@salesforce/user/Id';\nimport NAME_FIELD from '@salesforce/schema/User.Name';\nconst fields = [NAME_FIELD];\n\nexport default class Selector extends LightningElement {\n    userId = Id;\n    @wire(getRecord, { recordId: '$userId', fields })\n    user;\n    get name() { return getFieldValue(this.user.data, NAME_FIELD); }\n}",
+          "lang": "javascript",
+          "title": "selector.js"
+        },
+        {
+          "type": "tip",
+          "text": "`@salesforce/schema/...` 로 필드를 import하면 필드 이름이 바뀌거나 삭제될 때 플랫폼이 참조를 확인해 줍니다. 문자열 'User.Name' 보다 안전합니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Lightning Web Components",
+      "웹 표준 기반 Salesforce UI 컴포넌트 모델"
+    ],
+    [
+      "@api",
+      "public 속성·메서드 데코레이터"
+    ],
+    [
+      "@wire",
+      "데이터를 반응형으로 연결하는 데코레이터"
+    ],
+    [
+      "js-meta.xml",
+      "LWC 설정 파일 (apiVersion, isExposed, targets)"
+    ],
+    [
+      "CustomEvent",
+      "자식이 부모에게 알리는 표준 이벤트"
+    ],
+    [
+      "SLDS",
+      "Salesforce Lightning Design System"
+    ]
+  ]
+}

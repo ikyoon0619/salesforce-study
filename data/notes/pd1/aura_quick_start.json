@@ -1,0 +1,116 @@
+{
+  "intro": "Account 레코드 페이지에 연락처 목록을 보여주는 **Aura 컴포넌트** 를 Developer Console로 만듭니다. 새 UI는 LWC가 기본이지만, 기존 Aura 코드를 읽고 유지보수할 수 있어야 합니다.",
+  "units": [
+    {
+      "title": "Create a Server-side Apex Controller Class",
+      "ko": "서버 쪽 Apex 컨트롤러 만들기",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/quickstart-lightning-components/quickstart-lightning-components2",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "Developer Console에서",
+          "items": [
+            "Setup > Quick Find 'Web Console' 에서 Developer Console 활성화(필요 시)",
+            "Developer Console > File > New > Apex Class > `MyContactListController`"
+          ]
+        },
+        {
+          "type": "code",
+          "code": "public with sharing class MyContactListController {\n    @AuraEnabled\n    public static List<Contact> getContacts(Id recordId) {\n        return [SELECT Id, FirstName, LastName, Email, Phone\n                FROM Contact WHERE AccountId = :recordId];\n    }\n}",
+          "lang": "apex"
+        },
+        {
+          "type": "tip",
+          "text": "Lightning 컴포넌트(Aura, LWC)에서 부르는 Apex 메서드는 **`@AuraEnabled` + `static`** 이어야 합니다."
+        }
+      ]
+    },
+    {
+      "title": "Create an Aura Component",
+      "ko": "Aura 컴포넌트 만들기",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/quickstart-lightning-components/quickstart-lightning-components3",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "File > New > Lightning Component, 이름 `MyContactList`, **Lightning Record Page** 체크",
+            "`implements=\"flexipage:availableForRecordHome,force:hasRecordId\"` → 레코드 페이지에 놓을 수 있고 현재 레코드 Id를 `v.recordId` 로 받음",
+            "`aura:attribute` 로 데이터 보관, `v.` 는 속성 값 제공자, `{!v.recordId}` 는 표현식",
+            "`force:recordData` 는 Aura의 Lightning Data Service로 현재 Account를 읽어옵니다.",
+            "Account 레코드 > Edit Page > Custom 컴포넌트를 끌어놓기 > Save > Activate"
+          ]
+        },
+        {
+          "type": "code",
+          "code": "<aura:component controller=\"MyContactListController\"\n    implements=\"flexipage:availableForRecordHome,force:hasRecordId\" access=\"global\">\n    <aura:attribute name=\"recordId\" type=\"Id\" />\n    <aura:attribute name=\"Account\" type=\"Account\" />\n    <aura:attribute name=\"Contacts\" type=\"Contact[]\" />\n    <aura:attribute name=\"Columns\" type=\"List\" />\n    <force:recordData aura:id=\"accountRecord\" recordId=\"{!v.recordId}\"\n        targetFields=\"{!v.Account}\" layoutType=\"FULL\" />\n    <lightning:card iconName=\"standard:contact\" title=\"{! 'Contact List for ' + v.Account.Name}\">\n        <!-- Contact list goes here -->\n    </lightning:card>\n</aura:component>",
+          "lang": "xml",
+          "title": "MyContactList.cmp"
+        }
+      ]
+    },
+    {
+      "title": "Retrieve a Contact List",
+      "ko": "연락처 목록 가져오기",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/quickstart-lightning-components/quickstart-lightning-components4",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 210\" role=\"img\" aria-label=\"Aura 컴포넌트가 Apex를 부르는 흐름\"><rect class=\"d-box\" x=\"20\" y=\"70\" width=\"170\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"105.0\" y=\"98.5\" text-anchor=\"middle\">MyContactList.cmp</text><text class=\"d-sub\" x=\"105.0\" y=\"117.5\" text-anchor=\"middle\">init 핸들러</text><text class=\"d-sub\" x=\"105.0\" y=\"133.5\" text-anchor=\"middle\">lightning:datatable</text><rect class=\"d-accent\" x=\"270\" y=\"70\" width=\"180\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"98.5\" text-anchor=\"middle\">Controller.js</text><text class=\"d-sub\" x=\"360.0\" y=\"117.5\" text-anchor=\"middle\">c.getContacts</text><text class=\"d-sub\" x=\"360.0\" y=\"133.5\" text-anchor=\"middle\">$A.enqueueAction</text><rect class=\"d-accent\" x=\"530\" y=\"70\" width=\"170\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"615.0\" y=\"98.5\" text-anchor=\"middle\">Apex Controller</text><text class=\"d-sub\" x=\"615.0\" y=\"117.5\" text-anchor=\"middle\">@AuraEnabled static</text><text class=\"d-sub\" x=\"615.0\" y=\"133.5\" text-anchor=\"middle\">getContacts(recordId)</text><line class=\"d-line\" x1=\"194\" y1=\"110\" x2=\"266\" y2=\"110\"/><polygon class=\"d-arrow\" points=\"266.0,110.0 257.9,113.9 257.9,106.1\"/><text class=\"d-sub\" x=\"230.0\" y=\"102.0\" text-anchor=\"middle\">c.myAction</text><line class=\"d-line\" x1=\"454\" y1=\"100\" x2=\"526\" y2=\"100\"/><polygon class=\"d-arrow\" points=\"526.0,100.0 517.9,103.9 517.9,96.1\"/><text class=\"d-sub\" x=\"490.0\" y=\"92.0\" text-anchor=\"middle\">호출</text><line class=\"d-line\" x1=\"526\" y1=\"130\" x2=\"454\" y2=\"130\"/><polygon class=\"d-arrow\" points=\"454.0,130.0 462.1,126.1 462.1,133.9\"/><text class=\"d-sub\" x=\"490.0\" y=\"122.0\" text-anchor=\"middle\">setCallback</text></svg>",
+          "caption": "컴포넌트 init → 클라이언트 컨트롤러 → Apex → 콜백으로 속성 설정"
+        },
+        {
+          "type": "code",
+          "code": "({\n    myAction : function(component, event, helper) {\n        var action = component.get(\"c.getContacts\");          // c. = Apex 메서드\n        action.setParams({ recordId: component.get(\"v.recordId\") });\n        action.setCallback(this, function(data) {\n            component.set(\"v.Contacts\", data.getReturnValue());\n        });\n        $A.enqueueAction(action);                              // 서버 호출 대기열에 넣기\n    }\n})",
+          "lang": "javascript",
+          "title": "MyContactListController.js"
+        },
+        {
+          "type": "code",
+          "code": "<aura:handler name=\"init\" value=\"{!this}\" action=\"{!c.myAction}\" />",
+          "lang": "xml"
+        },
+        {
+          "type": "tip",
+          "text": "Aura에서 `c.` 는 마크업에서는 **클라이언트 컨트롤러**, JS의 `component.get(\"c.xxx\")` 에서는 **Apex 메서드** 를 가리킵니다."
+        }
+      ]
+    },
+    {
+      "title": "Render and Preview the Contact List",
+      "ko": "목록 표시하고 미리보기",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/quickstart-lightning-components/quickstart-lightning-components5",
+      "blocks": [
+        {
+          "type": "code",
+          "code": "<lightning:datatable data=\"{! v.Contacts }\" columns=\"{! v.Columns }\"\n    keyField=\"Id\" hideCheckboxColumn=\"true\"/>",
+          "lang": "xml"
+        },
+        {
+          "type": "code",
+          "code": "component.set(\"v.Columns\", [\n    {label:\"First Name\", fieldName:\"FirstName\", type:\"text\"},\n    {label:\"Last Name\",  fieldName:\"LastName\",  type:\"text\"},\n    {label:\"Phone\",      fieldName:\"Phone\",     type:\"phone\"}\n]);",
+          "lang": "javascript"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Account 페이지를 새로고침하면 그 Account의 연락처가 표로 보입니다."
+          ]
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "aura:attribute",
+      "Aura 컴포넌트의 데이터 속성"
+    ],
+    [
+      "$A.enqueueAction",
+      "Aura에서 서버(Apex) 호출을 대기열에 넣기"
+    ],
+    [
+      "force:hasRecordId",
+      "현재 레코드 Id를 recordId로 받는 인터페이스"
+    ]
+  ]
+}

@@ -1,0 +1,223 @@
+{
+  "intro": "기존 Visualforce 페이지를 **Lightning Experience** 에서 쓸 때 달라지는 점: iframe 컨테이너, UI 테마 감지, **sforce.one** 내비게이션, 스타일(SLDS), 피해야 할 기능.",
+  "units": [
+    {
+      "title": "Use Visualforce in Lightning Experience",
+      "ko": "LEX에서 Visualforce 쓰기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_dev_visualforce/lex_dev_visualforce_intro",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "대부분의 페이지는 그대로 동작하지만, 표준 컴포넌트는 **Classic 스타일** 로 보이고 JavaScript는 점검이 필요합니다 (Visualforce가 페이지 전체를 갖지 않음).",
+            "쓰는 곳: 앱의 Visualforce 탭, 페이지 레이아웃, Lightning App Builder, Quick Action, 버튼 Override, 커스텀 버튼·링크",
+            "**JavaScript 버튼·링크는 LEX에서 지원하지 않습니다.** Visualforce·URL 버튼은 됩니다."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Develop Visualforce Pages for Lightning Experience",
+      "ko": "LEX용 개발 환경",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_dev_visualforce/lex_dev_visualforce_process",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "`/apex/PageName` 으로 직접 열면 **항상 Classic** 으로 보입니다. LEX 안에서 확인해야 합니다.",
+            "권장: 개발자 프로필에만 보이는 'In Development' 앱을 만들고 Visualforce 탭을 넣기 (Setup > App Manager > New Lightning App, Setup > Tabs > Visualforce Tabs > New)",
+            "Development Mode 푸터는 Classic에서만 동작",
+            "테스트 매트릭스: Classic, LEX, Salesforce 모바일 앱, 지원 브라우저·기기를 모두 확인"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Explore the Visualforce App Container",
+      "ko": "Visualforce 앱 컨테이너",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_dev_visualforce/lex_dev_visualforce_container",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 220\" role=\"img\" aria-label=\"LEX 안의 Visualforce는 iframe\"><rect class=\"d-box\" x=\"20\" y=\"20\" width=\"680\" height=\"180\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"74.5\" text-anchor=\"middle\">Lightning Experience (/lightning, 단일 페이지 앱)</text><text class=\"d-sub\" x=\"360.0\" y=\"93.5\" text-anchor=\"middle\">헤더·내비게이션은 숨길 수 없음</text><text class=\"d-sub\" x=\"360.0\" y=\"109.5\" text-anchor=\"middle\"></text><text class=\"d-sub\" x=\"360.0\" y=\"125.5\" text-anchor=\"middle\"></text><text class=\"d-sub\" x=\"360.0\" y=\"141.5\" text-anchor=\"middle\"></text><text class=\"d-sub\" x=\"360.0\" y=\"157.5\" text-anchor=\"middle\"></text><rect class=\"d-accent\" x=\"200\" y=\"80\" width=\"320\" height=\"100\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"110.5\" text-anchor=\"middle\">Visualforce iframe (/apex/...)</text><text class=\"d-sub\" x=\"360.0\" y=\"129.5\" text-anchor=\"middle\">자기 DOM만 수정 가능</text><text class=\"d-sub\" x=\"360.0\" y=\"145.5\" text-anchor=\"middle\">sforce.one 자동 주입</text><text class=\"d-sub\" x=\"360.0\" y=\"161.5\" text-anchor=\"middle\">부모와 통신은 window.postMessage</text></svg>",
+          "caption": "LEX는 부모, Visualforce 페이지는 iframe 자식"
+        },
+        {
+          "type": "list",
+          "items": [
+            "부모 창의 DOM을 건드리는 코드(`window.parent`, `contentWindow`)는 쓰지 말고 **`window.postMessage`** 로 통신합니다.",
+            "Visualforce의 세션 ID(`$Api.Session_ID`)는 LEX 바깥 세션 ID와 다를 수 있습니다.",
+            "`showHeader`, `sidebar` 는 LEX에서 효과 없음 (Classic 헤더는 항상 숨김). `standardStylesheets` 는 기본 true이고 바꿀 수 있습니다.",
+            "**`sforce.one`** 객체가 LEX와 모바일 앱에 자동 주입됩니다 (Classic에는 없음)."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Share Visualforce Pages Between Classic and Lightning Experience",
+      "ko": "Classic과 LEX에서 같이 쓰기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_dev_visualforce/lex_dev_visualforce_multipurpose_pages",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "현재 UI 감지",
+          "headers": [
+            "어디서",
+            "방법"
+          ],
+          "rows": [
+            [
+              "마크업",
+              "`$User.UIThemeDisplayed` (실제 표시 중인 테마, 권장) / `$User.UITheme` (보여야 할 테마)"
+            ],
+            [
+              "JavaScript",
+              "`UITheme.getUITheme()`"
+            ],
+            [
+              "Apex",
+              "`UserInfo.getUiThemeDisplayed()`, `UserInfo.getUiTheme()`"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "title": "테마 값",
+          "headers": [
+            "값",
+            "UI"
+          ],
+          "rows": [
+            [
+              "Theme3",
+              "Salesforce Classic (2010)"
+            ],
+            [
+              "Theme4d",
+              "Lightning Experience"
+            ],
+            [
+              "Theme4t",
+              "Salesforce 모바일 앱"
+            ],
+            [
+              "Theme4u",
+              "Lightning Console"
+            ]
+          ]
+        },
+        {
+          "type": "code",
+          "code": "<apex:outputPanel rendered=\"{! $User.UIThemeDisplayed == 'Theme4d' }\">\n    Lightning Experience에서만 보이는 내용\n</apex:outputPanel>",
+          "lang": "xml"
+        },
+        {
+          "type": "tip",
+          "text": "버튼 Override는 모든 UI에서 같은 페이지를 쓰므로 공용 페이지가 필요합니다. 컨트롤러는 UI와 무관하게 유지하는 것이 좋습니다."
+        }
+      ]
+    },
+    {
+      "title": "Manage Navigation",
+      "ko": "내비게이션",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_dev_visualforce/lex_dev_visualforce_navigation",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Classic 방식인 **액션 메서드가 `PageReference` 를 반환** 하는 내비게이션은 LEX에서도 동작합니다.",
+            "LEX 방식: JavaScript에서 `sforce.one.navigateToSObject(recordId)`, `navigateToURL(url)`, `navigateToList(...)`, `createRecord(objName)`, `editRecord(id)`, `back()`",
+            "`sforce.one` 은 Classic에 없으므로 **있는지 먼저 확인** 하고 분기합니다.",
+            "`window.location` 을 직접 바꾸지 마세요 (LEX 내비게이션 기록이 깨짐). URL을 하드코딩하지 말고 `URLFOR($Action.Contact.Edit, recordId)` 를 씁니다."
+          ]
+        },
+        {
+          "type": "code",
+          "code": "function goToRecord(recordId) {\n    if (typeof sforce !== 'undefined' && sforce.one) {\n        sforce.one.navigateToSObject(recordId);     // LEX, 모바일\n    } else {\n        window.location.href = '/' + recordId;      // Classic\n    }\n}",
+          "lang": "javascript"
+        }
+      ]
+    },
+    {
+      "title": "Understand Important Visual Design Considerations",
+      "ko": "디자인 고려사항",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_dev_visualforce/lex_dev_visualforce_design",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "`apex:inputField`, `apex:pageBlock` 같은 내장 컴포넌트는 LEX에서도 Classic 모양입니다. 기존 페이지는 굳이 맞추지 않고, **새 페이지는 SLDS** 로 만듭니다.",
+            "내장 컴포넌트 스타일: `style`, `styleClass` 속성. 공용 CSS: `<apex:stylesheet value=\"{!$Resource.AppStylesheet}\"/>`",
+            "**`<apex:slds />`** 를 넣으면 정적 리소스 업로드 없이 SLDS를 씁니다.",
+            "`apex:stylesheet` 에는 `rendered` 속성이 없어 UI별 CSS는 `apex:variable` 의 rendered로 감쌉니다."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Know Which Features to Avoid in Lightning Experience",
+      "ko": "LEX에서 피할 기능",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_dev_visualforce/lex_dev_visualforce_known_issues",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "LEX 헤더와 내비게이션은 숨길 수 없으므로 완전한 커스텀 UI는 Classic에서만 가능합니다.",
+            "`apex:iframe` 은 피하기 (iframe 중첩), `window.location` 직접 설정 금지",
+            "`sforce.one` 은 데스크톱 LEX에도 있으므로 **모바일 감지용으로 쓰면 안 됩니다**."
+          ]
+        },
+        {
+          "type": "table",
+          "title": "버튼 Override가 적용되는 곳",
+          "headers": [
+            "Override",
+            "Classic",
+            "Lightning Experience",
+            "모바일 앱"
+          ],
+          "rows": [
+            [
+              "Tab",
+              "오브젝트 탭",
+              "오브젝트 홈",
+              "검색"
+            ],
+            [
+              "List",
+              "오브젝트 목록",
+              "적용 안 됨",
+              "오브젝트 홈"
+            ],
+            [
+              "View",
+              "레코드 보기",
+              "레코드 홈",
+              "레코드 홈"
+            ],
+            [
+              "Edit / New / Delete",
+              "같음",
+              "같음",
+              "같음"
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "sforce.one",
+      "LEX·모바일에서 Visualforce가 쓰는 내비게이션 객체"
+    ],
+    [
+      "UIThemeDisplayed",
+      "현재 실제로 표시되는 UI 테마"
+    ],
+    [
+      "apex:slds",
+      "Visualforce에 SLDS를 넣는 컴포넌트"
+    ]
+  ]
+}

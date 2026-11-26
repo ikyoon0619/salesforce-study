@@ -1,0 +1,156 @@
+{
+  "intro": "Apex **단위 테스트** 작성법: @IsTest, Assert, 75% 커버리지 규칙, 트리거 테스트, `Test.startTest/stopTest`, 테스트 데이터 팩토리. PD1 Testing 섹션의 핵심입니다.",
+  "units": [
+    {
+      "title": "Get Started with Apex Unit Tests",
+      "ko": "Apex 단위 테스트 시작",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/apex_testing/apex_testing_intro",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Apex는 **production에서 직접 작성할 수 없고** Sandbox나 Developer org에서 만들어 배포합니다.",
+            "production 배포 조건: 전체 Apex의 **75% 이상 커버리지**, **모든 테스트 통과**, **모든 트리거는 최소 1줄 이상 커버**. AppExchange 패키지도 같습니다.",
+            "75%만 맞추려 하지 말고 긍정·부정 케이스, 단건·대량(bulk) 처리, 경계값, 잘못된 입력(null 등)을 테스트합니다."
+          ]
+        },
+        {
+          "type": "code",
+          "code": "@IsTest\nprivate class TemperatureConverterTest {\n    @IsTest\n    static void testWarmTemp() {\n        Decimal celsius = TemperatureConverter.FahrenheitToCelsius(70);\n        Assert.areEqual(21.11, celsius, 'Temperature is not expected.');\n    }\n    @IsTest\n    static void testBoilingPoint() {\n        Assert.areEqual(100, TemperatureConverter.FahrenheitToCelsius(212));\n    }\n}",
+          "lang": "apex"
+        },
+        {
+          "type": "list",
+          "items": [
+            "테스트 클래스: `@IsTest`, **최상위 클래스** 여야 하고 보통 `private` (공용 데이터 팩토리는 `public`). 테스트 메서드의 접근 제한자는 상관없습니다.",
+            "`Assert.areEqual(expected, actual, msg)`, `Assert.isTrue`, `Assert.isFalse`, `Assert.isNull`. 실패하면 잡을 수 없는 AssertException.",
+            "실행: VS Code Testing 패널(Run Test), Developer Console Test 메뉴, Setup > Apex Test Execution. 여러 클래스를 묶으면 **Test Suite** (SFDX: Create Apex Test Suite)."
+          ]
+        },
+        {
+          "type": "table",
+          "title": "테스트 환경의 규칙",
+          "headers": [
+            "규칙",
+            "내용"
+          ],
+          "rows": [
+            [
+              "데이터 롤백",
+              "테스트에서 만든 레코드는 끝나면 롤백 → 정리 불필요"
+            ],
+            [
+              "org 데이터 격리",
+              "기본적으로 org 데이터를 **못 봄** (User, Profile 같은 setup 오브젝트는 예외). `@IsTest(SeeAllData=true)` 는 권장하지 않음"
+            ],
+            [
+              "코드 크기",
+              "org당 Apex 6MB 한도에 `@IsTest` 클래스는 포함 안 됨"
+            ],
+            [
+              "콜아웃",
+              "테스트에서 실제 콜아웃 불가 → **Mock** (`Test.setMock`)"
+            ],
+            [
+              "SOSL",
+              "결과가 비어 있음 → `Test.setFixedSearchResults()`"
+            ],
+            [
+              "이메일",
+              "테스트 메서드는 이메일을 보내지 않음"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "롤백되더라도 별도 테스트 DB가 아니므로, 고유(unique) 필드 값이 org의 기존 레코드와 겹치면 중복 오류가 날 수 있습니다."
+        }
+      ]
+    },
+    {
+      "title": "Test Apex Triggers",
+      "ko": "트리거 테스트",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/apex_testing/apex_testing_triggers",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "트리거는 직접 호출할 수 없으므로 **트리거를 발생시키는 DML을 테스트에서 실행** 하고 결과를 검증합니다. 예: Opportunity가 있는 Account 삭제를 막는 `AccountDeletion` before delete 트리거."
+        },
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 220\" role=\"img\" aria-label=\"테스트 메서드 한 개의 흐름\"><rect class=\"d-box\" x=\"20\" y=\"70\" width=\"150\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"95.0\" y=\"98.5\" text-anchor=\"middle\">@testSetup / Factory</text><text class=\"d-sub\" x=\"95.0\" y=\"117.5\" text-anchor=\"middle\">테스트 데이터 생성</text><text class=\"d-sub\" x=\"95.0\" y=\"133.5\" text-anchor=\"middle\">(org 데이터 안 보임)</text><rect class=\"d-accent\" x=\"200\" y=\"70\" width=\"170\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"285.0\" y=\"98.5\" text-anchor=\"middle\">Test.startTest()</text><text class=\"d-sub\" x=\"285.0\" y=\"117.5\" text-anchor=\"middle\">여기부터 새 Governor</text><text class=\"d-sub\" x=\"285.0\" y=\"133.5\" text-anchor=\"middle\">Limit 묶음</text><rect class=\"d-box\" x=\"400\" y=\"70\" width=\"140\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"470.0\" y=\"98.5\" text-anchor=\"middle\">테스트 대상 코드</text><text class=\"d-sub\" x=\"470.0\" y=\"117.5\" text-anchor=\"middle\">DML, 트리거,</text><text class=\"d-sub\" x=\"470.0\" y=\"133.5\" text-anchor=\"middle\">비동기 작업</text><rect class=\"d-accent\" x=\"570\" y=\"70\" width=\"130\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"635.0\" y=\"98.5\" text-anchor=\"middle\">Test.stopTest()</text><text class=\"d-sub\" x=\"635.0\" y=\"117.5\" text-anchor=\"middle\">비동기 작업 실행 완료</text><text class=\"d-sub\" x=\"635.0\" y=\"133.5\" text-anchor=\"middle\">→ Assert</text><rect class=\"d-warn\" x=\"200\" y=\"170\" width=\"340\" height=\"40\" rx=\"10\"/><text class=\"d-strong\" x=\"370.0\" y=\"194.5\" text-anchor=\"middle\">끝나면 데이터 전부 롤백</text><line class=\"d-line\" x1=\"174\" y1=\"110\" x2=\"196\" y2=\"110\"/><polygon class=\"d-arrow\" points=\"196.0,110.0 187.9,113.9 187.9,106.1\"/><line class=\"d-line\" x1=\"374\" y1=\"110\" x2=\"396\" y2=\"110\"/><polygon class=\"d-arrow\" points=\"396.0,110.0 387.9,113.9 387.9,106.1\"/><line class=\"d-line\" x1=\"544\" y1=\"110\" x2=\"566\" y2=\"110\"/><polygon class=\"d-arrow\" points=\"566.0,110.0 557.9,113.9 557.9,106.1\"/></svg>",
+          "caption": "준비 → startTest → 실행 → stopTest → 검증"
+        },
+        {
+          "type": "code",
+          "code": "@IsTest\nprivate class TestAccountDeletion {\n    @IsTest\n    static void TestDeleteAccountWithOneOpportunity() {\n        Account acct = new Account(Name = 'Test Account');\n        insert as user acct;\n        insert as user new Opportunity(Name = acct.Name + ' Opp', StageName = 'Prospecting',\n            CloseDate = System.today().addMonths(1), AccountId = acct.Id);\n\n        Test.startTest();\n        Database.DeleteResult result = Database.delete(acct, false, AccessLevel.USER_MODE);\n        Test.stopTest();\n\n        Assert.isFalse(result.isSuccess());\n        Assert.isTrue(result.getErrors().size() > 0);\n        Assert.areEqual('Cannot delete account with related opportunities.',\n                        result.getErrors()[0].getMessage());\n    }\n}",
+          "lang": "apex"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**`Test.startTest()` ~ `Test.stopTest()`** 사이 코드는 **새 Governor Limit** 을 받습니다. 준비 단계 DML이 테스트 대상의 한도를 잡아먹지 않습니다.",
+            "`Test.stopTest()` 시점에 그 안에서 큐에 넣은 **비동기 작업(future, queueable, batch)이 동기적으로 끝납니다**.",
+            "`Database.delete(rec, false)` 처럼 allOrNone=false 로 부르면 예외 대신 결과 객체로 오류를 검사할 수 있습니다."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Developer Console에서 일부만 실행하면 커버리지가 잘못 갱신될 수 있어 **Test > Run All** 로 다시 계산합니다."
+        }
+      ]
+    },
+    {
+      "title": "Create Test Data for Apex Tests",
+      "ko": "테스트 데이터 만들기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/apex_testing/apex_testing_data",
+      "blocks": [
+        {
+          "type": "code",
+          "code": "@IsTest\npublic class TestDataFactory {\n    public static List<Account> createAccountsWithOpps(Integer numAccts, Integer numOppsPerAcct) {\n        List<Account> accts = new List<Account>();\n        for (Integer i = 0; i < numAccts; i++) {\n            accts.add(new Account(Name = 'TestAccount' + i));\n        }\n        insert accts;\n        List<Opportunity> opps = new List<Opportunity>();\n        for (Account a : accts) {\n            for (Integer k = 0; k < numOppsPerAcct; k++) {\n                opps.add(new Opportunity(Name = a.Name + ' Opp ' + k, StageName = 'Prospecting',\n                    CloseDate = System.today().addMonths(1), AccountId = a.Id));\n            }\n        }\n        insert opps;          // 반복문 밖에서 한 번에 DML\n        return accts;\n    }\n}",
+          "lang": "apex",
+          "title": "TestDataFactory: 여러 테스트가 재사용"
+        },
+        {
+          "type": "list",
+          "items": [
+            "`@IsTest` 를 붙인 **public 유틸리티 클래스** 는 테스트 실행 중에만 호출 가능하고 코드 크기 한도에 포함되지 않습니다.",
+            "같은 팩토리로 시나리오를 바꿔 테스트: (1,1) 단건+관련 레코드, (1,0) 관련 레코드 없음, **(200,1) bulk**, (200,0)",
+            "클래스 안 모든 테스트가 같은 데이터를 쓰면 **`@TestSetup`** 메서드에서 한 번 만들고, 각 테스트 메서드는 롤백된 원본 상태로 시작합니다."
+          ]
+        },
+        {
+          "type": "code",
+          "code": "@TestSetup\nstatic void makeData() {\n    TestDataFactory.createAccountsWithOpps(200, 1);\n}\n@IsTest\nstatic void bulkDelete() {\n    List<Account> accts = [SELECT Id FROM Account];\n    Test.startTest();\n    Database.DeleteResult[] results = Database.delete(accts, false);\n    Test.stopTest();\n    for (Database.DeleteResult dr : results) Assert.isFalse(dr.isSuccess());\n}",
+          "lang": "apex"
+        },
+        {
+          "type": "tip",
+          "text": "bulk 테스트에 200건을 쓰는 이유: 트리거는 한 번에 최대 200건씩 처리되므로 SOQL·DML이 반복문 안에 있으면 여기서 한도 초과가 드러납니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "@IsTest",
+      "테스트 클래스·메서드 어노테이션"
+    ],
+    [
+      "@TestSetup",
+      "클래스의 모든 테스트가 쓸 데이터를 한 번 만드는 메서드"
+    ],
+    [
+      "Test.startTest / stopTest",
+      "새 Governor Limit 구간, 비동기 작업 완료 지점"
+    ],
+    [
+      "SeeAllData",
+      "org 데이터를 보게 하는 옵션 (비권장)"
+    ],
+    [
+      "Code Coverage",
+      "테스트가 실행한 코드 줄 비율, 배포에 75% 필요"
+    ]
+  ]
+}
