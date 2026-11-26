@@ -1,0 +1,190 @@
+{
+  "intro": "시스템끼리 **이벤트를 주고받아 느슨하게 연결** 하는 Platform Event를 정의하고, Apex·Flow·API로 발행하고, 트리거·Flow·LWC로 구독하는 법을 배웁니다.",
+  "units": [
+    {
+      "title": "Understand Event-Driven Software Architecture",
+      "ko": "이벤트 기반 아키텍처",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/platform_events_basics/platform_events_architecture",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 240\" role=\"img\" aria-label=\"Platform Event 흐름\"><rect class=\"d-box\" x=\"20\" y=\"80\" width=\"170\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"105.0\" y=\"116.5\" text-anchor=\"middle\">Producer</text><text class=\"d-sub\" x=\"105.0\" y=\"135.5\" text-anchor=\"middle\">Apex, Flow, API</text><rect class=\"d-accent\" x=\"250\" y=\"60\" width=\"220\" height=\"120\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"100.5\" text-anchor=\"middle\">Event Bus</text><text class=\"d-sub\" x=\"360.0\" y=\"119.5\" text-anchor=\"middle\">시간순 로그</text><text class=\"d-sub\" x=\"360.0\" y=\"135.5\" text-anchor=\"middle\">ReplayId</text><text class=\"d-sub\" x=\"360.0\" y=\"151.5\" text-anchor=\"middle\">72시간 보관</text><rect class=\"d-warn\" x=\"530\" y=\"20\" width=\"170\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"615.0\" y=\"46.5\" text-anchor=\"middle\">Apex Trigger</text><text class=\"d-sub\" x=\"615.0\" y=\"65.5\" text-anchor=\"middle\">after insert</text><rect class=\"d-warn\" x=\"530\" y=\"90\" width=\"170\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"615.0\" y=\"124.5\" text-anchor=\"middle\">Flow · LWC(empApi)</text><rect class=\"d-warn\" x=\"530\" y=\"160\" width=\"170\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"615.0\" y=\"186.5\" text-anchor=\"middle\">외부 시스템</text><text class=\"d-sub\" x=\"615.0\" y=\"205.5\" text-anchor=\"middle\">Pub/Sub API</text><line class=\"d-line\" x1=\"194\" y1=\"120\" x2=\"246\" y2=\"120\"/><polygon class=\"d-arrow\" points=\"246.0,120.0 237.9,123.9 237.9,116.1\"/><text class=\"d-sub\" x=\"220.0\" y=\"112.0\" text-anchor=\"middle\">publish</text><line class=\"d-line-accent\" x1=\"474\" y1=\"100\" x2=\"526\" y2=\"50\"/><polygon class=\"d-arrow-accent\" points=\"526.0,50.0 522.9,58.4 517.4,52.8\"/><line class=\"d-line-accent\" x1=\"474\" y1=\"120\" x2=\"526\" y2=\"120\"/><polygon class=\"d-arrow-accent\" points=\"526.0,120.0 517.9,123.9 517.9,116.1\"/><line class=\"d-line-accent\" x1=\"474\" y1=\"140\" x2=\"526\" y2=\"190\"/><polygon class=\"d-arrow-accent\" points=\"526.0,190.0 517.4,187.2 522.9,181.6\"/></svg>",
+          "caption": "발행자는 버스에 이벤트를 넣기만 하고, 누가 받는지 모릅니다."
+        },
+        {
+          "type": "table",
+          "title": "용어",
+          "headers": [
+            "용어",
+            "뜻"
+          ],
+          "rows": [
+            [
+              "Event",
+              "의미 있는 상태 변화 (예: 주문 출고)"
+            ],
+            [
+              "Event message",
+              "이벤트 데이터를 담은 메시지 = Platform Event 레코드 한 건"
+            ],
+            [
+              "Producer / Consumer",
+              "발행하는 쪽 / 구독해서 받는 쪽"
+            ],
+            [
+              "Event channel · Event bus",
+              "이벤트가 지나가는 통로. 시간순으로 쌓이는 발행-구독 로그"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "통신은 **비동기, 거의 실시간** 이고 받는 쪽은 수신 확인(ack)을 하지 않습니다. 발행자와 구독자가 서로를 몰라도 되므로 결합도가 낮습니다.",
+            "예: Salesforce → 외부 배송 앱(주문 이행), 외부 앱 → Salesforce(반품), Salesforce 안에서 → Salesforce(리드 재할당 후 Chatter 게시)",
+            "필드는 커스텀 오브젝트처럼 정의하지만, 이벤트 메시지는 **수정·삭제·화면 조회가 안 됩니다**.",
+            "발행: Apex, Flow, Pub/Sub API·REST/SOAP API. 구독: Apex 트리거, Flow, LWC(empApi), Pub/Sub API",
+            "레코드 변경을 자동으로 흘려보내는 **Change Data Capture(CDC)** 는 별개의 이벤트 종류입니다."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Define and Publish Platform Events",
+      "ko": "정의하고 발행하기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/platform_events_basics/platform_events_define_publish",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "Platform Event 정의",
+          "items": [
+            "Setup > Integrations > Platform Events > New Platform Event",
+            "Label 'Cloud News' → API 이름 **Cloud_News__e**",
+            "Publish Behavior 선택 (기본 Publish Immediately)",
+            "Custom Fields: Location__c(Text), Urgent__c(Checkbox), News_Content__c(Long Text Area)"
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "필드 유형은 Checkbox, Date, Date/Time, Number, Text, Text Area(Long)만 가능",
+            "새 이벤트는 **High-volume**, 버스에 **72시간** 보관 (예전 standard-volume은 24시간)",
+            "SOQL·SOSL로 조회할 수 없고 리포트·리스트 뷰·검색에도 안 나옵니다.",
+            "**ReplayId**: 시스템이 정하는 위치 값. 연속 번호가 아니므로 계산하지 말 것"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "Publish Behavior",
+          "headers": [
+            "설정",
+            "동작",
+            "한도 계산"
+          ],
+          "rows": [
+            [
+              "Publish Immediately (기본)",
+              "트랜잭션 성공 여부와 상관없이 바로 발행",
+              "EventBus.publish 호출 150회 (별도 한도)"
+            ],
+            [
+              "Publish After Commit",
+              "트랜잭션이 커밋될 때만 발행, 롤백되면 발행 안 함",
+              "DML 문 수에 포함"
+            ]
+          ]
+        },
+        {
+          "type": "code",
+          "code": "List<Cloud_News__e> events = new List<Cloud_News__e>{\n    new Cloud_News__e(Location__c = 'Mountain City', Urgent__c = true,\n                      News_Content__c = 'Lake Road is closed due to mudslides.')\n};\nList<Database.SaveResult> results = EventBus.publish(events);\nfor (Database.SaveResult sr : results) {\n    if (!sr.isSuccess()) {\n        System.debug(sr.getErrors()[0].getMessage());   // 예외를 던지지 않으므로 직접 확인\n    }\n}",
+          "lang": "apex",
+          "title": "Apex로 발행"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Flow: Create Records 요소로 이벤트 레코드를 만들면 발행됩니다.",
+            "REST API: `/services/data/vXX.X/sobjects/Cloud_News__e/` 에 POST → 응답 statusCode `OPERATION_ENQUEUED`"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "\"DML이 롤백되면 이벤트도 보내지 말아야 한다\" → Publish After Commit."
+        }
+      ]
+    },
+    {
+      "title": "Subscribe to Platform Events",
+      "ko": "구독하기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/platform_events_basics/platform_events_subscribe",
+      "blocks": [
+        {
+          "type": "code",
+          "code": "trigger CloudNewsTrigger on Cloud_News__e (after insert) {\n    Group queue = [SELECT Id FROM Group WHERE Name = 'Regional Dispatch' AND Type = 'Queue'];\n    List<Case> cases = new List<Case>();\n    for (Cloud_News__e ev : Trigger.new) {\n        if (ev.Urgent__c) {\n            cases.add(new Case(Priority = 'High', Subject = 'News team dispatch to ' + ev.Location__c,\n                               OwnerId = queue.Id));   // 실행 사용자가 Automated Process라서 소유자 지정\n        }\n    }\n    insert cases;\n}",
+          "lang": "apex",
+          "title": "Platform Event 트리거"
+        },
+        {
+          "type": "table",
+          "title": "일반 트리거와 다른 점",
+          "headers": [
+            "항목",
+            "Platform Event 트리거"
+          ],
+          "rows": [
+            [
+              "이벤트",
+              "**after insert** 만"
+            ],
+            [
+              "실행 사용자",
+              "Automated Process (PlatformEventSubscriberConfig로 변경 가능)"
+            ],
+            [
+              "한 번에 받는 수",
+              "최대 **2,000** 건 (일반 트리거는 200)"
+            ],
+            [
+              "실행 시점",
+              "발행 트랜잭션과 **별도로, 비동기**, ReplayId 순서"
+            ],
+            [
+              "콜아웃",
+              "동기 콜아웃 불가"
+            ],
+            [
+              "디버그 로그",
+              "Automated Process 엔티티에 Trace Flag"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "이벤트의 Subscriptions 관련 목록에서 구독 상태(Running, Error 등)를 보고 Suspend, Resume, Resume from Tip을 할 수 있습니다.",
+            "테스트: 발행을 `Test.startTest()`/`stopTest()` 로 감싸면 stopTest 시점에 트리거가 실행됩니다. 그 뒤에 `isSuccess()` 와 생성된 Case를 검증합니다.",
+            "LWC는 `lightning/empApi`, Flow는 **Platform Event-Triggered Flow**(또는 Pause 요소로 이벤트를 기다림), 외부는 **Pub/Sub API**(gRPC, Avro)로 구독합니다."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Platform Event 트리거에서 만든 레코드의 소유자를 지정하지 않으면 Automated Process 사용자가 소유자가 됩니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Event Bus",
+      "이벤트를 시간순으로 쌓는 발행-구독 통로"
+    ],
+    [
+      "ReplayId",
+      "버스 안에서 이벤트의 위치"
+    ],
+    [
+      "CDC",
+      "레코드 변경을 이벤트로 보내는 Change Data Capture"
+    ]
+  ]
+}

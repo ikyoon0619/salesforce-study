@@ -1,0 +1,132 @@
+{
+  "intro": "Agentforce Builder(클릭) 대신 **Agentforce DX(코드)** 로 에이전트를 만드는 프로젝트입니다. 에이전트도 **메타데이터** 라서 소스 관리, CLI 배포, 테스트를 일반 코드처럼 할 수 있다는 점이 핵심입니다.",
+  "units": [
+    {
+      "title": "Get Started with Agentforce DX",
+      "ko": "Agentforce DX 시작하기",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/create-an-agent-using-pro-code-tools/get-started-with-agentforce-dx",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Coral Cloud Resorts의 'Local Info Agent'(날씨, 리조트 운영 시간 안내)를 넘겨받은 개발자가 되어, GitHub의 소스로 에이전트를 개발합니다."
+        },
+        {
+          "type": "table",
+          "title": "Builder vs Agentforce DX",
+          "headers": [
+            "",
+            "Agentforce Builder",
+            "Agentforce DX"
+          ],
+          "rows": [
+            [
+              "방식",
+              "로우코드, 클릭",
+              "프로코드, 소스 파일"
+            ],
+            [
+              "버전 관리",
+              "org 안",
+              "Git 저장소"
+            ],
+            [
+              "도구",
+              "Setup 화면",
+              "Salesforce CLI, VS Code 확장"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "개발 환경 준비",
+          "items": [
+            "Agentforce가 있는 Developer Edition org 만들고 Einstein·Agentforce 켜기",
+            "VS Code + Salesforce Extension Pack (Agentforce DX, Agentforce Vibes 포함), Salesforce CLI, Node.js 설치",
+            "샘플 저장소 clone (Git: Clone)",
+            "SFDX: Authorize an Org → 별칭 agentforce",
+            "setup 스크립트 실행: 소스 배포, 권한 할당, **에이전트 사용자** 생성 (Einstein Agent User 프로필)"
+          ]
+        },
+        {
+          "type": "code",
+          "code": "sf search                                    # 사용할 수 있는 agent 명령 찾기\nsf plugins inspect agent                     # agent 명령이 든 플러그인 정보\nsf agent validate authoring-bundle --help    # 도움말",
+          "lang": "bash",
+          "title": "CLI 살펴보기"
+        },
+        {
+          "type": "tip",
+          "text": "에이전트는 전용 **에이전트 사용자** 권한으로 실행됩니다. 이 사용자가 에이전트의 실행 신원입니다."
+        }
+      ]
+    },
+    {
+      "title": "Author Your Agent Using Agent Script",
+      "ko": "Agent Script로 에이전트 작성",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/create-an-agent-using-pro-code-tools/create-an-agent-from-your-dx-project",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 200\" role=\"img\" aria-label=\"Agentforce DX 에이전트 수명 주기\"><rect class=\"d-accent\" x=\"20\" y=\"60\" width=\"120\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"80.0\" y=\"96.5\" text-anchor=\"middle\">Develop</text><text class=\"d-sub\" x=\"80.0\" y=\"115.5\" text-anchor=\"middle\">.agent 파일 작성</text><rect class=\"d-accent\" x=\"160\" y=\"60\" width=\"120\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"220.0\" y=\"96.5\" text-anchor=\"middle\">Publish</text><text class=\"d-sub\" x=\"220.0\" y=\"115.5\" text-anchor=\"middle\">org에 메타데이터 생성</text><line class=\"d-line\" x1=\"142\" y1=\"100\" x2=\"158\" y2=\"100\"/><polygon class=\"d-arrow\" points=\"158.0,100.0 149.9,103.9 149.9,96.1\"/><rect class=\"d-box\" x=\"300\" y=\"60\" width=\"120\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"96.5\" text-anchor=\"middle\">Test</text><text class=\"d-sub\" x=\"360.0\" y=\"115.5\" text-anchor=\"middle\">Sandbox·Scratch</text><line class=\"d-line\" x1=\"282\" y1=\"100\" x2=\"298\" y2=\"100\"/><polygon class=\"d-arrow\" points=\"298.0,100.0 289.9,103.9 289.9,96.1\"/><rect class=\"d-box\" x=\"440\" y=\"60\" width=\"120\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"500.0\" y=\"96.5\" text-anchor=\"middle\">Deploy</text><text class=\"d-sub\" x=\"500.0\" y=\"115.5\" text-anchor=\"middle\">프로덕션으로</text><line class=\"d-line\" x1=\"422\" y1=\"100\" x2=\"438\" y2=\"100\"/><polygon class=\"d-arrow\" points=\"438.0,100.0 429.9,103.9 429.9,96.1\"/><rect class=\"d-box\" x=\"580\" y=\"60\" width=\"120\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"640.0\" y=\"96.5\" text-anchor=\"middle\">Activate</text><text class=\"d-sub\" x=\"640.0\" y=\"115.5\" text-anchor=\"middle\">고객에게 공개</text><line class=\"d-line\" x1=\"562\" y1=\"100\" x2=\"578\" y2=\"100\"/><polygon class=\"d-arrow\" points=\"578.0,100.0 569.9,103.9 569.9,96.1\"/><text class=\"d-sub\" x=\"160\" y=\"40\" text-anchor=\"middle\">이 프로젝트에서 하는 부분</text></svg>",
+          "caption": "Develop → Publish → Test → Deploy → Activate"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Agent Script**: 자연어 지시(LLM의 유연함)와 프로그래밍 식(정해진 업무 규칙)을 섞어 쓰는 에이전트 언어",
+            "에이전트 정의는 **AiAuthoringBundle** 메타데이터(authoring bundle) 안의 `.agent` 파일입니다. system, config, variables 같은 블록이 있고 config의 `default_agent_user` 에 에이전트 사용자를 적습니다."
+          ]
+        },
+        {
+          "type": "table",
+          "title": "미리보기 두 가지",
+          "headers": [
+            "모드",
+            "쓰는 것"
+          ],
+          "rows": [
+            [
+              "Simulation",
+              ".agent 파일만. 도구(Apex, Flow) 결과는 LLM이 흉내냄 (그래도 org 인증은 필요)"
+            ],
+            [
+              "Live Test",
+              "org의 실제 Apex, Flow, Prompt Template 실행"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "작업 순서",
+          "items": [
+            "파일 우클릭 > AFDX: Preview This Agent → Simulation",
+            "지시 문장을 고치고 AFDX: Validate this Agent (오류는 Problems 탭)",
+            "Compile & Restart로 다시 미리보기",
+            "default_agent_user 설정 후 Live Test",
+            "AFDX: Publish This Agent → Bot, BotVersion, GenAiPlannerBundle, GenAiFunction 등 메타데이터 생성",
+            "BotVersion 파일 우클릭 > AFDX: Activate Agent"
+          ]
+        },
+        {
+          "type": "code",
+          "code": "sf project deploy start --metadata AiAuthoringBundle:Local_Info_Agent\nsf org open agent --authoring-bundle Local_Info_Agent      # Builder에서 열기\nsf project retrieve start --metadata AiAuthoringBundle:Local_Info_Agent",
+          "lang": "bash",
+          "title": "org와 동기화"
+        },
+        {
+          "type": "tip",
+          "text": "Builder에서 고친 내용도 retrieve로 프로젝트에 가져올 수 있습니다. 코드와 클릭 두 방식이 같은 메타데이터를 다룹니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Agent Script",
+      "자연어 지시 + 프로그래밍 식으로 에이전트를 정의하는 언어"
+    ],
+    [
+      "AiAuthoringBundle",
+      ".agent 파일을 담는 메타데이터 타입"
+    ]
+  ]
+}

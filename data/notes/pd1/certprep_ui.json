@@ -1,0 +1,75 @@
+{
+  "intro": "**User Interface(25%)** 섹션의 목표를 Visualforce와 Lightning Component Framework 두 유닛으로 정리한 공식 Cert Prep 모듈입니다. 보안 취약점 방지와 Flow·Agentforce에서 Apex 쓰기도 포함됩니다.",
+  "units": [
+    {
+      "title": "Study Up on Visualforce",
+      "ko": "Visualforce와 UI 보안",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/platform-developer-i-certification-prep-user-interfaces/pd1-3-ui-visualforce",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 230\" role=\"img\" aria-label=\"User Interface 학습 지도\"><rect class=\"d-box\" x=\"20\" y=\"30\" width=\"210\" height=\"160\" rx=\"10\"/><text class=\"d-strong\" x=\"125.0\" y=\"90.5\" text-anchor=\"middle\">Visualforce</text><text class=\"d-sub\" x=\"125.0\" y=\"109.5\" text-anchor=\"middle\">Standard Controller</text><text class=\"d-sub\" x=\"125.0\" y=\"125.5\" text-anchor=\"middle\">Extension</text><text class=\"d-sub\" x=\"125.0\" y=\"141.5\" text-anchor=\"middle\">Custom Controller</text><rect class=\"d-accent\" x=\"255\" y=\"30\" width=\"210\" height=\"160\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"90.5\" text-anchor=\"middle\">Lightning Components</text><text class=\"d-sub\" x=\"360.0\" y=\"109.5\" text-anchor=\"middle\">LWC (권장) · Aura</text><text class=\"d-sub\" x=\"360.0\" y=\"125.5\" text-anchor=\"middle\">이벤트, LDS</text><text class=\"d-sub\" x=\"360.0\" y=\"141.5\" text-anchor=\"middle\">Apex 호출</text><rect class=\"d-warn\" x=\"490\" y=\"30\" width=\"210\" height=\"160\" rx=\"10\"/><text class=\"d-strong\" x=\"595.0\" y=\"90.5\" text-anchor=\"middle\">Flow · Agentforce</text><text class=\"d-sub\" x=\"595.0\" y=\"109.5\" text-anchor=\"middle\">FlowScreen LWC</text><text class=\"d-sub\" x=\"595.0\" y=\"125.5\" text-anchor=\"middle\">@InvocableMethod</text><text class=\"d-sub\" x=\"595.0\" y=\"141.5\" text-anchor=\"middle\">에이전트 액션</text><text class=\"d-sub\" x=\"360\" y=\"214\" text-anchor=\"middle\">공통: XSS · SOQL Injection · CRUD/FLS · 공유 규칙 지키기</text></svg>",
+          "caption": "UI 섹션의 세 영역과 공통 보안 주제"
+        },
+        {
+          "type": "list",
+          "items": [
+            "UI와 데이터 접근 보안 취약점 막기: XSS(출력 이스케이프), SOQL Injection(바인딩 변수), CRUD/FLS 검사, `with sharing`",
+            "커스텀 UI 표시: Lightning 컴포넌트, Flow, Visualforce"
+          ]
+        },
+        {
+          "type": "code",
+          "code": "<apex:page standardController=\"Case\" extensions=\"CaseExt\">\n    <apex:outputText value=\"{!Case.Subject}\"/>   <!-- 기본 이스케이프 -->\n</apex:page>",
+          "lang": "html"
+        },
+        {
+          "type": "list",
+          "items": [
+            "추천 모듈: Visualforce Basics, Lightning Web Components Basics"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Review the Lightning Component Framework",
+      "ko": "Lightning Component Framework",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/platform-developer-i-certification-prep-user-interfaces/pd1-3-ui-lcf",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "LWC의 쓰임새와 모범 사례: 웹 표준 기반이라 빠름, 이벤트로 통신, LDS 우선",
+            "Lightning 컴포넌트·Flow·Agentforce와 함께 동작하는 Apex: `@AuraEnabled`, `@InvocableMethod`, Flow 화면용 LWC(`lightning__FlowScreen`), Apex에서 Flow 실행(`Flow.Interview`)"
+          ]
+        },
+        {
+          "type": "code",
+          "code": "Map<String, Object> inputs = new Map<String, Object>{ 'recordId' => acc.Id };\nFlow.Interview f = Flow.Interview.createInterview('Welcome_Flow', inputs);\nf.start();",
+          "lang": "apex",
+          "title": "Apex에서 Flow 시작"
+        },
+        {
+          "type": "list",
+          "items": [
+            "추천 모듈: Best Practices in LWC, Visualforce & Lightning Experience, Quick Start: Aura Components, LWC for Aura Developers, Agent Customization with Apex"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Aura는 LWC를 품을 수 있지만 LWC는 Aura를 품을 수 없습니다. 새로 만든다면 LWC."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "XSS",
+      "사용자 입력이 스크립트로 실행되는 취약점"
+    ],
+    [
+      "SOQL Injection",
+      "입력으로 쿼리 조건을 조작하는 취약점"
+    ]
+  ]
+}

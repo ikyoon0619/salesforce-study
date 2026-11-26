@@ -1,0 +1,299 @@
+{
+  "intro": "C#·Java를 아는 개발자 관점에서 Apex와 플랫폼의 차이를 정리하는 모듈입니다. **멀티테넌트 때문에 생긴 규칙**(Governor Limit, Bulk 처리, 테스트 75%)과 실행 컨텍스트, 비동기 Apex, 디버그 로그까지 PD1의 기초가 한 번에 나옵니다.",
+  "units": [
+    {
+      "title": "Map .NET Concepts to the Agentforce 360 Platform",
+      "ko": ".NET 개념을 플랫폼에 대응시키기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/apex_basics_dotnet/mapping_concepts",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "플랫폼은 **메타데이터 기반** 입니다. 코드, 설정, 앱이 모두 메타데이터이고 데이터베이스·UI·보안·리포트가 붙어 있습니다. 서버 관리, 업그레이드, 확장은 Salesforce가 합니다. 코드는 항상 필요하지 않고, 클릭으로 되면 클릭이 먼저입니다."
+        },
+        {
+          "type": "code",
+          "code": "[private | public | global]\n[virtual | abstract]\n[with sharing | without sharing | inherited sharing]\nclass ClassName [implements Interface] [extends Parent] {\n}",
+          "lang": "apex",
+          "title": "클래스 선언 형태"
+        },
+        {
+          "type": "table",
+          "title": "Apex 자료형",
+          "headers": [
+            "종류",
+            "내용"
+          ],
+          "rows": [
+            [
+              "기본형",
+              "Integer, Long, Double, Decimal, String, Boolean, Date, Datetime, **Id**(18자 레코드 Id). 초기화하지 않으면 **모두 null**"
+            ],
+            [
+              "sObject",
+              "Account, Invoice__c 같은 표준·커스텀 오브젝트 (테이블 한 행)"
+            ],
+            [
+              "enum",
+              "값을 직접 숫자로 지정할 수 없음. `ordinal()` 은 0부터"
+            ],
+            [
+              "컬렉션",
+              "**List, Set, Map 세 가지뿐**. 배열은 없고 `String[]` 표기는 List와 같음"
+            ]
+          ]
+        },
+        {
+          "type": "code",
+          "code": "List<Account> accs = [SELECT Id, Name FROM Account];   // SOQL 결과는 항상 List\nString first = accs[0].Name;                           // accs.get(0).Name 과 같음\n\nSet<Id> ids = new Set<Id>{ accs[0].Id };                 // 중복 없음, WHERE Id IN :ids 에 자주 씀\nMap<Id, Account> byId = new Map<Id, Account>(accs);      // Id로 바로 찾기\nAccount a = byId.get(accs[0].Id);",
+          "lang": "apex"
+        },
+        {
+          "type": "table",
+          "title": ".NET과 다른 점",
+          "headers": [
+            "항목",
+            "Apex / 플랫폼"
+          ],
+          "rows": [
+            [
+              "대소문자",
+              "**구분하지 않음**"
+            ],
+            [
+              "DB와의 관계",
+              "오브젝트마다 클래스가 있고, 없는 필드를 쓰면 컴파일 실패. 코드가 참조하는 필드는 삭제 불가"
+            ],
+            [
+              "테스트",
+              "프로덕션 배포에 **커버리지 75%** 필요. 메이저 릴리스 전 Salesforce가 모든 테스트를 실행"
+            ],
+            [
+              "프로젝트 파일",
+              "솔루션·설정 파일, 연결 문자열 없음. 앱은 탭·페이지·리포트의 느슨한 모음"
+            ],
+            [
+              "보안",
+              "인증·권한은 플랫폼이 선언형으로 처리 (오브젝트·필드·레코드)"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "개발 도구: Developer Edition org, **Developer Console**(편집, 디버그, SOQL·SOSL 실행, 쿼리 플랜), VS Code + Salesforce Extensions, Salesforce CLI",
+            "연동: SOAP·REST 양방향. Apex로 웹 서비스를 노출하거나 외부를 호출하고, 이메일을 받아 처리할 수도 있습니다."
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Developer Console로 첫 클래스 만들기",
+          "items": [
+            "Setup > Quick Find 'Developer Console' (필요하면 Enable Developer Console)",
+            "File > New > Apex Class → EmailManager",
+            "`Messaging.SingleEmailMessage` 로 메일을 보내는 static 메서드 작성 후 Ctrl+S",
+            "Debug > Open Execute Anonymous Window에서 `EmailManager.sendMail(...)` 실행"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "시험 포인트: Apex 컬렉션은 3가지, 변수 기본값은 null, 대소문자 구분 없음, 배포 커버리지 75%."
+        }
+      ]
+    },
+    {
+      "title": "Understand Execution Context",
+      "ko": "실행 컨텍스트와 트리거",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/apex_basics_dotnet/execution_context",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "코드가 시작해서 끝날 때까지가 **실행 컨텍스트** 입니다. 같은 컨텍스트 안에서 트리거, Workflow, Flow가 함께 실행되고 **Governor Limit을 함께 씁니다**."
+        },
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 250\" role=\"img\" aria-label=\"한 실행 컨텍스트 안에서 함께 도는 것들\"><rect class=\"d-box\" x=\"20\" y=\"30\" width=\"680\" height=\"190\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"129.5\" text-anchor=\"middle\">실행 컨텍스트 (트랜잭션) = 같은 Governor Limit</text><rect class=\"d-accent\" x=\"40\" y=\"80\" width=\"150\" height=\"110\" rx=\"10\"/><text class=\"d-strong\" x=\"115.0\" y=\"131.5\" text-anchor=\"middle\">Execute Anonymous</text><text class=\"d-sub\" x=\"115.0\" y=\"150.5\" text-anchor=\"middle\">insert acc;</text><rect class=\"d-accent\" x=\"210\" y=\"80\" width=\"150\" height=\"110\" rx=\"10\"/><text class=\"d-strong\" x=\"285.0\" y=\"131.5\" text-anchor=\"middle\">before insert</text><text class=\"d-sub\" x=\"285.0\" y=\"150.5\" text-anchor=\"middle\">AccountTrigger</text><rect class=\"d-accent\" x=\"380\" y=\"80\" width=\"150\" height=\"110\" rx=\"10\"/><text class=\"d-strong\" x=\"455.0\" y=\"123.5\" text-anchor=\"middle\">after insert</text><text class=\"d-sub\" x=\"455.0\" y=\"142.5\" text-anchor=\"middle\">Handler →</text><text class=\"d-sub\" x=\"455.0\" y=\"158.5\" text-anchor=\"middle\">Opportunity insert</text><rect class=\"d-warn\" x=\"550\" y=\"80\" width=\"130\" height=\"110\" rx=\"10\"/><text class=\"d-strong\" x=\"615.0\" y=\"123.5\" text-anchor=\"middle\">Workflow · Flow</text><text class=\"d-sub\" x=\"615.0\" y=\"142.5\" text-anchor=\"middle\">같은 이벤트에</text><text class=\"d-sub\" x=\"615.0\" y=\"158.5\" text-anchor=\"middle\">반응한 자동화</text><line class=\"d-line\" x1=\"194\" y1=\"135\" x2=\"206\" y2=\"135\"/><polygon class=\"d-arrow\" points=\"206.0,135.0 197.9,138.9 197.9,131.1\"/><line class=\"d-line\" x1=\"364\" y1=\"135\" x2=\"376\" y2=\"135\"/><polygon class=\"d-arrow\" points=\"376.0,135.0 367.9,138.9 367.9,131.1\"/><line class=\"d-line\" x1=\"534\" y1=\"135\" x2=\"546\" y2=\"135\"/><polygon class=\"d-arrow\" points=\"546.0,135.0 537.9,138.9 537.9,131.1\"/></svg>",
+          "caption": "익명 실행 한 번에 트리거와 다른 자동화가 모두 같은 한도 안에서 돕니다."
+        },
+        {
+          "type": "table",
+          "title": "Apex가 실행되는 방법",
+          "headers": [
+            "방법",
+            "언제"
+          ],
+          "rows": [
+            [
+              "Database Trigger",
+              "레코드 insert/update/delete/undelete 이벤트"
+            ],
+            [
+              "Anonymous Apex",
+              "Developer Console·CLI에서 코드 조각 실행"
+            ],
+            [
+              "Asynchronous Apex",
+              "future, queueable, batch, scheduled"
+            ],
+            [
+              "Web Services",
+              "REST·SOAP로 노출하거나 호출"
+            ],
+            [
+              "Email Services",
+              "받은 메일 처리"
+            ],
+            [
+              "Visualforce · Lightning",
+              "페이지 컨트롤러, 컴포넌트의 Apex 호출, Flow 액션"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Apex는 기본적으로 모든 오브젝트·필드에 접근합니다(시스템 모드). 사용자의 공유 규칙을 적용하려면 `with sharing` 을 씁니다. **공유 키워드는 항상 명시** 하는 것이 모범 사례입니다.",
+            "트리거 이벤트 7가지: before insert/update/delete, after insert/update/delete, after undelete",
+            "**before**: 같은 레코드 값 검증·변경. 끝나면 시스템이 저장하므로 DML 불필요(하면 오류)",
+            "**after**: Id, LastModifiedDate 같은 시스템 값을 읽거나 **다른** 레코드를 변경. 트리거 레코드는 읽기 전용"
+          ]
+        },
+        {
+          "type": "code",
+          "code": "trigger AccountTrigger on Account (before insert, after insert) {\n    if (Trigger.isAfter && Trigger.isInsert) {\n        AccountHandler.createNewOpportunity(Trigger.new);\n    }\n}\n\npublic with sharing class AccountHandler {\n    public static void createNewOpportunity(List<Account> accts) {\n        List<Opportunity> opps = new List<Opportunity>();\n        for (Account a : accts) {\n            opps.add(new Opportunity(Name = a.Name + ' Opportunity',\n                StageName = 'Prospecting', CloseDate = Date.today().addMonths(1),\n                AccountId = a.Id));\n        }\n        if (!opps.isEmpty()) insert opps;   // 루프 밖에서 한 번만 DML\n    }\n}",
+          "lang": "apex",
+          "title": "Bulk로 만든 트리거 + Handler"
+        },
+        {
+          "type": "list",
+          "items": [
+            "트리거는 한 번에 **최대 200건** 을 받습니다. 동기 한도는 SOQL 100, DML 문 150. 루프 안 SOQL·DML은 대량 처리에서 반드시 깨집니다.",
+            "Bulk 테스트: `@isTest` 클래스에서 Account 200건을 리스트로 만들어 `Test.startTest()`/`stopTest()` 사이에 insert하고 `Assert.areEqual(200, ...)` 로 확인",
+            "세션·애플리케이션 변수는 없습니다. **static 변수는 한 실행 컨텍스트 동안만** 유지됩니다."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "트리거보다 Flow로 되면 Flow가 먼저입니다. 트리거를 쓴다면 오브젝트당 하나, 로직은 Handler 클래스로."
+        }
+      ]
+    },
+    {
+      "title": "Use Asynchronous Apex",
+      "ko": "비동기 Apex",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/apex_basics_dotnet/async_apex",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "비동기를 쓰는 이유 세 가지: **대량 레코드**(비동기 한도가 더 큼), **외부 웹 서비스 호출**(트리거에서 직접 콜아웃 불가), **사용자 경험**(기다릴 필요 없는 일은 나중에)"
+          ]
+        },
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 230\" role=\"img\" aria-label=\"비동기 Apex 세 가지\"><rect class=\"d-box\" x=\"20\" y=\"40\" width=\"210\" height=\"150\" rx=\"10\"/><text class=\"d-strong\" x=\"125.0\" y=\"95.5\" text-anchor=\"middle\">@future</text><text class=\"d-sub\" x=\"125.0\" y=\"114.5\" text-anchor=\"middle\">static void</text><text class=\"d-sub\" x=\"125.0\" y=\"130.5\" text-anchor=\"middle\">기본형 인자만</text><text class=\"d-sub\" x=\"125.0\" y=\"146.5\" text-anchor=\"middle\">Job Id 없음, 체이닝 불가</text><rect class=\"d-accent\" x=\"255\" y=\"40\" width=\"210\" height=\"150\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"95.5\" text-anchor=\"middle\">Queueable</text><text class=\"d-sub\" x=\"360.0\" y=\"114.5\" text-anchor=\"middle\">implements Queueable</text><text class=\"d-sub\" x=\"360.0\" y=\"130.5\" text-anchor=\"middle\">sObject 인자 가능</text><text class=\"d-sub\" x=\"360.0\" y=\"146.5\" text-anchor=\"middle\">Job Id 반환, 체이닝</text><rect class=\"d-warn\" x=\"490\" y=\"40\" width=\"210\" height=\"150\" rx=\"10\"/><text class=\"d-strong\" x=\"595.0\" y=\"95.5\" text-anchor=\"middle\">Batch</text><text class=\"d-sub\" x=\"595.0\" y=\"114.5\" text-anchor=\"middle\">start / execute / finish</text><text class=\"d-sub\" x=\"595.0\" y=\"130.5\" text-anchor=\"middle\">기본 200건씩</text><text class=\"d-sub\" x=\"595.0\" y=\"146.5\" text-anchor=\"middle\">수백만 건 처리</text></svg>",
+          "caption": "가벼운 일은 future, 객체를 넘기거나 이어서 실행하면 Queueable, 아주 많은 레코드는 Batch"
+        },
+        {
+          "type": "code",
+          "code": "public class AccountSync {\n    @future(callout=true)\n    public static void push(Set<Id> accountIds) {        // sObject 대신 Id\n        List<Account> accs = [SELECT Name FROM Account WHERE Id IN :accountIds];\n        // HTTP 콜아웃 ...\n    }\n}",
+          "lang": "apex",
+          "title": "@future: static void, 기본형 인자"
+        },
+        {
+          "type": "code",
+          "code": "public class CleanupBatch implements Database.Batchable<sObject> {\n    public Database.QueryLocator start(Database.BatchableContext bc) {\n        return Database.getQueryLocator('SELECT Id FROM Task WHERE IsClosed = true');\n    }\n    public void execute(Database.BatchableContext bc, List<Task> scope) {\n        delete scope;          // 기본 200건씩\n    }\n    public void finish(Database.BatchableContext bc) {\n        // 완료 메일 등 마무리\n    }\n}\n// 실행: Database.executeBatch(new CleanupBatch());",
+          "lang": "apex",
+          "title": "Batch Apex"
+        },
+        {
+          "type": "code",
+          "code": "public class UpdateParent implements Queueable {\n    private List<Contact> contacts;\n    public UpdateParent(List<Contact> contacts) { this.contacts = contacts; }\n    public void execute(QueueableContext ctx) {\n        // 처리 후 필요하면 다음 작업 enqueue (체이닝)\n    }\n}\nId jobId = System.enqueueJob(new UpdateParent(contacts));",
+          "lang": "apex",
+          "title": "Queueable"
+        },
+        {
+          "type": "list",
+          "items": [
+            "`Database.Stateful` 을 구현하면 Batch의 execute 사이에 값을 유지합니다.",
+            "Apex Flex Queue로 Batch 작업을 대기시키고 순서를 바꿀 수 있습니다.",
+            "비동기여도 Governor Limit은 있습니다. 단지 더 클 뿐입니다."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "\"future 메서드에 sObject를 넘기면?\" → 컴파일 오류. 실행할 때쯤 값이 바뀌었을 수 있어서 Id를 넘기고 다시 조회합니다."
+        }
+      ]
+    },
+    {
+      "title": "Debug and Run Diagnostics",
+      "ko": "디버그와 진단",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/apex_basics_dotnet/debugging_diagnostics",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "멀티테넌트 환경에서는 실행을 멈추는 중단점이 공유 자원을 붙잡으므로, 기본 도구는 **디버그 로그** 입니다. `System.debug()` 로 기록합니다."
+        },
+        {
+          "type": "table",
+          "title": "로그 수준 (낮음 → 높음, 누적)",
+          "headers": [
+            "수준",
+            "의미"
+          ],
+          "rows": [
+            [
+              "NONE",
+              "기록 안 함"
+            ],
+            [
+              "ERROR · WARN · INFO",
+              "중요한 것만"
+            ],
+            [
+              "DEBUG",
+              "System.debug 기본 수준"
+            ],
+            [
+              "FINE · FINER · FINEST",
+              "가장 자세함 (FINEST는 아래 모두 포함)"
+            ]
+          ]
+        },
+        {
+          "type": "code",
+          "code": "System.debug(LoggingLevel.INFO, 'My Info Debug Message');\nSystem.debug(LoggingLevel.FINE, 'My Fine Debug Message');  // Apex Code가 INFO면 안 보임",
+          "lang": "apex",
+          "title": "수준 지정"
+        },
+        {
+          "type": "list",
+          "items": [
+            "로그 하나는 **20MB** 까지, 넘으면 잘립니다. org는 로그를 최대 **1,000MB** 보관하고 오래된 것부터 지웁니다.",
+            "Developer Console > Debug > Change Log Levels에서 카테고리별 수준을 바꿉니다. FINE 메시지를 보려면 Apex Code를 FINE 이상으로.",
+            "Log Inspector: Debug > Perspective Manager에서 'All (Predefined)'를 고르면 Timeline, Executed Units, Execution Log를 함께 봅니다. 필터는 대소문자를 구분합니다.",
+            "**Checkpoint**: 코드 줄 왼쪽을 클릭해 빨간 점을 찍으면, 실행을 멈추지 않고 그 시점의 변수(Symbols)와 Heap 상태를 Checkpoint Inspector에서 봅니다."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "\"실행을 멈추지 않고 특정 줄의 변수 값을 보려면?\" → Developer Console Checkpoint. VS Code에서는 Apex Replay Debugger."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Execution Context",
+      "코드 시작부터 끝까지, 같은 한도를 공유하는 범위"
+    ],
+    [
+      "Anonymous Apex",
+      "저장하지 않고 한 번 실행하는 코드"
+    ],
+    [
+      "Checkpoint",
+      "실행을 멈추지 않고 상태를 기록하는 지점"
+    ]
+  ]
+}

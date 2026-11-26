@@ -1,0 +1,147 @@
+{
+  "intro": "시험 가이드의 **Agentforce for Developers** 는 지금 **Agentforce Vibes** 확장으로 이름이 바뀌었습니다. VS Code에서 자연어로 Apex·LWC를 만들고, 테스트를 만들고, org에 배포까지 맡기는 AI 도구입니다. 시험에서는 **무엇을 할 수 있는지와 한계(사람의 검토 책임)** 를 묻습니다.",
+  "units": [
+    {
+      "title": "Get to Know Agentforce Vibes",
+      "ko": "Agentforce Vibes 알아보기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/einstein-for-developers/get-to-know-einstein-for-developers",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Agentforce Vibes(옛 Agentforce for Developers)는 개발 작업을 대신 실행하는 **에이전트형 AI 도구 모음** 입니다. 단순히 답을 주는 채팅이 아니라 명령 실행, 여러 단계 작업, org 연결까지 합니다."
+        },
+        {
+          "type": "table",
+          "title": "핵심 기능",
+          "headers": [
+            "기능",
+            "하는 일"
+          ],
+          "rows": [
+            [
+              "Agentforce Vibes 채팅",
+              "MCP로 org와 연결된 에이전트 채팅. 코드 생성, 명령 실행, 테스트·배포·메타데이터 작업"
+            ],
+            [
+              "인라인 자동완성",
+              "타이핑하는 동안 Apex와 LWC(JS, HTML, CSS) 코드 제안"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Salesforce DX 프로젝트에서 동작하며 **Salesforce Extension Pack**(VS Code Marketplace)에 포함되어 있습니다. Agentforce Vibes IDE에는 미리 설치되어 있습니다.",
+            "사용 조건: Salesforce 확장의 텔레메트리가 켜져 있어야 합니다 (`salesforcedx-vscode-core.telemetry.enabled`).",
+            "상태 표시줄 아이콘으로 언제든 끌 수 있습니다.",
+            "Salesforce의 보안 맞춤 AI 모델(익명화한 코드 패턴으로 학습)과 정적 분석·보안 스캔 권장으로 모범 사례를 돕습니다."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "**책임 있는 사용**: AI 출력은 부정확하거나 해로울 수 있고 실행할 때마다 다를 수 있습니다. 개발자가 정확성과 안전성을 검토하고, 결과 적용의 책임도 개발자에게 있습니다. 이 한계가 시험에 나옵니다."
+        }
+      ]
+    },
+    {
+      "title": "Seamlessly Interact with Agentforce as You Code",
+      "ko": "코딩하면서 대화하기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/einstein-for-developers/seamlessly-interact-with-dev-assistant-as-you-code",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Activity Bar의 Agentforce Vibes 아이콘으로 채팅을 엽니다. 열린 프로젝트와 파일을 알고 대화를 이어 갑니다.",
+            "질문만 하지 말고 **작업을 맡기세요**: \"org의 기존 패턴에 맞춰 Account 관리 Apex 클래스를 만들어\", \"AccountService의 단위 테스트를 만들어\", \"이 SOQL이 느린 이유와 개선안\""
+          ]
+        },
+        {
+          "type": "table",
+          "title": "Rules vs Skills",
+          "headers": [
+            "",
+            "Rules",
+            "Skills"
+          ],
+          "rows": [
+            [
+              "무엇",
+              "항상 적용되는 지침 (코딩 표준, 명명 규칙)",
+              "특정 작업용 지침 묶음"
+            ],
+            [
+              "언제",
+              "모든 세션에 항상",
+              "요청이 설명과 맞을 때만 불러옴"
+            ],
+            [
+              "예",
+              "Apex 클래스는 PascalCase, LWC는 kebab-case",
+              "apex-class-generator, lwc-component-creator"
+            ],
+            [
+              "만드는 법",
+              "UI 또는 `/newrule` 명령",
+              "Skills UI에서 관리 (기본 켜짐)"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "채팅에서 `@` 를 입력하면 파일 등 맥락을 첨부할 수 있습니다. 업무 규칙, 관련 Salesforce 기능, 원하는 동작을 구체적으로 적을수록 결과가 좋아집니다."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Supercharge Your Development with MCP Integration",
+      "ko": "MCP로 org 맥락 연결",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/einstein-for-developers/supercharge-your-development-with-mcp-integration",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 220\" role=\"img\" aria-label=\"Agentforce Vibes가 org를 이해하는 방법\"><rect class=\"d-accent\" x=\"20\" y=\"70\" width=\"190\" height=\"90\" rx=\"10\"/><text class=\"d-strong\" x=\"115.0\" y=\"103.5\" text-anchor=\"middle\">VS Code 채팅</text><text class=\"d-sub\" x=\"115.0\" y=\"122.5\" text-anchor=\"middle\">자연어 작업 요청</text><text class=\"d-sub\" x=\"115.0\" y=\"138.5\" text-anchor=\"middle\">Rules · Skills</text><rect class=\"d-box\" x=\"270\" y=\"70\" width=\"190\" height=\"90\" rx=\"10\"/><text class=\"d-strong\" x=\"365.0\" y=\"111.5\" text-anchor=\"middle\">MCP</text><text class=\"d-sub\" x=\"365.0\" y=\"130.5\" text-anchor=\"middle\">표준 연결 규약</text><rect class=\"d-warn\" x=\"520\" y=\"20\" width=\"180\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"610.0\" y=\"56.5\" text-anchor=\"middle\">Salesforce DX MCP 서버</text><text class=\"d-sub\" x=\"610.0\" y=\"75.5\" text-anchor=\"middle\">스키마, Apex, 권한</text><rect class=\"d-box\" x=\"520\" y=\"120\" width=\"180\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"610.0\" y=\"156.5\" text-anchor=\"middle\">다른 MCP 서버</text><text class=\"d-sub\" x=\"610.0\" y=\"175.5\" text-anchor=\"middle\">외부 도구·데이터</text><line class=\"d-line\" x1=\"214\" y1=\"115\" x2=\"266\" y2=\"115\"/><polygon class=\"d-arrow\" points=\"266.0,115.0 257.9,118.9 257.9,111.1\"/><polygon class=\"d-arrow\" points=\"214.0,115.0 222.1,111.1 222.1,118.9\"/><line class=\"d-line\" x1=\"464\" y1=\"105\" x2=\"516\" y2=\"60\"/><polygon class=\"d-arrow\" points=\"516.0,60.0 512.4,68.3 507.3,62.3\"/><polygon class=\"d-arrow\" points=\"464.0,105.0 467.6,96.7 472.7,102.7\"/><line class=\"d-line\" x1=\"464\" y1=\"125\" x2=\"516\" y2=\"160\"/><polygon class=\"d-arrow\" points=\"516.0,160.0 507.1,158.7 511.5,152.2\"/><polygon class=\"d-arrow\" points=\"464.0,125.0 472.9,126.3 468.5,132.8\"/></svg>",
+          "caption": "MCP는 AI 도구와 외부 도구·데이터를 잇는 표준입니다."
+        },
+        {
+          "type": "p",
+          "text": "**MCP(Model Context Protocol)** 는 AI 도우미가 외부 도구, 데이터, 서비스에 안전하게 연결하는 개방형 표준입니다. **Salesforce DX MCP 서버** 를 켜면 Agentforce Vibes가 org를 실시간으로 이해합니다."
+        },
+        {
+          "type": "list",
+          "items": [
+            "org 스키마와 메타데이터, 커스텀 오브젝트·필드·관계 조회",
+            "기존 Apex 클래스, 트리거, Lightning 컴포넌트 분석",
+            "보안 모델, Permission Set, Profile 이해",
+            "org 설정에 맞는 코드 생성과 최적화 제안"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "시작하기",
+          "items": [
+            "Salesforce DX MCP 서버 켜기",
+            "필요한 다른 MCP 서버 연결",
+            "인증과 권한 설정",
+            "채팅하면 자동으로 MCP 연결을 사용"
+          ]
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Agentforce Vibes",
+      "옛 Agentforce for Developers. VS Code의 개발용 AI 에이전트"
+    ],
+    [
+      "MCP",
+      "Model Context Protocol, AI와 도구를 잇는 표준"
+    ],
+    [
+      "Rules",
+      "항상 적용되는 AI 코딩 지침"
+    ]
+  ]
+}
