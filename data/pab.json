@@ -35,49 +35,56 @@
           "url": "https://trailhead.salesforce.com/content/learn/modules/lex_migration_customization",
           "minutes": 25,
           "kind": "module",
-          "topics": "선언형 커스터마이징 기본, 클릭으로 가능한 것과 코드가 필요한 것"
+          "topics": "선언형 커스터마이징 기본, 클릭으로 가능한 것과 코드가 필요한 것",
+          "note": "app_customization_lite"
         },
         {
           "title": "App Development with Salesforce DX",
           "url": "https://trailhead.salesforce.com/content/learn/modules/sfdx_app_dev",
           "minutes": 150,
           "kind": "module",
-          "topics": "Salesforce DX, Scratch Org, Salesforce CLI로 앱 개발"
+          "topics": "Salesforce DX, Scratch Org, Salesforce CLI로 앱 개발",
+          "note": "salesforce_dx"
         },
         {
           "title": "AgentExchange Basics",
           "url": "https://trailhead.salesforce.com/content/learn/modules/appexchange_basics",
           "minutes": 55,
           "kind": "module",
-          "topics": "AgentExchange(구 AppExchange)에서 앱·컴포넌트 찾기, 설치 전 검토"
+          "topics": "AgentExchange(구 AppExchange)에서 앱·컴포넌트 찾기, 설치 전 검토",
+          "note": "agentexchange_basics"
         },
         {
           "title": "Data Security",
           "url": "https://trailhead.salesforce.com/content/learn/modules/data_security",
           "minutes": 110,
           "kind": "module",
-          "topics": "Org·Object·Field·Record 단계 보안, Profile, Permission Set, OWD, Role Hierarchy, Sharing Rule"
+          "topics": "Org·Object·Field·Record 단계 보안, Profile, Permission Set, OWD, Role Hierarchy, Sharing Rule",
+          "note": "data_security"
         },
         {
           "title": "User Management",
           "url": "https://trailhead.salesforce.com/content/learn/modules/lex_implementation_user_setup_mgmt",
           "minutes": 45,
           "kind": "module",
-          "topics": "사용자 생성·비활성화, 라이선스, 프로필"
+          "topics": "사용자 생성·비활성화, 라이선스, 프로필",
+          "note": "user_management"
         },
         {
           "title": "User Access Policies",
           "url": "https://trailhead.salesforce.com/content/learn/modules/user-access-policies",
           "minutes": 70,
           "kind": "module",
-          "topics": "조건에 맞는 사용자에게 Permission Set·Group 등을 자동 부여/회수"
+          "topics": "조건에 맞는 사용자에게 Permission Set·Group 등을 자동 부여/회수",
+          "note": "user_access_policies"
         },
         {
           "title": "Reports & Dashboards for Lightning Experience",
           "url": "https://trailhead.salesforce.com/content/learn/modules/lex_implementation_reports_dashboards",
           "minutes": 110,
           "kind": "module",
-          "topics": "리포트 형식, Report Type, 필터, 대시보드, Running User"
+          "topics": "리포트 형식, Report Type, 필터, 대시보드, Running User",
+          "note": "reports_dashboards"
         }
       ],
       "summary": [

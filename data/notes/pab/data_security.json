@@ -1,0 +1,346 @@
+{
+  "intro": "코드 없이 데이터 접근을 통제하는 네 단계(**조직 → 오브젝트 → 필드 → 레코드**)를 채용 앱 예시로 하나씩 설정합니다. App Builder 시험의 보안 문제 대부분이 이 모듈 범위입니다.",
+  "units": [
+    {
+      "title": "Overview of Data Security",
+      "ko": "데이터 보안 개요",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/data_security/data_security_overview",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "네 단계",
+          "headers": [
+            "단계",
+            "도구"
+          ],
+          "rows": [
+            [
+              "Organization",
+              "사용자 목록, 비밀번호 정책, 로그인 시간·IP 제한"
+            ],
+            [
+              "Object",
+              "오브젝트 권한 (Create, Read, Edit, Delete) — Permission Set / Group"
+            ],
+            [
+              "Field",
+              "Field-Level Security — 오브젝트는 봐도 특정 필드는 숨김"
+            ],
+            [
+              "Record",
+              "OWD, Role Hierarchy, Sharing Rule, Manual Sharing"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "보안 설정은 화면뿐 아니라 **API**에도 똑같이 적용됩니다.",
+            "감사 도구: Created By / Last Modified By, Login History(최근 6개월), Field History Tracking, **Setup Audit Trail**, Event Monitoring"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Control Access to the Org",
+      "ko": "조직 접근 통제",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/data_security/data_security_org",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "사용자",
+          "items": [
+            "Setup > Users > New User (Add Multiple Users는 최대 10명)",
+            "License가 고를 수 있는 Profile을 결정, 사용자당 Profile 1개",
+            "삭제 불가 → Active 해제로 비활성화, 당장 못 하면 **Freeze**"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "비밀번호 정책",
+          "items": [
+            "Setup > **Password Policies**: 만료 일수, 복잡도, 잠금까지 실패 횟수, 잠금 해제 방식",
+            "Profile 단위 비밀번호 정책이 있으면 조직 정책보다 우선"
+          ]
+        },
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 240\" role=\"img\" aria-label=\"로그인 IP 제한 두 가지\"><rect class=\"d-box\" x=\"20\" y=\"30\" width=\"320\" height=\"180\" rx=\"10\"/><text class=\"d-strong\" x=\"180.0\" y=\"92.5\" text-anchor=\"middle\">Trusted IP Ranges</text><text class=\"d-sub\" x=\"180.0\" y=\"111.5\" text-anchor=\"middle\">Setup &gt; Network Access (조직 전체)</text><text class=\"d-sub\" x=\"180.0\" y=\"127.5\" text-anchor=\"middle\">범위 안: 인증 코드 없이 로그인</text><text class=\"d-sub\" x=\"180.0\" y=\"143.5\" text-anchor=\"middle\">범위 밖: 인증 코드 요구</text><text class=\"d-sub\" x=\"180.0\" y=\"159.5\" text-anchor=\"middle\">→ 막지는 않음</text><rect class=\"d-warn\" x=\"380\" y=\"30\" width=\"320\" height=\"180\" rx=\"10\"/><text class=\"d-strong\" x=\"540.0\" y=\"92.5\" text-anchor=\"middle\">Login IP Ranges</text><text class=\"d-sub\" x=\"540.0\" y=\"111.5\" text-anchor=\"middle\">Profile 단위</text><text class=\"d-sub\" x=\"540.0\" y=\"127.5\" text-anchor=\"middle\">범위 밖: 로그인 자체 불가</text><text class=\"d-sub\" x=\"540.0\" y=\"143.5\" text-anchor=\"middle\">Login Hours도 Profile에서</text><text class=\"d-sub\" x=\"540.0\" y=\"159.5\" text-anchor=\"middle\">→ 차단</text></svg>",
+          "caption": "Trusted IP Range는 인증 생략, Profile의 Login IP Range는 차단"
+        },
+        {
+          "type": "steps",
+          "title": "Login Hours",
+          "items": [
+            "Setup > Profiles > 프로필 > Login Hours > Edit",
+            "시작·종료를 같게 하면 그날 로그인 불가",
+            "시간이 끝나면 이미 로그인한 사용자도 조회만 가능하고 작업 불가"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "'특정 IP 밖에서는 절대 로그인 못 하게' → **Profile의 Login IP Ranges**. '사무실에서는 인증 코드 없이' → **Network Access의 Trusted IP Ranges**."
+        }
+      ]
+    },
+    {
+      "title": "Control Access to Objects",
+      "ko": "오브젝트 접근",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/data_security/data_security_objects",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "Profile, Permission Set, Permission Set Group",
+          "headers": [
+            "",
+            "개수",
+            "역할"
+          ],
+          "rows": [
+            [
+              "Profile",
+              "사용자당 **1개**",
+              "기본 앱, Record Type, Page Layout, IP 범위, Login Hours"
+            ],
+            [
+              "Permission Set",
+              "여러 개",
+              "오브젝트·필드·사용자 권한, Apex·VF·Connected App 접근, 탭 설정. 한 가지 업무 단위로"
+            ],
+            [
+              "Permission Set Group",
+              "여러 개",
+              "Permission Set 묶음 = 페르소나(예: Sales Rep). Muting으로 일부 제거"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "표준 Profile(Standard User, System Administrator, Minimum Access - Salesforce 등)의 오브젝트 권한은 **수정 불가** → Clone해서 수정",
+            "**View All Data / Modify All Data**는 공유 설정을 무시합니다. 관리자 외에는 신중히",
+            "권장: Minimum Access - Salesforce를 기본으로, 필요한 권한은 Permission Set으로 더하기",
+            "권한을 빼려면 Profile과 모든 Permission Set에서 제거하거나, Group 안에서 Muting"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Permission Set Group 만들고 할당",
+          "items": [
+            "Setup > Permission Sets > New: Access and Manage Reviews, License None → Reviews 오브젝트 Read/Create/Edit",
+            "Setup > Permission Set Groups > New: Recruiters → Add Permission Set",
+            "Manage Assignments > Add Assignment → (선택) 만료일 → Assign"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "누가 어떤 접근을 가졌는지: Object Manager > 오브젝트 > **Object Access**, 또는 사용자/Permission Set의 **View Summary**."
+        }
+      ]
+    },
+    {
+      "title": "Control Access to Fields",
+      "ko": "필드 접근",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/data_security/data_security_fields",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "**Field-Level Security(FLS)**는 필드를 볼 수 있는지·편집할 수 있는지를 정하고, 상세 페이지뿐 아니라 **관련 목록, 리스트 뷰, 리포트, 검색 결과, API** 모두에 적용됩니다. Page Layout에서 필드를 빼는 것은 상세·편집 화면에서만 숨길 뿐입니다."
+        },
+        {
+          "type": "table",
+          "title": "채용 앱 예",
+          "headers": [
+            "필드",
+            "설정"
+          ],
+          "rows": [
+            [
+              "Position의 최소·최대 보너스",
+              "일반 직원·면접관에게 숨김"
+            ],
+            [
+              "Candidate의 SSN",
+              "채용 매니저·면접관에게 숨김"
+            ],
+            [
+              "Job Application의 Position·Candidate Lookup",
+              "채용 매니저는 Read-Only"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "필드 권한 주기",
+          "items": [
+            "Permission Set > Find Settings: Candidates > Edit > Object Read, Field Permissions 설정",
+            "여러 Permission Set에 한 번에: User Management Settings > **Field-Level Security for Permission Sets during Field Creation** 켜기 → 필드 > Set Field-Level Security"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "'리포트에서도 이 필드가 보이면 안 된다' → Page Layout이 아니라 **FLS**. 시험 단골입니다."
+        }
+      ]
+    },
+    {
+      "title": "Control Access to Records",
+      "ko": "레코드 접근",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/data_security/data_security_records",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "오브젝트 권한이 바닥선이고, OWD는 **내가 소유하지 않은 레코드**에 대한 기본 접근입니다. OWD는 오브젝트 권한보다 더 많이 줄 수 없습니다."
+        },
+        {
+          "type": "list",
+          "items": [
+            "① **OWD**: 가장 제한적인 기본값",
+            "② **Role Hierarchy**: 위 역할이 아래 레코드에 접근",
+            "③ **Sharing Rule**: 그룹 단위 예외",
+            "④ **Manual Sharing**: 레코드마다 Share 버튼"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "채용 앱 OWD",
+          "headers": [
+            "오브젝트",
+            "내부",
+            "외부"
+          ],
+          "rows": [
+            [
+              "Position",
+              "Public Read Only",
+              "Private"
+            ],
+            [
+              "Candidate",
+              "Private",
+              "Private"
+            ],
+            [
+              "Job Application",
+              "Private",
+              "Private"
+            ],
+            [
+              "Review",
+              "Controlled by Parent (Master-Detail의 Detail)",
+              ""
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "설정",
+          "items": [
+            "Setup > Sharing Settings > Organization-Wide Defaults > Edit",
+            "오브젝트별 Internal / External Access",
+            "Custom Object는 Grant Access Using Hierarchies 해제 가능 (Controlled by Parent면 불가) → Save → 공유 재계산"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "②~④는 **접근을 넓히기만** 합니다. 외부 사용자 OWD는 내부보다 넓을 수 없습니다."
+        }
+      ]
+    },
+    {
+      "title": "Create a Role Hierarchy",
+      "ko": "역할 계층",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/data_security/data_security_roles",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 270\" role=\"img\" aria-label=\"역할 계층 예시\"><rect class=\"d-accent\" x=\"270\" y=\"14\" width=\"180\" height=\"50\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"43.5\" text-anchor=\"middle\">CEO</text><rect class=\"d-box\" x=\"90\" y=\"100\" width=\"200\" height=\"50\" rx=\"10\"/><text class=\"d-strong\" x=\"190.0\" y=\"129.5\" text-anchor=\"middle\">VP of Development</text><rect class=\"d-box\" x=\"430\" y=\"100\" width=\"200\" height=\"50\" rx=\"10\"/><text class=\"d-strong\" x=\"530.0\" y=\"129.5\" text-anchor=\"middle\">VP of Human Resources</text><rect class=\"d-box\" x=\"20\" y=\"196\" width=\"160\" height=\"50\" rx=\"10\"/><text class=\"d-strong\" x=\"100.0\" y=\"225.5\" text-anchor=\"middle\">SW Dev Manager</text><rect class=\"d-box\" x=\"200\" y=\"196\" width=\"160\" height=\"50\" rx=\"10\"/><text class=\"d-strong\" x=\"280.0\" y=\"225.5\" text-anchor=\"middle\">Director QA</text><rect class=\"d-box\" x=\"380\" y=\"196\" width=\"160\" height=\"50\" rx=\"10\"/><text class=\"d-strong\" x=\"460.0\" y=\"225.5\" text-anchor=\"middle\">Recruiting Manager</text><rect class=\"d-box\" x=\"560\" y=\"196\" width=\"140\" height=\"50\" rx=\"10\"/><text class=\"d-strong\" x=\"630.0\" y=\"225.5\" text-anchor=\"middle\">Recruiter</text><line class=\"d-line\" x1=\"330\" y1=\"68\" x2=\"200\" y2=\"96\"/><polygon class=\"d-arrow\" points=\"200.0,96.0 207.1,90.5 208.7,98.1\"/><line class=\"d-line\" x1=\"390\" y1=\"68\" x2=\"530\" y2=\"96\"/><polygon class=\"d-arrow\" points=\"530.0,96.0 521.3,98.2 522.8,90.6\"/><line class=\"d-line\" x1=\"160\" y1=\"154\" x2=\"100\" y2=\"192\"/><polygon class=\"d-arrow\" points=\"100.0,192.0 104.8,184.4 108.9,191.0\"/><line class=\"d-line\" x1=\"220\" y1=\"154\" x2=\"280\" y2=\"192\"/><polygon class=\"d-arrow\" points=\"280.0,192.0 271.1,191.0 275.2,184.4\"/><line class=\"d-line\" x1=\"500\" y1=\"154\" x2=\"460\" y2=\"192\"/><polygon class=\"d-arrow\" points=\"460.0,192.0 463.2,183.6 468.6,189.3\"/><line class=\"d-line\" x1=\"560\" y1=\"154\" x2=\"620\" y2=\"192\"/><polygon class=\"d-arrow\" points=\"620.0,192.0 611.1,191.0 615.2,184.4\"/><text class=\"d-sub\" x=\"360\" y=\"264\" text-anchor=\"middle\">위 역할은 아래 역할 사용자의 레코드에 접근 (조직도와 같을 필요 없음)</text></svg>",
+          "caption": "역할 계층은 데이터 접근을 위한 것이라 조직도와 꼭 같을 필요는 없습니다."
+        },
+        {
+          "type": "list",
+          "items": [
+            "같은 접근이 필요한 직함은 한 역할로 묶어도 됩니다 (예: 주니어·시니어 엔지니어 → Software Engineer).",
+            "Custom Object는 Grant Access Using Hierarchies를 끌 수 있습니다 (표준 오브젝트는 항상 켜짐)."
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "역할 추가와 할당",
+          "items": [
+            "Setup > Roles > Set Up Roles > Expand All",
+            "상위 역할 아래 **Add Role** → Label(Onboarding Manager), This role reports to 자동 입력 → Save",
+            "역할 > Assign Users to Role → 사용자 추가 → Save"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Define Sharing Rules",
+      "ko": "Sharing Rule",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/data_security/data_security_sharing_rules",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 200\" role=\"img\" aria-label=\"Sharing Rule의 세 부분\"><rect class=\"d-box\" x=\"20\" y=\"50\" width=\"210\" height=\"100\" rx=\"10\"/><text class=\"d-strong\" x=\"125.0\" y=\"88.5\" text-anchor=\"middle\">① 어떤 레코드</text><text class=\"d-sub\" x=\"125.0\" y=\"107.5\" text-anchor=\"middle\">Owner 기준</text><text class=\"d-sub\" x=\"125.0\" y=\"123.5\" text-anchor=\"middle\">또는 필드 조건 기준</text><rect class=\"d-accent\" x=\"255\" y=\"50\" width=\"210\" height=\"100\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"88.5\" text-anchor=\"middle\">② 누구에게</text><text class=\"d-sub\" x=\"360.0\" y=\"107.5\" text-anchor=\"middle\">Role, Role &amp; Subordinates</text><text class=\"d-sub\" x=\"360.0\" y=\"123.5\" text-anchor=\"middle\">Public Group, Territory</text><rect class=\"d-warn\" x=\"490\" y=\"50\" width=\"210\" height=\"100\" rx=\"10\"/><text class=\"d-strong\" x=\"595.0\" y=\"88.5\" text-anchor=\"middle\">③ 어떤 접근</text><text class=\"d-sub\" x=\"595.0\" y=\"107.5\" text-anchor=\"middle\">Read Only</text><text class=\"d-sub\" x=\"595.0\" y=\"123.5\" text-anchor=\"middle\">Read/Write</text><line class=\"d-line\" x1=\"234\" y1=\"100\" x2=\"251\" y2=\"100\"/><polygon class=\"d-arrow\" points=\"251.0,100.0 242.9,103.9 242.9,96.1\"/><line class=\"d-line\" x1=\"469\" y1=\"100\" x2=\"486\" y2=\"100\"/><polygon class=\"d-arrow\" points=\"486.0,100.0 477.9,103.9 477.9,96.1\"/></svg>",
+          "caption": "Sharing Rule = 어떤 레코드를, 누구에게, 어떤 접근으로"
+        },
+        {
+          "type": "list",
+          "items": [
+            "OWD가 **Private 또는 Public Read Only**일 때만 의미가 있고, OWD보다 좁힐 수 없습니다.",
+            "Public Group 멤버: 사용자, Role, Role and Subordinates, Territory, 다른 Public Group",
+            "미리 예측 가능한 그룹(모든 Recruiter)에 적합. 자주 바뀌는 그룹(직무별 면접관)은 Manual Sharing 등 다른 방법"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Reviewers 그룹과 규칙",
+          "items": [
+            "Setup > Public Groups > New: Reviewers → 멤버: SW Dev Manager, Director QA 등 Role, Recruiting Manager의 Role and Internal Subordinates",
+            "Sharing Settings > Review > Sharing Rules > New: Edit Reviews",
+            "Based on record owner: All Internal Users 소유 → Reviewers 그룹에 **Read/Write** → Save"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Sharing Rule 종류: **Owner 기반**(누가 소유했나)과 **Criteria 기반**(필드 값이 무엇인가). 접근 수준은 Read Only 또는 Read/Write."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Password Policies",
+      "비밀번호 규칙"
+    ],
+    [
+      "Trusted IP Ranges",
+      "인증 코드 생략 IP (Network Access)"
+    ],
+    [
+      "Login IP Ranges",
+      "Profile 로그인 허용 IP"
+    ],
+    [
+      "View All Data / Modify All Data",
+      "공유 무시 슈퍼 권한"
+    ],
+    [
+      "Role Hierarchy",
+      "역할 계층"
+    ],
+    [
+      "Sharing Rule",
+      "그룹 단위 공유 예외"
+    ],
+    [
+      "Public Group",
+      "공유용 사용자 그룹"
+    ],
+    [
+      "Manual Sharing",
+      "레코드별 수동 공유"
+    ]
+  ]
+}

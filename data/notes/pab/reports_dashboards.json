@@ -1,0 +1,313 @@
+{
+  "intro": "업무 질문을 리포트 조건으로 바꾸는 법, Report Type·Report·Dashboard의 차이, 필터(표준·필드·필터 로직·Cross Filter·Row Limit), 리포트 형식(Tabular·Summary·Matrix), 대시보드와 **Dynamic Dashboard**를 배웁니다.",
+  "units": [
+    {
+      "title": "Get to Know Lightning Reports and Dashboards",
+      "ko": "리포트와 대시보드 개념",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_implementation_reports_dashboards/lex_implementation_reports_dashboards_overview",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "시작은 업무 질문입니다. '어떤 상품이 잘 팔리나?' → Report Type: Opportunities with Products, 형식: Summary, Product Family로 그룹, 날짜: Close Date, 필터: Product Active AND Stage = Closed Won."
+        },
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 250\" role=\"img\" aria-label=\"Report Type, Report, Dashboard 관계\"><rect class=\"d-box\" x=\"20\" y=\"90\" width=\"180\" height=\"70\" rx=\"10\"/><text class=\"d-strong\" x=\"110.0\" y=\"121.5\" text-anchor=\"middle\">Report Type</text><text class=\"d-sub\" x=\"110.0\" y=\"140.5\" text-anchor=\"middle\">오브젝트·필드 템플릿</text><rect class=\"d-accent\" x=\"270\" y=\"30\" width=\"180\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"56.5\" text-anchor=\"middle\">Report A</text><text class=\"d-sub\" x=\"360.0\" y=\"75.5\" text-anchor=\"middle\">Summary</text><rect class=\"d-accent\" x=\"270\" y=\"160\" width=\"180\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"186.5\" text-anchor=\"middle\">Report B</text><text class=\"d-sub\" x=\"360.0\" y=\"205.5\" text-anchor=\"middle\">Matrix</text><rect class=\"d-warn\" x=\"520\" y=\"70\" width=\"180\" height=\"110\" rx=\"10\"/><text class=\"d-strong\" x=\"610.0\" y=\"113.5\" text-anchor=\"middle\">Dashboard</text><text class=\"d-sub\" x=\"610.0\" y=\"132.5\" text-anchor=\"middle\">위젯 1개 = 리포트 1개</text><text class=\"d-sub\" x=\"610.0\" y=\"148.5\" text-anchor=\"middle\">Running User 권한으로 표시</text><line class=\"d-line\" x1=\"204\" y1=\"115\" x2=\"266\" y2=\"64\"/><polygon class=\"d-arrow\" points=\"266.0,64.0 262.2,72.2 257.3,66.1\"/><line class=\"d-line\" x1=\"204\" y1=\"135\" x2=\"266\" y2=\"186\"/><polygon class=\"d-arrow\" points=\"266.0,186.0 257.3,183.9 262.2,177.8\"/><line class=\"d-line-accent\" x1=\"454\" y1=\"60\" x2=\"516\" y2=\"105\"/><polygon class=\"d-arrow-accent\" points=\"516.0,105.0 507.1,103.4 511.7,97.1\"/><line class=\"d-line-accent\" x1=\"454\" y1=\"190\" x2=\"516\" y2=\"150\"/><polygon class=\"d-arrow-accent\" points=\"516.0,150.0 511.3,157.7 507.1,151.1\"/></svg>",
+          "caption": "Report Type이 리포트의 재료를 정하고, 대시보드 위젯은 각각 리포트 하나를 원천으로 합니다."
+        },
+        {
+          "type": "table",
+          "title": "세 가지 개념",
+          "headers": [
+            "개념",
+            "설명"
+          ],
+          "rows": [
+            [
+              "Report Type",
+              "어떤 **주 오브젝트와 관련 오브젝트·필드**를 쓸 수 있는지 정한 템플릿. 표준에 없으면 **Custom Report Type** (예: Leads with Activities)"
+            ],
+            [
+              "Report",
+              "조건에 맞는 레코드 목록. 필터, 그룹, 합계, 차트. 항상 **Report Folder**에 저장"
+            ],
+            [
+              "Dashboard",
+              "핵심 지표를 시각화. 위젯마다 원천 리포트 1개. 보려면 원천 리포트 폴더 접근도 필요"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "title": "대시보드는 누구 권한으로 보이나",
+          "headers": [
+            "방식",
+            "설명"
+          ],
+          "rows": [
+            [
+              "Running User 지정",
+              "정한 사용자 한 명의 권한으로 모든 시청자에게 같은 데이터. 예: 팀 리더보드는 영업 관리자로"
+            ],
+            [
+              "Dynamic Dashboard",
+              "**보는 사람 자신**이 Running User. 각자 볼 수 있는 데이터만"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "폴더는 공개·숨김·공유가 가능하고, Role, Public Group, 권한, 라이선스로 접근을 정합니다."
+        }
+      ]
+    },
+    {
+      "title": "Create Reports with the Report Builder",
+      "ko": "Report Builder",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_implementation_reports_dashboards/lex_implementation_reports_dashboards_using_report_builder",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "첫 리포트",
+          "items": [
+            "App Launcher > Reports > **New Report**",
+            "Report Type: Accounts 선택 → Start Report",
+            "미리보기가 비면 날짜 필터를 **All Time**으로",
+            "Save: 이름(Direct Customer Accounts), 설명 → Run"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "Report Builder 영역",
+          "headers": [
+            "영역",
+            "하는 일"
+          ],
+          "rows": [
+            [
+              "Outline 탭",
+              "열(Columns) 관리, 행 그룹(Summary), 행+열 그룹(Matrix)"
+            ],
+            [
+              "Filters 탭",
+              "표준 필터, 필드 필터, 필터 로직, Cross Filter, Row Limit. 탭 옆 숫자 = 적용된 조건 수"
+            ],
+            [
+              "Fields 패널",
+              "Report Type이 허용하는 모든 필드. 검색하거나 끌어서 추가"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "리포트에서 쓸 수 있는 필드는 **Report Type**이 결정합니다. 필드가 안 보이면 Report Type(또는 Custom Report Type의 레이아웃)을 확인하세요."
+        }
+      ]
+    },
+    {
+      "title": "Filter Your Report",
+      "ko": "리포트 필터",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_implementation_reports_dashboards/lex_implementation_reports_dashboards_filter_your_report",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "필터 종류",
+          "headers": [
+            "필터",
+            "설명"
+          ],
+          "rows": [
+            [
+              "Standard filter",
+              "Show Me(내 것/전체)와 날짜 범위. 대부분 오브젝트에 Created Date"
+            ],
+            [
+              "Field filter",
+              "필드 + 연산자 + 값"
+            ],
+            [
+              "Filter logic",
+              "필드 필터 번호에 AND/OR/NOT/괄호. 예: `(1 OR 2) AND NOT 3`. **표준 필터에는 적용 안 됨**"
+            ],
+            [
+              "Cross filter",
+              "부모 레코드를 자식 오브젝트가 **있는(with)/없는(without)** 것으로 거름. 자식 필드 subfilter 가능. 예외 리포트에 씀"
+            ],
+            [
+              "Row limit",
+              "**Tabular 리포트만**. 최대 행 수와 정렬. 대시보드 원천이 되려면 필수"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Cross Filter 예: 영업기회 없는 Account",
+          "items": [
+            "Filters > More Actions(▾) > **Add Cross Filter**",
+            "Accounts **without** Opportunities",
+            "(선택) Subfilter: Stage equals Prospecting, …"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Filter Logic 예",
+          "items": [
+            "Amount > 100000 (1), Probability (%) > 50 (2), Stage contains Closed (3)",
+            "More Actions > Add Filter Logic → `(1 OR 2) AND NOT 3`"
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Opportunity의 Probability는 표준 필터라서 로직에 못 넣습니다. 같은 조건을 **필드 필터**로 따로 추가하세요.",
+            "`not equals`, `does not contain`, NOT 로직은 리포트를 느리게 하거나 타임아웃을 낼 수 있습니다.",
+            "**Locked** 필터: 필터에 Locked 체크 후 저장하면 보는 사람이 그 필터를 바꿀 수 없습니다."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "'영업기회가 하나도 없는 고객 목록' → **Cross Filter without**. 시험에 자주 나옵니다."
+        }
+      ]
+    },
+    {
+      "title": "Format Your Report",
+      "ko": "리포트 형식",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_implementation_reports_dashboards/lex_implementation_reports_dashboards_report_formats",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 220\" role=\"img\" aria-label=\"리포트 형식 세 가지\"><rect class=\"d-box\" x=\"20\" y=\"30\" width=\"210\" height=\"150\" rx=\"10\"/><text class=\"d-strong\" x=\"125.0\" y=\"85.5\" text-anchor=\"middle\">Tabular</text><text class=\"d-sub\" x=\"125.0\" y=\"104.5\" text-anchor=\"middle\">단순 목록 (기본값)</text><text class=\"d-sub\" x=\"125.0\" y=\"120.5\" text-anchor=\"middle\">그룹 없음, 차트 없음</text><text class=\"d-sub\" x=\"125.0\" y=\"136.5\" text-anchor=\"middle\">대시보드엔 Row Limit 필요</text><rect class=\"d-accent\" x=\"255\" y=\"30\" width=\"210\" height=\"150\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"85.5\" text-anchor=\"middle\">Summary</text><text class=\"d-sub\" x=\"360.0\" y=\"104.5\" text-anchor=\"middle\">행(Row) 그룹</text><text class=\"d-sub\" x=\"360.0\" y=\"120.5\" text-anchor=\"middle\">소계, 차트 가능</text><text class=\"d-sub\" x=\"360.0\" y=\"136.5\" text-anchor=\"middle\">가장 많이 씀</text><rect class=\"d-warn\" x=\"490\" y=\"30\" width=\"210\" height=\"150\" rx=\"10\"/><text class=\"d-strong\" x=\"595.0\" y=\"85.5\" text-anchor=\"middle\">Matrix</text><text class=\"d-sub\" x=\"595.0\" y=\"104.5\" text-anchor=\"middle\">행 + 열(Column) 그룹</text><text class=\"d-sub\" x=\"595.0\" y=\"120.5\" text-anchor=\"middle\">격자 합계</text><text class=\"d-sub\" x=\"595.0\" y=\"136.5\" text-anchor=\"middle\">차트 가능</text></svg>",
+          "caption": "Tabular는 목록, Summary는 행 그룹, Matrix는 행+열 그룹"
+        },
+        {
+          "type": "steps",
+          "title": "Summary 예: 우선순위별 종료 Case",
+          "items": [
+            "New Report > Cases, Show Me All Cases, Opened Date All Time, Closed = True",
+            "Outline > Group Rows: **Priority**",
+            "**Detail Rows** 끄면 합계만 보임 → Save"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Matrix 예: 월·유형별 수주액",
+          "items": [
+            "Opportunities, Closed Won, Close Date All Time",
+            "Amount 열 ▾ > Summarize: **Sum**",
+            "Group Rows: Close Month, Group Columns: Type → Detail Rows 끄기 → Save"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "**Joined** 리포트는 여러 블록(Report Type)을 한 리포트에 붙이는 네 번째 형식입니다. 이 모듈에선 다루지 않지만 시험 보기로 나오니 이름은 알아 두세요."
+        }
+      ]
+    },
+    {
+      "title": "Visualize Your Data with the Lightning Dashboard Builder",
+      "ko": "대시보드 만들기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_implementation_reports_dashboards/lex_implementation_reports_dashboards_visualizing_data",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "위젯 종류",
+          "headers": [
+            "위젯",
+            "언제"
+          ],
+          "rows": [
+            [
+              "Chart",
+              "막대, 선, 도넛, 깔때기, 산점도 등 그래프"
+            ],
+            [
+              "Gauge",
+              "값 하나가 목표 범위 어디쯤인지"
+            ],
+            [
+              "Metric",
+              "핵심 숫자 하나"
+            ],
+            [
+              "Table",
+              "리포트 데이터를 열로"
+            ],
+            [
+              "Rich Text / Image / Report",
+              "텍스트, 그림, 리포트 데이터"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "대시보드 만들기",
+          "items": [
+            "Leads 리포트(Lead Source로 그룹) 저장",
+            "Dashboards > New Dashboard > 이름 > Create",
+            "**+ Widget** > Chart or Table > 리포트 선택 > Donut → Add",
+            "(선택) **+ Filter**로 대시보드 필터 → Save → Done"
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Joined 리포트**와 **Historical Trend 리포트**는 대시보드 원천으로 못 씁니다.",
+            "리포트 상단의 **Report Chart**는 리포트 하나에 차트 하나, 대시보드는 여러 리포트를 한 화면에."
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Dynamic Dashboard",
+          "items": [
+            "대시보드와 리포트 폴더를 대상자와 공유",
+            "대시보드 Edit > 속성(톱니) > **View Dashboard As: The dashboard viewer**",
+            "(선택) Let dashboard viewers choose whom they view the dashboard as → Save"
+          ]
+        },
+        {
+          "type": "p",
+          "text": "예: VP 1명, 관리자 4명, 영업 40명이면 사람마다 45개를 만들 필요 없이 Dynamic Dashboard 2개(영업용, 관리자용)면 됩니다."
+        },
+        {
+          "type": "tip",
+          "text": "Dynamic Dashboard는 **Private 폴더에 저장할 수 없습니다**. View My Team's Dashboards 또는 View All Data 권한이 있는 관리자는 부하 직원 시점으로 미리 볼 수 있습니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Report Type",
+      "리포트에 쓸 오브젝트·필드 템플릿"
+    ],
+    [
+      "Custom Report Type",
+      "직접 만든 Report Type"
+    ],
+    [
+      "Cross Filter",
+      "자식 유무(with/without)로 부모를 거름"
+    ],
+    [
+      "Filter Logic",
+      "필드 필터 번호로 AND/OR/NOT"
+    ],
+    [
+      "Row Limit",
+      "Tabular 행 수 제한"
+    ],
+    [
+      "Tabular / Summary / Matrix / Joined",
+      "리포트 형식 네 가지"
+    ],
+    [
+      "Running User",
+      "대시보드 데이터 기준 사용자"
+    ],
+    [
+      "Dynamic Dashboard",
+      "보는 사람 권한으로 표시"
+    ]
+  ]
+}
