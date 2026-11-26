@@ -1,0 +1,25 @@
+{
+  "certs": [
+    {
+      "id": "pab",
+      "name": "Platform App Builder",
+      "file": "data/pab.json",
+      "statusLabel": "학습 중",
+      "note": "코드 없이(클릭으로) 데이터 모델, 자동화, 화면을 설계하는 자격증"
+    },
+    {
+      "id": "pd1",
+      "name": "Platform Developer I",
+      "file": null,
+      "statusLabel": "다음 순서",
+      "note": "Apex, SOQL, 트리거, LWC, 테스트. App Builder를 마친 뒤 추가"
+    },
+    {
+      "id": "next",
+      "name": "Agentforce Specialist 또는 JavaScript Developer I",
+      "file": null,
+      "statusLabel": "그다음 (택 1)",
+      "note": "Platform Developer I을 마친 뒤 하나를 골라 추가"
+    }
+  ]
+}
