@@ -1,0 +1,127 @@
+{
+  "intro": "가장 비중이 큰 섹션 **Process Automation and Logic(28%)** 의 목표를 세 부분으로 나눠 정리한 공식 Cert Prep 모듈입니다. 선언형 자동화, Apex 기본 문법, SOQL·SOSL·DML, 클래스와 트리거, 저장 순서까지 다룹니다.",
+  "units": [
+    {
+      "title": "Review Declarative Features and Basic Constructs in Apex",
+      "ko": "선언형 자동화와 Apex 기본",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/platform-developer-i-certification-prep-logic-and-process-automation/pd1-2-apex-formulas-rollupsummary",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 260\" role=\"img\" aria-label=\"Process Automation and Logic 학습 지도\"><rect class=\"d-box\" x=\"20\" y=\"20\" width=\"220\" height=\"100\" rx=\"10\"/><text class=\"d-strong\" x=\"130.0\" y=\"58.5\" text-anchor=\"middle\">선언형 자동화</text><text class=\"d-sub\" x=\"130.0\" y=\"77.5\" text-anchor=\"middle\">Record-Triggered Flow</text><text class=\"d-sub\" x=\"130.0\" y=\"93.5\" text-anchor=\"middle\">Approval Process</text><rect class=\"d-box\" x=\"250\" y=\"20\" width=\"220\" height=\"100\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"58.5\" text-anchor=\"middle\">Apex 기본</text><text class=\"d-sub\" x=\"360.0\" y=\"77.5\" text-anchor=\"middle\">변수·상수·메서드</text><text class=\"d-sub\" x=\"360.0\" y=\"93.5\" text-anchor=\"middle\">제어문·인터페이스</text><rect class=\"d-box\" x=\"480\" y=\"20\" width=\"220\" height=\"100\" rx=\"10\"/><text class=\"d-strong\" x=\"590.0\" y=\"58.5\" text-anchor=\"middle\">데이터 다루기</text><text class=\"d-sub\" x=\"590.0\" y=\"77.5\" text-anchor=\"middle\">SOQL · SOSL · DML</text><text class=\"d-sub\" x=\"590.0\" y=\"93.5\" text-anchor=\"middle\">예외 처리</text><rect class=\"d-accent\" x=\"20\" y=\"140\" width=\"330\" height=\"100\" rx=\"10\"/><text class=\"d-strong\" x=\"185.0\" y=\"178.5\" text-anchor=\"middle\">클래스와 트리거</text><text class=\"d-sub\" x=\"185.0\" y=\"197.5\" text-anchor=\"middle\">Bulk 패턴, Handler 클래스</text><text class=\"d-sub\" x=\"185.0\" y=\"213.5\" text-anchor=\"middle\">저장 순서, 재귀·연쇄</text><rect class=\"d-warn\" x=\"370\" y=\"140\" width=\"330\" height=\"100\" rx=\"10\"/><text class=\"d-strong\" x=\"535.0\" y=\"178.5\" text-anchor=\"middle\">Governor Limit과 비동기</text><text class=\"d-sub\" x=\"535.0\" y=\"197.5\" text-anchor=\"middle\">트랜잭션 한도</text><text class=\"d-sub\" x=\"535.0\" y=\"213.5\" text-anchor=\"middle\">Future · Queueable · Batch</text></svg>",
+          "caption": "이 섹션의 다섯 덩어리. 트리거와 한도 문제가 가장 많이 나옵니다."
+        },
+        {
+          "type": "list",
+          "items": [
+            "**선언형 자동화** 로 무엇을 할 수 있는지: Record-Triggered Flow(before-save는 같은 레코드 필드 업데이트, after-save는 관련 레코드·액션), Approval Process(다단계 승인, 잠금)",
+            "**Apex 기본**: 변수·상수(`static final`)·메서드, 접근 제한자, 인터페이스, if/switch/for/while"
+          ]
+        },
+        {
+          "type": "code",
+          "code": "public interface Discountable {\n    Decimal discount(Decimal amount);\n}\n\npublic class VipDiscount implements Discountable {\n    public Decimal discount(Decimal amount) {\n        return amount * 0.9;\n    }\n}",
+          "lang": "apex",
+          "title": "인터페이스 예"
+        },
+        {
+          "type": "list",
+          "items": [
+            "추천 모듈: Approve Records with Approval Processes, Record-Triggered Flows, Apex Basics & Database"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "\"코드 없이\"가 가능하면 Flow, 대량·복잡한 로직이나 세밀한 오류 처리가 필요하면 Apex."
+        }
+      ]
+    },
+    {
+      "title": "Get a Refresh on SOQL, SOSL, and DML",
+      "ko": "SOQL, SOSL, DML 다시 보기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/platform-developer-i-certification-prep-logic-and-process-automation/pd1-2-soql-sosl-dml",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "세 가지 구분",
+          "headers": [
+            "",
+            "하는 일",
+            "반환"
+          ],
+          "rows": [
+            [
+              "SOQL",
+              "한 오브젝트(+관계)를 조건으로 조회",
+              "List<sObject>, sObject 하나, Integer(COUNT)"
+            ],
+            [
+              "SOSL",
+              "여러 오브젝트 텍스트 검색",
+              "List<List<sObject>>"
+            ],
+            [
+              "DML",
+              "insert/update/upsert/delete/undelete/merge",
+              "문: 없음(실패 시 예외) · Database 메서드: 결과 배열"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Governor Limit이 트랜잭션에 주는 영향: 루프 안 SOQL·DML 금지, 컬렉션으로 한 번에",
+            "예외 처리: try-catch-finally, 커스텀 예외(이름이 Exception으로 끝남), LimitException은 잡을 수 없음"
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "추천 모듈: Database & .NET Basics, Search Solution Basics, Asynchronous Apex"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Study Up on Apex Classes and Triggers",
+      "ko": "클래스, 트리거, 저장 순서",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/platform-developer-i-certification-prep-logic-and-process-automation/pd1-2-classes-triggers",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "모범 사례: 오브젝트당 트리거 1개, 로직은 Handler 클래스, Bulk 처리, 하드코딩된 Id 금지",
+            "Apex 트랜잭션과 **저장 순서(Order of Execution)**, 재귀와 연쇄(한 DML이 다른 트리거·Flow를 부름)"
+          ]
+        },
+        {
+          "type": "code",
+          "code": "trigger AccountTrigger on Account (before insert, before update, after update) {\n    AccountTriggerHandler.run(Trigger.operationType, Trigger.new, Trigger.oldMap);\n}",
+          "lang": "apex",
+          "title": "로직 없는 트리거 + Handler"
+        },
+        {
+          "type": "list",
+          "items": [
+            "추천 모듈: Apex Triggers",
+            "참고 문서: Triggers and Order of Execution, Apex Security and Sharing"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "저장 순서 표는 Automation and Logic 섹션 화면에 있습니다. before 트리거 → Validation Rule → after 트리거 → after-save Flow 순서는 꼭 외우세요."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Order of Execution",
+      "레코드 저장 시 처리 순서"
+    ],
+    [
+      "Bulkify",
+      "여러 레코드를 한 번에 처리하도록 작성"
+    ]
+  ]
+}
