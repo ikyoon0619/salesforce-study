@@ -1,0 +1,197 @@
+{
+  "intro": "**Lightning App Builder**로 App Page, Home Page, Record Page를 끌어 놓기로 만들고, **Dynamic Forms**와 **Visibility Rule**로 필요한 때 필요한 필드만 보이게 하는 법을 배웁니다.",
+  "units": [
+    {
+      "title": "Get Started with the Lightning App Builder",
+      "ko": "App Builder 기본",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning_app_builder/lightning_app_builder_intro",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 240\" role=\"img\" aria-label=\"Lightning App Builder 화면 구성\"><rect class=\"d-box\" x=\"20\" y=\"14\" width=\"680\" height=\"40\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"38.5\" text-anchor=\"middle\">① Header: 페이지 이름, Pages 목록</text><rect class=\"d-box\" x=\"20\" y=\"62\" width=\"680\" height=\"36\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"84.5\" text-anchor=\"middle\">② Toolbar: 저장, 활성화, 화면 크기(데스크톱·태블릿·폰)</text><rect class=\"d-box\" x=\"20\" y=\"106\" width=\"170\" height=\"120\" rx=\"10\"/><text class=\"d-strong\" x=\"105.0\" y=\"146.5\" text-anchor=\"middle\">③ 컴포넌트 팔레트</text><text class=\"d-sub\" x=\"105.0\" y=\"165.5\" text-anchor=\"middle\">Standard / Custom</text><text class=\"d-sub\" x=\"105.0\" y=\"181.5\" text-anchor=\"middle\">AgentExchange</text><text class=\"d-sub\" x=\"105.0\" y=\"197.5\" text-anchor=\"middle\">Fields 탭 (레코드)</text><rect class=\"d-accent\" x=\"200\" y=\"106\" width=\"320\" height=\"120\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"154.5\" text-anchor=\"middle\">④ Canvas</text><text class=\"d-sub\" x=\"360.0\" y=\"173.5\" text-anchor=\"middle\">템플릿이 정한 영역(Region)에</text><text class=\"d-sub\" x=\"360.0\" y=\"189.5\" text-anchor=\"middle\">컴포넌트를 끌어 놓음</text><rect class=\"d-box\" x=\"530\" y=\"106\" width=\"170\" height=\"120\" rx=\"10\"/><text class=\"d-strong\" x=\"615.0\" y=\"154.5\" text-anchor=\"middle\">⑤ Properties</text><text class=\"d-sub\" x=\"615.0\" y=\"173.5\" text-anchor=\"middle\">컴포넌트 속성</text><text class=\"d-sub\" x=\"615.0\" y=\"189.5\" text-anchor=\"middle\">Visibility 필터</text></svg>",
+          "caption": "다섯 영역: Header, Toolbar, 컴포넌트 팔레트, Canvas, Properties"
+        },
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 220\" role=\"img\" aria-label=\"Lightning 페이지 세 종류\"><rect class=\"d-box\" x=\"20\" y=\"30\" width=\"210\" height=\"160\" rx=\"10\"/><text class=\"d-strong\" x=\"125.0\" y=\"90.5\" text-anchor=\"middle\">App Page</text><text class=\"d-sub\" x=\"125.0\" y=\"109.5\" text-anchor=\"middle\">앱의 첫 화면/도구</text><text class=\"d-sub\" x=\"125.0\" y=\"125.5\" text-anchor=\"middle\">Lightning + 모바일</text><text class=\"d-sub\" x=\"125.0\" y=\"141.5\" text-anchor=\"middle\">Global Action만</text><rect class=\"d-box\" x=\"255\" y=\"30\" width=\"210\" height=\"160\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"98.5\" text-anchor=\"middle\">Home Page</text><text class=\"d-sub\" x=\"360.0\" y=\"117.5\" text-anchor=\"middle\">Lightning Experience 전용</text><text class=\"d-sub\" x=\"360.0\" y=\"133.5\" text-anchor=\"middle\">앱·프로필별 할당</text><rect class=\"d-accent\" x=\"490\" y=\"30\" width=\"210\" height=\"160\" rx=\"10\"/><text class=\"d-strong\" x=\"595.0\" y=\"90.5\" text-anchor=\"middle\">Record Page</text><text class=\"d-sub\" x=\"595.0\" y=\"109.5\" text-anchor=\"middle\">Lightning + 모바일</text><text class=\"d-sub\" x=\"595.0\" y=\"125.5\" text-anchor=\"middle\">앱·Record Type·프로필·</text><text class=\"d-sub\" x=\"595.0\" y=\"141.5\" text-anchor=\"middle\">폼 팩터별 할당</text></svg>",
+          "caption": "페이지 종류별로 쓰이는 곳과 할당 방식이 다릅니다."
+        },
+        {
+          "type": "table",
+          "title": "컴포넌트 종류",
+          "headers": [
+            "종류",
+            "설명"
+          ],
+          "rows": [
+            [
+              "Standard",
+              "Salesforce 제공 (Record Detail, Related Lists, Path, Chatter, Tabs…)"
+            ],
+            [
+              "Custom",
+              "LWC/Aura로 만들어 App Builder용으로 설정한 것"
+            ],
+            [
+              "Third-party",
+              "AgentExchange에서 설치"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Customize Your Lightning Experience Home Page",
+      "ko": "홈 페이지",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning_app_builder/lightning_app_builder_homepage",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "만들기",
+          "items": [
+            "Setup > Lightning App Builder > New > **Home Page** (템플릿, 복제, 또는 Home 탭에서 Edit Page)",
+            "Assistant, Performance, Today's Events, Key Deals, Today's Tasks 배치 → Save → Activate",
+            "Activation: Org Default / App Default / **App and Profile** 조합"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "표준 페이지를 복사해 만든 페이지는 Salesforce 업그레이드를 받지만, 처음부터 만든 페이지는 새 기능이 자동으로 들어가지 않습니다. Save만 하면 비활성 상태입니다."
+        }
+      ]
+    },
+    {
+      "title": "Build a Custom Record Page",
+      "ko": "레코드 페이지",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning_app_builder/lightning_app_builder_recordpage",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "New Opportunity Page",
+          "items": [
+            "New > Record Page, Opportunity, 템플릿 Header, Subheader, Right Sidebar",
+            "Highlights Panel, **Path**, Chatter, Tabs(Details·Activity·Recent Items·Related) 배치",
+            "탭 순서는 Tabs 속성 창에서",
+            "Activation > App, Record Type, and Profile: Sales 앱, Desktop and phone, Master, System Administrator"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "팔레트 설정의 'Always show icons'로 컴포넌트별 지원 폼 팩터를 볼 수 있습니다. 예: Chatter Publisher는 데스크톱 전용."
+        }
+      ]
+    },
+    {
+      "title": "Get Started With Dynamic Forms",
+      "ko": "Dynamic Forms",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning_app_builder/get-started-with-dynamic-forms-lab",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "**Dynamic Forms**는 Record Detail 하나를 필드·Field Section 컴포넌트로 쪼개 어디든(탭, 아코디언) 배치하고 Visibility Rule을 거는 기능입니다."
+        },
+        {
+          "type": "list",
+          "items": [
+            "장점: 필드를 자유 배치, 조건부 표시, **Page Layout·Record Type 수를 줄임**",
+            "대부분의 LWC 지원 표준 오브젝트와 Custom Object 지원 (팔레트에 Fields 탭이 없으면 미지원)",
+            "Upgrade Now로 이전할 때 원본 레이아웃에 없던 **필수 필드**(예: Forecast Category)는 직접 추가해야 저장됨",
+            "이전 후 원래 Record Detail은 제거됨",
+            "**Dynamic Highlights Panel**: 최대 12개 필드와 액션"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Lookup 필드 옆 화살표로 **부모 오브젝트 필드**(cross-object)도 페이지에 넣을 수 있습니다."
+        }
+      ]
+    },
+    {
+      "title": "Add Visibility Rules for Dynamic Pages",
+      "ko": "Visibility Rule",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning_app_builder/add-visibility-rules-for-dynamic-pages-lab",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "컴포넌트 표시 조건",
+          "items": [
+            "컴포넌트 속성 > Set Component Visibility > Add Filter",
+            "예: Amount ≥ 1,000,000 AND Stage = Closed Won일 때만 Rich Text 표시",
+            "Filter Type **Device = Phone**으로 모바일 전용 컴포넌트"
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "필터 기준: 레코드 필드, 사용자(프로필, 권한), 폼 팩터",
+            "눈 모양 아이콘 = 표시 조건이 걸린 항목",
+            "**필드** 규칙은 편집 중에 바로 반응, **Field Section** 규칙은 저장 후에 평가",
+            "한 영역의 모든 컴포넌트가 숨겨지면 그 영역은 비게 됨"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "'특정 조건일 때만 필드를 보여 줘라' → Dynamic Forms + Visibility Rule. 데이터 보안은 아니므로 진짜로 막으려면 FLS."
+        }
+      ]
+    },
+    {
+      "title": "Build an App Lightning Page",
+      "ko": "App Page",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning_app_builder/lightning_app_builder_apphome",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "Top Accounts and Opportunities",
+          "items": [
+            "New > **App Page**, Two Regions 템플릿",
+            "List View(Account, 5건), Recent Items(Opportunity만)",
+            "페이지 액션: Log a Call, New Account, New Opportunity (**Global Action만**)",
+            "Activation: 탭 라벨·아이콘, 'Activate for System Administrators only'로 테스트",
+            "Lightning Experience 탭: Sales 앱에 추가, Mobile Navigation 탭: 모바일 메뉴에 추가"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Work with Custom Lightning Components",
+      "ko": "커스텀 컴포넌트",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning_app_builder/lightning_app_builder_custom_comps",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "App Builder에서 쓰려면 컴포넌트가 설정(메타데이터에 노출)되어 있어야 합니다.",
+            "패키지로 설치한 Opportunity Alert 컴포넌트를 App Page에 추가하고 속성(Days Since Last Modified = 6)을 조정. 다시 활성화할 필요 없음."
+          ]
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "App Page / Home Page / Record Page",
+      "Lightning 페이지 세 종류"
+    ],
+    [
+      "Template / Region",
+      "페이지 틀과 영역"
+    ],
+    [
+      "Dynamic Forms",
+      "필드 단위 배치"
+    ],
+    [
+      "Component Visibility",
+      "조건부 표시"
+    ],
+    [
+      "Dynamic Highlights Panel",
+      "App Builder로 꾸미는 머리글"
+    ],
+    [
+      "Form factor",
+      "Desktop / Phone"
+    ]
+  ]
+}

@@ -1298,42 +1298,48 @@
           "url": "https://trailhead.salesforce.com/content/learn/modules/lex_customization",
           "minutes": 180,
           "kind": "module",
-          "topics": "Lightning 앱, 레코드 페이지, 액션, 리스트 뷰, Path, 레이아웃"
+          "topics": "Lightning 앱, 레코드 페이지, 액션, 리스트 뷰, Path, 레이아웃",
+          "note": "lex_customization"
         },
         {
           "title": "Lightning App Builder",
           "url": "https://trailhead.salesforce.com/content/learn/modules/lightning_app_builder",
           "minutes": 170,
           "kind": "module",
-          "topics": "App/Home/Record Page, 컴포넌트, 페이지 할당, Dynamic Forms"
+          "topics": "App/Home/Record Page, 컴포넌트, 페이지 할당, Dynamic Forms",
+          "note": "lightning_app_builder"
         },
         {
           "title": "Lightning Web Components Basics",
           "url": "https://trailhead.salesforce.com/content/learn/modules/lightning-web-components-basics",
           "minutes": 70,
           "kind": "module",
-          "topics": "LWC 구조와 App Builder에 노출하는 방법"
+          "topics": "LWC 구조와 App Builder에 노출하는 방법",
+          "note": "lwc_basics"
         },
         {
           "title": "Salesforce Mobile App Customization",
           "url": "https://trailhead.salesforce.com/content/learn/modules/salesforce1_mobile_app",
           "minutes": 95,
           "kind": "module",
-          "topics": "모바일 앱 탐색, Compact Layout, 글로벌/오브젝트 액션"
+          "topics": "모바일 앱 탐색, Compact Layout, 글로벌/오브젝트 액션",
+          "note": "mobile_app"
         },
         {
           "title": "Customize the User Interface for a Travel Approval App",
           "url": "https://trailhead.salesforce.com/content/learn/projects/customize-the-user-interface-for-a-travel-approval-app",
           "minutes": 60,
           "kind": "project",
-          "topics": "출장 승인 앱 화면 실습"
+          "topics": "출장 승인 앱 화면 실습",
+          "note": "travel_ui"
         },
         {
           "title": "Customize the User Interface for a Recruiting App",
           "url": "https://trailhead.salesforce.com/content/learn/projects/customize-the-ui-for-a-recruiting-app",
           "minutes": 105,
           "kind": "project",
-          "topics": "채용 앱 화면 실습"
+          "topics": "채용 앱 화면 실습",
+          "note": "recruiting_ui"
         }
       ],
       "summary": [
@@ -1596,42 +1602,48 @@
           "url": "https://trailhead.salesforce.com/content/learn/modules/salesforce-sandboxes-quick-look",
           "minutes": 5,
           "kind": "module",
-          "topics": "Sandbox 종류와 용도"
+          "topics": "Sandbox 종류와 용도",
+          "note": "sandboxes"
         },
         {
           "title": "Lifecycle Center: Quick Look",
           "url": "https://trailhead.salesforce.com/content/learn/modules/devops-center-quick-look",
           "minutes": 5,
           "kind": "module",
-          "topics": "클릭 기반 변경 추적·배포 파이프라인"
+          "topics": "클릭 기반 변경 추적·배포 파이프라인",
+          "note": "lifecycle_center"
         },
         {
           "title": "Org Development Model",
           "url": "https://trailhead.salesforce.com/content/learn/modules/org-development-model",
           "minutes": 30,
           "kind": "module",
-          "topics": "Sandbox, Change Set, 애플리케이션 수명 주기"
+          "topics": "Sandbox, Change Set, 애플리케이션 수명 주기",
+          "note": "org_development_model"
         },
         {
           "title": "Package Development Model",
           "url": "https://trailhead.salesforce.com/content/learn/modules/sfdx_dev_model",
           "minutes": 35,
           "kind": "module",
-          "topics": "패키지 단위 개발, 버전 관리 중심 개발"
+          "topics": "패키지 단위 개발, 버전 관리 중심 개발",
+          "note": "package_development_model"
         },
         {
           "title": "Second-Generation Managed Packages",
           "url": "https://trailhead.salesforce.com/content/learn/modules/second-generation-managed-packages",
           "minutes": 30,
           "kind": "module",
-          "topics": "2GP Managed Package, 네임스페이스, 배포·업그레이드"
+          "topics": "2GP Managed Package, 네임스페이스, 배포·업그레이드",
+          "note": "second_gen_packages"
         },
         {
           "title": "Unlocked Packages for Customers",
           "url": "https://trailhead.salesforce.com/content/learn/modules/unlocked-packages-for-customers",
           "minutes": 55,
           "kind": "module",
-          "topics": "사내용 Unlocked Package"
+          "topics": "사내용 Unlocked Package",
+          "note": "unlocked_packages"
         }
       ],
       "summary": [

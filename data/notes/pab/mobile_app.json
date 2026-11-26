@@ -1,0 +1,152 @@
+{
+  "intro": "**Salesforce 모바일 앱**은 모든 라이선스에 포함되고 별도 설정 없이 쓰지만, 데스크톱용 레이아웃은 모바일에 불편합니다. 부동산 회사 DreamHouse 예시로 **내비게이션, Global/Object-Specific Quick Action, Compact Layout**을 모바일에 맞게 다듬습니다.",
+  "units": [
+    {
+      "title": "Get Started with the Salesforce Mobile App",
+      "ko": "모바일 앱 시작",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/salesforce1_mobile_app/salesforce1_mobile_app_intro",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 230\" role=\"img\" aria-label=\"모바일 앱 화면을 정하는 것\"><rect class=\"d-box\" x=\"20\" y=\"20\" width=\"220\" height=\"190\" rx=\"10\"/><text class=\"d-strong\" x=\"130.0\" y=\"95.5\" text-anchor=\"middle\">Navigation</text><text class=\"d-sub\" x=\"130.0\" y=\"114.5\" text-anchor=\"middle\">Lightning 앱 Navigation Items</text><text class=\"d-sub\" x=\"130.0\" y=\"130.5\" text-anchor=\"middle\">첫 4개 = 하단 내비게이션 바</text><text class=\"d-sub\" x=\"130.0\" y=\"146.5\" text-anchor=\"middle\">App Options: Desktop and phone</text><rect class=\"d-accent\" x=\"250\" y=\"20\" width=\"220\" height=\"190\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"95.5\" text-anchor=\"middle\">Actions</text><text class=\"d-sub\" x=\"360.0\" y=\"114.5\" text-anchor=\"middle\">Global Publisher Layout</text><text class=\"d-sub\" x=\"360.0\" y=\"130.5\" text-anchor=\"middle\">Page Layout의 Mobile &amp;</text><text class=\"d-sub\" x=\"360.0\" y=\"146.5\" text-anchor=\"middle\">Lightning Actions 섹션 순서</text><rect class=\"d-warn\" x=\"480\" y=\"20\" width=\"220\" height=\"190\" rx=\"10\"/><text class=\"d-strong\" x=\"590.0\" y=\"95.5\" text-anchor=\"middle\">Compact Layout</text><text class=\"d-sub\" x=\"590.0\" y=\"114.5\" text-anchor=\"middle\">레코드 머리글 필드</text><text class=\"d-sub\" x=\"590.0\" y=\"130.5\" text-anchor=\"middle\">최대 10개, Name 먼저</text><text class=\"d-sub\" x=\"590.0\" y=\"146.5\" text-anchor=\"middle\">프로필별 불가, Record Type별 가능</text></svg>",
+          "caption": "모바일 화면을 바꾸는 세 가지 도구"
+        },
+        {
+          "type": "list",
+          "items": [
+            "모든 Salesforce 라이선스에 포함, iOS·Android, 오프라인 지원, 클릭으로 커스터마이즈",
+            "필드 100개짜리 레이아웃은 모바일에서 쓰기 어렵다 → 꼭 필요한 것만",
+            "테스트는 Sandbox 권장",
+            "DreamHouse 사용 사례: 잠재 고객 추가, 집 보여 주기 일정, 방문 후 피드백"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Customize Navigation",
+      "ko": "내비게이션",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/salesforce1_mobile_app/salesforce1_mobile_app_navigation",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "모바일 메뉴는 현재 Lightning 앱의 **Navigation Items**를 따름 (앱이 Desktop and phone이어야 함)",
+            "메뉴의 **첫 4개**가 하단 내비게이션 바",
+            "사용자 유형별로 다른 메뉴는 불가. Visualforce·Lightning 페이지는 탭이 있어야 하고 모바일 사용이 켜져 있어야 함"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "설정",
+          "items": [
+            "App Manager > Sales > Edit > App Options: **Desktop and phone**",
+            "Navigation Items: Home, Opportunities, Contacts, Tasks, Dashboards 순 → Save",
+            "모바일에서 아래로 당겨 새로 고침"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Create Global Quick Actions",
+      "ko": "Global Quick Action",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/salesforce1_mobile_app/salesforce1_mobile_app_actions_global",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "New Prospect 액션",
+          "items": [
+            "Contact에 Picklist Stage (Prospect, Showing, Offer, Closing, Archive)",
+            "Setup > Global Actions > New Action: Create a Record → Contact, New Prospect",
+            "Action Layout: 필드는 **5개 미만** 권장, 최대 8개 넘지 않기",
+            "**Predefined Field Values**: Stage = Prospect",
+            "Publisher Layouts > Global Layout: New Prospect를 모바일 섹션 맨 앞에"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Global Action은 **레코드 생성만** 되고 다른 레코드와 관계를 자동으로 잇지 않습니다. 레코드 **수정(Update)**은 Object-Specific만 가능."
+        }
+      ]
+    },
+    {
+      "title": "Create Object-Specific Quick Actions",
+      "ko": "Object-Specific Quick Action",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/salesforce1_mobile_app/salesforce1_mobile_app_actions_objectspecific",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "준비",
+          "items": [
+            "Custom Object Property (Allow Activities 체크) + 탭",
+            "Event에 Page Layout 'Showing Layout'과 Record Type 'Showing'",
+            "Activity에 Lookup → Property (Showing Layout에만)"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "New Showing 액션",
+          "items": [
+            "Contact > New Action: Create a Record → Event, Record Type Showing",
+            "레이아웃에서 Related To, Assigned To, Name 제거, Property 추가·필수",
+            "Predefined Value: Subject = \"Showing\"",
+            "Contact Layout의 Mobile & Lightning Actions 맨 앞에"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "필수 필드를 액션 레이아웃에서 빼도 되는 경우: 기본값이나 Predefined Value가 있을 때 (예: Assigned To는 현재 사용자가 기본)."
+        }
+      ]
+    },
+    {
+      "title": "Customize Compact Layouts",
+      "ko": "모바일 Compact Layout",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/salesforce1_mobile_app/salesforce1_mobile_app_compact_layouts",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Compact Layout = 모바일 레코드 머리글 필드. **최대 10개** (Name 포함, Name을 첫째로)",
+            "Text Area, Long/Rich Text Area, **Multi-Select Picklist**는 넣을 수 없음",
+            "**프로필별로 다르게 할 수 없음** (Record Type별 지정은 가능)"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "만들고 할당",
+          "items": [
+            "Contact > Compact Layouts > New: Mobile Contact Layout (Name, Phone, Stage, Email)",
+            "Compact Layout Assignment > Primary로 지정",
+            "또는 Setup > Salesforce Mobile App에서 **Dynamic Forms and Dynamic Highlights Panel on Mobile** 켜기"
+          ]
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Navigation Items",
+      "앱 메뉴 항목"
+    ],
+    [
+      "Global Quick Action",
+      "어디서나 쓰는 생성 액션"
+    ],
+    [
+      "Object-Specific Quick Action",
+      "레코드 관련 생성·수정 액션"
+    ],
+    [
+      "Predefined Field Values",
+      "액션 기본값"
+    ],
+    [
+      "Action Layout",
+      "액션 입력 화면"
+    ],
+    [
+      "Compact Layout",
+      "모바일 머리글 필드"
+    ]
+  ]
+}

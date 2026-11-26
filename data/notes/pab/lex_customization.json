@@ -1,0 +1,268 @@
+{
+  "intro": "Ursa Major Solar의 관리자가 Energy Audit 오브젝트를 만들고, Lightning 앱, 리스트 뷰와 차트, Compact Layout, 레코드 페이지, 커스텀 버튼·링크, Quick Action까지 차례로 꾸미는 모듈입니다. App Builder 시험 UI 범위의 기본기를 다 담고 있어요.",
+  "units": [
+    {
+      "title": "Set Up Your Org",
+      "ko": "오브젝트와 탭",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_customization/lex_customization_custom_objects",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "Energy Audit 오브젝트",
+          "items": [
+            "Setup > Object Manager > Create > Custom Object: Energy Audit, **Allow Search**, Launch New Custom Tab Wizard 체크",
+            "탭 스타일 선택, Sales 앱에만 추가",
+            "필드: Type of Installation (Picklist), Account (Lookup, 필수), Average Annual Electric Cost (Currency 16,2), Annual Energy Usage (Number), Audit Notes (Long Text Area)",
+            "Setup > Feed Tracking > Energy Audit 켜기"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Custom Object를 앱에 넣으려면 **탭**이 있어야 합니다."
+        }
+      ]
+    },
+    {
+      "title": "Create and Customize Lightning Apps",
+      "ko": "Lightning 앱",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_customization/lex_customization_apps",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Lightning 앱은 오브젝트, 탭, 유틸리티를 하나의 내비게이션 바로 묶습니다. Home, Chatter, 커스텀 오브젝트, Visualforce·Lightning 컴포넌트·Lightning 페이지·웹 탭, **Utility Bar**를 넣을 수 있습니다."
+        },
+        {
+          "type": "steps",
+          "title": "앱 만들기",
+          "items": [
+            "Setup > App Manager > **New Lightning App**",
+            "이름, 로고(5MB 미만, 128×128 권장), 브랜드 색",
+            "Navigation Items 순서 지정",
+            "사용할 **프로필** 할당 → Save & Finish"
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "App Manager에서 'Visible in Lightning Experience' 표시가 없는 Classic 앱은 App Launcher에 안 보입니다.",
+            "모범 사례: 사용자 의견 묻기, 오브젝트 전체 목록을 만들고 사용자 그룹별로 줄이기, 중요한 항목을 앞으로"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Create and Customize List Views",
+      "ko": "리스트 뷰와 차트",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_customization/lex_customization_list",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "리스트 뷰",
+          "items": [
+            "Accounts 탭 > 리스트 뷰 컨트롤 > New: Channel Customers, 모든 사용자 공개",
+            "필터: Type = Customer - Channel, Billing State = WA,OR,CA",
+            "Select Fields to Display로 열 바꾸기, 열 머리글로 정렬, 연필 아이콘 셀은 **인라인 편집**"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "리스트 뷰 차트",
+          "items": [
+            "Opportunities > All Opportunities > 차트 아이콘 > New Chart",
+            "Donut, Aggregate: **Sum / Count / Average** of Amount, Group by Account Name"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "리스트 뷰 차트는 그 오브젝트의 모든 리스트 뷰에서 보입니다 (Recently Viewed 제외)."
+        }
+      ]
+    },
+    {
+      "title": "Customize Record Highlights with Compact Layouts",
+      "ko": "Compact Layout",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_customization/lex_customization_compact_layouts",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Compact Layout이 정하는 곳: 레코드 **Highlights Panel**, Lookup 호버 카드, Activity Timeline의 펼친 내용, 모바일 머리글",
+            "첫 필드는 굵게 표시. 새 Custom Object는 Name만 있는 시스템 기본값"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "만들고 할당",
+          "items": [
+            "Object Manager > Energy Audit > Compact Layouts > New: Name, Account, Annual Energy Usage, Average Annual Electric Cost, Type of Installation",
+            "**Compact Layout Assignment** > Edit Assignment → Primary로 지정"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "더 세밀하게 하려면 Lightning App Builder의 **Dynamic Highlights Panel**을 씁니다."
+        }
+      ]
+    },
+    {
+      "title": "Customize Record Page Components and Fields",
+      "ko": "레코드 페이지",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_customization/lex_customization_page_layouts",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "무엇을 어디서",
+          "headers": [
+            "도구",
+            "정하는 것"
+          ],
+          "rows": [
+            [
+              "Lightning App Builder",
+              "컴포넌트, 페이지 구조, (Dynamic Forms) 필드 위치"
+            ],
+            [
+              "Page Layout 편집기",
+              "버튼, 링크, 액션, 관련 목록"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Dynamic Forms로 필드 배치",
+          "items": [
+            "레코드 > 톱니 > Edit Page → Details 탭의 Record Detail > **Upgrade Now**",
+            "레이아웃 선택 → 필드 이동 → Save"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "Activation 옵션",
+          "headers": [
+            "옵션",
+            "의미"
+          ],
+          "rows": [
+            [
+              "Org Default",
+              "그 오브젝트 전체 기본"
+            ],
+            [
+              "App Default",
+              "특정 앱 기본"
+            ],
+            [
+              "App, Record Type, and Profile",
+              "조합별 할당 (가장 구체적)"
+            ],
+            [
+              "Form factor",
+              "Desktop / Phone"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Create Custom Buttons and Links",
+      "ko": "커스텀 버튼·링크",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_customization/lex_customization_buttons_links",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "종류",
+          "headers": [
+            "종류",
+            "위치"
+          ],
+          "rows": [
+            [
+              "List Button",
+              "관련 목록 (리스트 뷰)"
+            ],
+            [
+              "Detail Page Link",
+              "상세의 Custom Links 섹션"
+            ],
+            [
+              "Detail Page Button",
+              "Highlights의 액션 메뉴"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "예",
+          "items": [
+            "Account > Buttons, Links, and Actions > New: Google This Account (Detail Page Link), URL `https://www.google.com/search?q={!Account.Name}`",
+            "Map Location (Detail Page Button), 주소 Merge Field로 Google 지도",
+            "Page Layout의 Custom Links / Custom Buttons에 끌어 놓기"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Custom Detail Page Link는 **Dynamic Forms를 쓰지 않는** 페이지에서만 보입니다. 버튼이 액션 메뉴에 안 보이면 Mobile & Lightning Actions 섹션에 넣었는지 확인. JavaScript 버튼은 Lightning 미지원."
+        }
+      ]
+    },
+    {
+      "title": "Empower Your Users with Quick Actions",
+      "ko": "Quick Action",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_customization/lex_customization_actions",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 230\" role=\"img\" aria-label=\"Object-Specific Action vs Global Action\"><rect class=\"d-accent\" x=\"20\" y=\"20\" width=\"320\" height=\"190\" rx=\"10\"/><text class=\"d-strong\" x=\"180.0\" y=\"87.5\" text-anchor=\"middle\">Object-Specific Action</text><text class=\"d-sub\" x=\"180.0\" y=\"106.5\" text-anchor=\"middle\">오브젝트 Page Layout에 배치</text><text class=\"d-sub\" x=\"180.0\" y=\"122.5\" text-anchor=\"middle\">Create a Record (관계 자동 연결)</text><text class=\"d-sub\" x=\"180.0\" y=\"138.5\" text-anchor=\"middle\">Update a Record, Log a Call</text><text class=\"d-sub\" x=\"180.0\" y=\"154.5\" text-anchor=\"middle\">Send Email (Case), Flow, LWC, VF</text><rect class=\"d-box\" x=\"380\" y=\"20\" width=\"320\" height=\"190\" rx=\"10\"/><text class=\"d-strong\" x=\"540.0\" y=\"87.5\" text-anchor=\"middle\">Global Action</text><text class=\"d-sub\" x=\"540.0\" y=\"106.5\" text-anchor=\"middle\">Setup &gt; Global Actions</text><text class=\"d-sub\" x=\"540.0\" y=\"122.5\" text-anchor=\"middle\">Global Publisher Layout에 배치</text><text class=\"d-sub\" x=\"540.0\" y=\"138.5\" text-anchor=\"middle\">헤더 + 메뉴, Chatter, 앱 페이지</text><text class=\"d-sub\" x=\"540.0\" y=\"154.5\" text-anchor=\"middle\">레코드 생성만 (관계 없음, Update 불가)</text></svg>",
+          "caption": "Object-Specific은 레코드와 관계가 있고, Global은 어디서나 독립 레코드를 만듭니다."
+        },
+        {
+          "type": "steps",
+          "title": "Object-Specific",
+          "items": [
+            "Account > Buttons, Links, and Actions > New Action: Create a Record → Energy Audit",
+            "Action Layout: 필수 필드는 빨간 별표 (빼면 액션을 완료할 수 없음)",
+            "Account Layout의 **Salesforce Mobile and Lightning Experience Actions**에 추가"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Global",
+          "items": [
+            "Setup > Global Actions > New Action: Create a Record → Campaign",
+            "Setup > **Publisher Layouts** > Global Layout > Edit → New Campaign 추가"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Email, Log a Call, New Event, New Task는 액션 메뉴가 아니라 **Activity 탭**에, Post·Poll은 Chatter 탭에 나옵니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Lightning App",
+      "탭·유틸리티 묶음 앱"
+    ],
+    [
+      "Utility Bar",
+      "앱 하단 고정 도구 모음"
+    ],
+    [
+      "List View Chart",
+      "리스트 뷰 차트"
+    ],
+    [
+      "Compact Layout",
+      "Highlights Panel 필드"
+    ],
+    [
+      "Custom Button / Link",
+      "URL·Merge Field 버튼"
+    ],
+    [
+      "Global Publisher Layout",
+      "Global Action 배치"
+    ]
+  ]
+}

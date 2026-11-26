@@ -1,0 +1,131 @@
+{
+  "intro": "출장 승인 앱의 화면을 다듬는 실습입니다. 승인자 사용자 설정, **리스트 뷰**와 **Search Layout**, Lightning App Builder로 섹션 추가, 관련 목록 열, Chatter **Feed Tracking**까지 다룹니다.",
+  "units": [
+    {
+      "title": "Create a User and Setup Approvals",
+      "ko": "승인자 사용자",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-the-user-interface-for-a-travel-approval-app/create-a-user-and-setup-approvals",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "CEO 사용자 만들기",
+          "items": [
+            "Setup > Users > New User: Eric Executive, Alias eexec, Role **CEO**, License Salesforce, Profile System Administrator",
+            "내 사용자 > Edit > Approver Settings > **Manager** = Eric Executive → Save"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "승인 프로세스에서 '제출자의 Manager에게 보내기'는 사용자 레코드의 **Manager** 필드를 씁니다. 이 값이 비어 있으면 제출이 실패합니다."
+        }
+      ]
+    },
+    {
+      "title": "Create and Customize a List View",
+      "ko": "리스트 뷰와 검색 레이아웃",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-the-user-interface-for-a-travel-approval-app/create-and-customize-a-list-view",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "Search Layout",
+          "items": [
+            "Travel Approvals 탭 > 톱니 > Edit Object > **Search Layouts** > Default Layout > Edit",
+            "선택 필드: Purpose of Trip, Department, Status, Destination State, Trip Start Date, Trip End Date"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "새 리스트 뷰",
+          "items": [
+            "Travel Approvals 탭 > 리스트 뷰 톱니 > **New**: Open Out of State Travel Requests, **All users can see this list view**",
+            "필터: Out-of-State = True, Status ≠ Approved, Rejected",
+            "톱니 > **Select Fields to Display**로 열 순서 지정"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "리스트 뷰 공개 범위는 나만 / 모든 사용자 / 특정 그룹·역할. Search Layout은 검색 결과와 Lookup 대화창에 보이는 열을 정합니다."
+        }
+      ]
+    },
+    {
+      "title": "Customize the Travel Approval Object Page Layout",
+      "ko": "레코드 페이지에 섹션 추가",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-the-user-interface-for-a-travel-approval-app/customize-the-page-layout-of-the-travel-approval-object",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "Trip Info 섹션",
+          "items": [
+            "레코드 > 톱니 > **Edit Page** (Lightning App Builder) → Record Detail의 'Travel Approval Layout'",
+            "Section을 Information 아래로 끌어 놓기, 이름 Trip Info",
+            "왼쪽: Purpose of Trip, Trip Start/End Date, 오른쪽: Out-of-State, Destination State → Save"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Customize the Expense Item Related List",
+      "ko": "관련 목록 열",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-the-user-interface-for-a-travel-approval-app/customize-the-expense-item-related-list",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "열 추가",
+          "items": [
+            "Object Manager > Travel Approval > Page Layouts > Travel Approval Layout",
+            "Expense Items 관련 목록의 **렌치 아이콘** → Expense Type, Amount 추가",
+            "사용자 개인 설정 덮어쓰기: Yes → Save"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "관련 목록에 어떤 열이 보일지는 Lightning App Builder가 아니라 **Page Layout**에서 정합니다."
+        }
+      ]
+    },
+    {
+      "title": "Enable Chatter on the Travel Approval Object",
+      "ko": "Chatter Feed Tracking",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-the-user-interface-for-a-travel-approval-app/enable-chatter-on-the-travel-approval-object",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "설정",
+          "items": [
+            "Setup > Deliverability: Use a substitute email address for unverified domains",
+            "Setup > Chatter Settings: Chatter 켜져 있는지 확인",
+            "Setup > **Feed Tracking** > Travel Approval > Enable Feed Tracking, Destination State·Status 선택",
+            "레코드 Chatter에서 @Eric 멘션 → 메일로 답장하면 피드에 표시"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Feed Tracking을 켠 필드가 바뀌면 레코드 피드에 자동으로 기록되어 팀이 변경을 따라갈 수 있습니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "List View",
+      "저장된 필터 목록"
+    ],
+    [
+      "Search Layout",
+      "검색 결과 열"
+    ],
+    [
+      "Related List",
+      "관련 레코드 목록"
+    ],
+    [
+      "Feed Tracking",
+      "필드 변경을 Chatter에 기록"
+    ],
+    [
+      "Manager field",
+      "승인용 상사 필드"
+    ]
+  ]
+}
