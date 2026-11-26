@@ -8,12 +8,20 @@
 //   #/c/:cert/review            오답노트
 //   #/c/:cert/review/quiz       오답만 다시 풀기
 //   #/c/:cert/m/:note           Trailhead 모듈 노트
+//   #/c/:cert/exam              실전 모의고사
 import { store } from './store.js';
 import { runQuiz } from './quiz.js';
 import { esc, inline, crumb } from './format.js';
 import { renderNote } from './notes.js';
+import { renderExamIntro, leaveExam } from './exam.js';
 
 const app = document.getElementById('app');
+
+// 상단바 높이를 CSS 변수로 노출: 모의고사 바가 그 아래에 붙도록.
+const topbar = document.querySelector('.topbar');
+if (topbar && 'ResizeObserver' in window) {
+  new ResizeObserver(() => document.documentElement.style.setProperty('--topbar-h', `${topbar.offsetHeight}px`)).observe(topbar);
+}
 const topnav = document.getElementById('topnav');
 
 // ---------- 데이터 로딩 ----------
@@ -46,6 +54,7 @@ function parse() {
 
 async function route() {
   const [kind, certId, sub, arg, arg2] = parse();
+  leaveExam();
   try {
     if (!kind) return await renderHome();
     if (kind !== 'c' || !certId) return notFound();
@@ -58,6 +67,7 @@ async function route() {
     if (sub === 'review' && arg === 'quiz') return renderReviewQuiz(cert);
     if (sub === 'review') return renderReview(cert);
     if (sub === 'm' && arg) return await renderModuleNote(cert, arg);
+    if (sub === 'exam') return renderExam(cert);
     return notFound();
   } catch (err) {
     console.error(err);
@@ -86,6 +96,7 @@ function setNav(cert, active) {
   const links = [
     ['overview', base, '개요'],
     ['quiz', `${base}/quiz`, '퀴즈'],
+    ['exam', `${base}/exam`, '모의고사'],
     ['review', `${base}/review`, `오답노트 (${store.wrongIds(cert.id).length})`],
   ];
   topnav.innerHTML = links
@@ -267,6 +278,7 @@ function renderOverview(cert) {
         <section class="cta">
           <p>문제 ${cert.questions.length}개가 준비되어 있어요. 오답노트에는 지금 ${store.wrongIds(cert.id).length}개가 있습니다.</p>
           <a class="btn btn-primary" href="#/c/${cert.id}/quiz">퀴즈 풀기</a>
+          <a class="btn" href="#/c/${cert.id}/exam">실전 모의고사</a>
         </section>
       </div>
     </div>`;
@@ -408,7 +420,7 @@ function renderQuizPicker(cert) {
     })
     .join('');
   const recent = store.attempts(cert.id).slice(0, 5);
-  const scopeName = (scope) => (scope === 'all' ? '전체' : scope === 'review' ? '오답노트' : cert.sections.find((s) => s.id === scope)?.title ?? scope);
+  const scopeName = (scope) => (scope === 'all' ? '전체' : scope === 'review' ? '오답노트' : scope === 'exam' ? '모의고사' : cert.sections.find((s) => s.id === scope)?.title ?? scope);
   app.innerHTML = `
     <div class="content">
       <header><p class="eyebrow">${esc(cert.name)}</p><h1>퀴즈</h1>
@@ -416,6 +428,7 @@ function renderQuizPicker(cert) {
       <section class="block">
         <h2>범위 선택</h2>
         <div class="quiz-pick">
+          <a href="#/c/${cert.id}/exam"><strong>실전 모의고사</strong><span class="count">${cert.exam.questions}문제 · ${cert.exam.minutes}분 · 비중대로</span></a>
           <a href="#/c/${cert.id}/quiz/all"><strong>전체 섞어서</strong><span class="count">${cert.questions.length}문제</span></a>
           ${cards}
         </div>
@@ -444,6 +457,12 @@ function renderQuiz(cert, scope) {
   const title = isAll ? `${cert.name} 전체 퀴즈` : `${section.title} 퀴즈`;
   setTitle(title);
   runQuiz(app, { cert, questions, scope, title, backHref: isAll ? `#/c/${cert.id}/quiz` : `#/c/${cert.id}/s/${scope}` });
+}
+
+function renderExam(cert) {
+  setNav(cert, 'exam');
+  setTitle(`${cert.name} 모의고사`);
+  renderExamIntro(app, cert);
 }
 
 // ---------- 오답노트 ----------

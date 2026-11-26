@@ -337,6 +337,56 @@ tbody th { font-weight: 600; white-space: nowrap; }
 .review-item .meta { font-size: var(--fs-xs); color: var(--ink-2); font-variant-numeric: tabular-nums; }
 .empty { padding: 28px; text-align: center; color: var(--ink-2); border: 1px dashed var(--line); border-radius: var(--radius); }
 
+
+/* ---------- 모의고사 ---------- */
+.exam { display: flex; flex-direction: column; gap: 16px; }
+.exam-bar {
+  position: sticky; top: var(--topbar-h, 61px); z-index: 5; display: flex; align-items: center; gap: 12px 16px; flex-wrap: wrap;
+  background: var(--bg); border-bottom: 1px solid var(--line); padding: 10px 0;
+}
+.exam-title { font-weight: 700; flex: 1 1 auto; min-width: 0; }
+.exam-count { font-size: var(--fs-sm); color: var(--ink-2); }
+.exam-timer { font-size: var(--fs-md); font-weight: 700; padding: 4px 10px; border-radius: 8px; background: var(--surface-2); }
+.exam-timer.low { color: var(--bad); background: var(--bad-soft); }
+.exam-body { display: grid; grid-template-columns: minmax(0, 1fr) 232px; gap: 20px; align-items: start; }
+.exam-qhead { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.exam-qhead .eyebrow { margin: 0; }
+.flag-toggle { display: inline-flex; gap: 6px; align-items: center; font-size: var(--fs-xs); font-weight: 600; color: var(--weight); cursor: pointer; }
+.flag-toggle input { accent-color: var(--weight); }
+.exam-grid {
+  position: sticky; top: calc(var(--topbar-h, 61px) + 72px); display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px;
+}
+.exam-grid button {
+  font: inherit; font-family: var(--font-mono); font-size: var(--fs-xs); min-height: 32px; border-radius: 6px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--bg); color: var(--ink-2); position: relative;
+}
+.exam-grid button.done { background: var(--accent-soft); color: var(--ink); border-color: var(--accent); }
+.exam-grid button.flag::after { content: ""; position: absolute; top: 3px; right: 3px; width: 6px; height: 6px; border-radius: 50%; background: var(--weight); }
+.exam-grid button.current { outline: 2px solid var(--accent); outline-offset: 1px; color: var(--ink); font-weight: 700; }
+.exam-confirm { background: var(--surface); border: 1px solid var(--accent); border-radius: var(--radius); padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; }
+.exam-confirm p { margin: 0; }
+.meter { display: inline-block; vertical-align: middle; width: 90px; height: 6px; margin-right: 8px; background: var(--surface-2); border-radius: 999px; overflow: hidden; }
+.meter > span { display: block; height: 100%; }
+.meter > .ok { background: var(--good); }
+.meter > .low { background: var(--bad); }
+.exam-review-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.exam-reviews { display: flex; flex-direction: column; gap: 8px; }
+.exam-reviews.only-wrong .exam-review.ok { display: none; }
+.exam-review { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.exam-review summary { display: flex; gap: 10px; align-items: baseline; padding: 12px 14px; cursor: pointer; font-size: var(--fs-sm); }
+.exam-review summary .sum-q { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.exam-review .question { border: 0; border-top: 1px solid var(--line); border-radius: 0 0 var(--radius) var(--radius); }
+.exam-review .option { cursor: default; }
+.tag { font-size: var(--fs-xs); font-weight: 700; padding: 1px 8px; border-radius: 999px; background: var(--surface-2); color: var(--ink-2); white-space: nowrap; }
+.tag.good { background: var(--good-soft); color: var(--good); }
+.tag.bad { background: var(--bad-soft); color: var(--bad); }
+@media (max-width: 860px) {
+  .exam-body { grid-template-columns: minmax(0, 1fr); }
+  .exam-grid { position: static; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); }
+  .exam-grid button { padding: 0; white-space: nowrap; }
+}
+
 /* ---------- 반응형 ---------- */
 @media (max-width: 860px) {
   .cert-layout { grid-template-columns: minmax(0, 1fr); gap: 20px; }
