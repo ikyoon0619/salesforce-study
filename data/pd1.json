@@ -767,51 +767,58 @@
     {
      "title": "Visualforce Basics",
      "url": "https://trailhead.salesforce.com/content/learn/modules/visualforce_fundamentals",
-     "minutes": 245,
+     "minutes": 160,
      "kind": "module",
-     "topics": "Visualforce 페이지, Standard Controller, 표현식, 출력·입력 컴포넌트, Custom Controller"
+     "topics": "Visualforce 페이지, Standard Controller, 표현식, 출력·입력 컴포넌트, Custom Controller",
+     "note": "visualforce_basics"
     },
     {
      "title": "Lightning Web Components Basics",
      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning-web-components-basics",
      "minutes": 70,
      "kind": "module",
-     "topics": "LWC 파일 구조, 데코레이터, Lightning Data Service, 배포"
+     "topics": "LWC 파일 구조, 데코레이터, Lightning Data Service, 배포",
+     "note": "lwc_basics_pd1"
     },
     {
      "title": "Best Practices in Lightning Web Components",
      "url": "https://trailhead.salesforce.com/content/learn/modules/best-practices-in-lightning-web-components",
-     "minutes": 60,
+     "minutes": 20,
      "kind": "module",
-     "topics": "데이터 접근 순서(LDS → UI API → Apex), 성능, 보안"
+     "topics": "데이터 접근 순서(LDS → UI API → Apex), 성능, 보안",
+     "note": "lwc_best_practices"
     },
     {
      "title": "Visualforce & Lightning Experience",
      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_dev_visualforce",
-     "minutes": 115,
+     "minutes": 120,
      "kind": "module",
-     "topics": "Lightning Experience에서 Visualforce 쓰기, 스타일, 내비게이션"
+     "topics": "Lightning Experience에서 Visualforce 쓰기, 스타일, 내비게이션",
+     "note": "visualforce_lex"
     },
     {
      "title": "Quick Start: Aura Components",
      "url": "https://trailhead.salesforce.com/content/learn/projects/quickstart-lightning-components",
-     "minutes": 40,
+     "minutes": 20,
      "kind": "project",
-     "topics": "Aura 컴포넌트를 만들어 레코드 페이지에 올리기"
+     "topics": "Aura 컴포넌트를 만들어 레코드 페이지에 올리기",
+     "note": "aura_quick_start"
     },
     {
      "title": "Lightning Web Components for Aura Developers",
      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning-web-components-for-aura-developers",
-     "minutes": 80,
+     "minutes": 65,
      "kind": "module",
-     "topics": "Aura와 LWC 비교, 이벤트·속성·Apex 호출 방식 차이"
+     "topics": "Aura와 LWC 비교, 이벤트·속성·Apex 호출 방식 차이",
+     "note": "lwc_for_aura"
     },
     {
      "title": "Agent Customization with Apex",
      "url": "https://trailhead.salesforce.com/content/learn/modules/agent-customization-with-apex",
-     "minutes": 60,
+     "minutes": 30,
      "kind": "module",
-     "topics": "Apex 클래스를 Agentforce 에이전트 액션으로 쓰기"
+     "topics": "Apex 클래스를 Agentforce 에이전트 액션으로 쓰기",
+     "note": "agent_customization_apex"
     }
    ],
    "summary": [
@@ -1097,30 +1104,34 @@
     {
      "title": "Apex Testing",
      "url": "https://trailhead.salesforce.com/content/learn/modules/apex_testing",
-     "minutes": 85,
+     "minutes": 135,
      "kind": "module",
-     "topics": "단위 테스트 작성, 트리거 테스트, 테스트 데이터 생성, 코드 커버리지"
+     "topics": "단위 테스트 작성, 트리거 테스트, 테스트 데이터 생성, 코드 커버리지",
+     "note": "apex_testing"
     },
     {
      "title": "Developer Console Basics",
      "url": "https://trailhead.salesforce.com/content/learn/modules/developer_console",
-     "minutes": 155,
+     "minutes": 85,
      "kind": "module",
-     "topics": "Developer Console로 코드 작성, 로그 보기, 쿼리, 체크포인트"
+     "topics": "Developer Console로 코드 작성, 로그 보기, 쿼리, 체크포인트",
+     "note": "developer_console"
     },
     {
      "title": "Command-Line Interface",
      "url": "https://trailhead.salesforce.com/content/learn/modules/cli-basics",
-     "minutes": 40,
+     "minutes": 55,
      "kind": "module",
-     "topics": "명령줄 기본과 Salesforce CLI가 하는 일"
+     "topics": "명령줄 기본과 Salesforce CLI가 하는 일",
+     "note": "cli_basics"
     },
     {
      "title": "Quick Start: Salesforce DX",
      "url": "https://trailhead.salesforce.com/content/learn/projects/quick-start-salesforce-dx",
      "minutes": 40,
      "kind": "project",
-     "topics": "Salesforce CLI 설치, Scratch Org 만들고 소스 push/pull"
+     "topics": "Salesforce CLI 설치, Scratch Org 만들고 소스 push/pull",
+     "note": "sfdx_quick_start"
     },
     {
      "title": "Org Development Model",
@@ -1136,7 +1147,8 @@
      "url": "https://trailhead.salesforce.com/content/learn/projects/find-and-fix-bugs-with-apex-replay-debugger",
      "minutes": 60,
      "kind": "project",
-     "topics": "VS Code에서 디버그 로그를 재생하며 중단점·변수 확인"
+     "topics": "VS Code에서 디버그 로그를 재생하며 중단점·변수 확인",
+     "note": "apex_replay_debugger"
     }
    ],
    "summary": [
@@ -3105,6 +3117,6 @@
  "trail": {
   "title": "Study for the Platform Developer Exam + Prepare for Your Salesforce Platform Developer I Credential",
   "url": "https://trailhead.salesforce.com/content/learn/trails/platform-developer-i-certification-study-guide",
-  "hours": "약 35시간 15분"
+  "hours": "약 32시간 5분"
  }
 }

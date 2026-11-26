@@ -1,0 +1,126 @@
+{
+  "intro": "기존 Apex 코드를 **@InvocableMethod** 로 감싸 Agentforce 에이전트가 쓸 수 있는 **Agent Action** 으로 만듭니다. 같은 어노테이션이 Flow와 REST에서도 쓰이므로 PD1에서도 핵심입니다.",
+  "units": [
+    {
+      "title": "Get Ready to Create an Apex Action",
+      "ko": "Apex 액션 준비하기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/agent-customization-with-apex/get-ready-to-create-an-apex-action",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "시나리오: Coral Cloud Resorts의 에이전트가 날씨를 알려주게 합니다. 외부 API를 부르는 `WeatherService.getResortWeather(Datetime)` 클래스가 이미 있지만, 그대로는 Agentforce Builder가 쓸 수 없습니다."
+        },
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 230\" role=\"img\" aria-label=\"Apex 클래스가 에이전트 액션이 되는 흐름\"><rect class=\"d-box\" x=\"20\" y=\"80\" width=\"150\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"95.0\" y=\"108.5\" text-anchor=\"middle\">WeatherService</text><text class=\"d-sub\" x=\"95.0\" y=\"127.5\" text-anchor=\"middle\">기존 서비스 클래스</text><text class=\"d-sub\" x=\"95.0\" y=\"143.5\" text-anchor=\"middle\">HTTP 콜아웃</text><rect class=\"d-accent\" x=\"210\" y=\"80\" width=\"170\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"295.0\" y=\"108.5\" text-anchor=\"middle\">CheckWeather</text><text class=\"d-sub\" x=\"295.0\" y=\"127.5\" text-anchor=\"middle\">@InvocableMethod 래퍼</text><text class=\"d-sub\" x=\"295.0\" y=\"143.5\" text-anchor=\"middle\">label · description</text><rect class=\"d-accent\" x=\"420\" y=\"80\" width=\"140\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"490.0\" y=\"108.5\" text-anchor=\"middle\">Agent Action</text><text class=\"d-sub\" x=\"490.0\" y=\"127.5\" text-anchor=\"middle\">Apex &gt; Invocable</text><text class=\"d-sub\" x=\"490.0\" y=\"143.5\" text-anchor=\"middle\">Method로 생성</text><rect class=\"d-box\" x=\"600\" y=\"80\" width=\"110\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"655.0\" y=\"108.5\" text-anchor=\"middle\">Subagent</text><text class=\"d-sub\" x=\"655.0\" y=\"127.5\" text-anchor=\"middle\">에이전트가 추론</text><text class=\"d-sub\" x=\"655.0\" y=\"143.5\" text-anchor=\"middle\">중 호출</text><rect class=\"d-warn\" x=\"210\" y=\"180\" width=\"350\" height=\"40\" rx=\"10\"/><text class=\"d-strong\" x=\"385.0\" y=\"196.5\" text-anchor=\"middle\">Permission Set</text><text class=\"d-sub\" x=\"385.0\" y=\"215.5\" text-anchor=\"middle\">Apex 클래스 접근 권한이 없으면 에이전트가 액션을 고려하지 않음</text><line class=\"d-line\" x1=\"206\" y1=\"120\" x2=\"174\" y2=\"120\"/><polygon class=\"d-arrow\" points=\"174.0,120.0 182.1,116.1 182.1,123.9\"/><text class=\"d-sub\" x=\"190.0\" y=\"112.0\" text-anchor=\"middle\">호출</text><line class=\"d-line\" x1=\"384\" y1=\"120\" x2=\"416\" y2=\"120\"/><polygon class=\"d-arrow\" points=\"416.0,120.0 407.9,123.9 407.9,116.1\"/><line class=\"d-line\" x1=\"564\" y1=\"120\" x2=\"596\" y2=\"120\"/><polygon class=\"d-arrow\" points=\"596.0,120.0 587.9,123.9 587.9,116.1\"/></svg>",
+          "caption": "서비스 클래스는 그대로 두고 invocable 래퍼를 만들어 액션으로 연결"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**@InvocableMethod** 는 Apex를 **Flow, REST로 호출하는 외부 앱, Agentforce** 에서 부를 수 있게 합니다.",
+            "권장 방식: 원래 서비스 클래스에 어노테이션을 달지 말고 **별도 래퍼 클래스** 를 만들어 거기서 서비스를 호출합니다."
+          ]
+        },
+        {
+          "type": "code",
+          "code": "public with sharing class CheckWeather {\n    @InvocableMethod(label='Check Weather'\n        description='Check weather at Coral Cloud Resorts at a specific date')\n    public static List<WeatherResponse> getWeather(List<WeatherRequest> requests) {\n        List<WeatherResponse> results = new List<WeatherResponse>();\n        for (WeatherRequest req : requests) {\n            WeatherService.Weather w =\n                WeatherService.getResortWeather(Datetime.newInstance(req.dateToCheck, Time.newInstance(12, 0, 0, 0)));\n            WeatherResponse res = new WeatherResponse();\n            res.minTemperature = w.minTemperatureC;\n            res.maxTemperature = w.maxTemperatureC;\n            res.temperatureDescription = w.description;\n            results.add(res);\n        }\n        return results;\n    }\n    public class WeatherRequest {\n        @InvocableVariable(required=true description='Date to check (yyyy-MM-dd)')\n        public Date dateToCheck;\n    }\n    public class WeatherResponse {\n        @InvocableVariable(description='Minimum temperature') public Decimal minTemperature;\n        @InvocableVariable(description='Maximum temperature') public Decimal maxTemperature;\n        @InvocableVariable(description='Weather description') public String temperatureDescription;\n    }\n}",
+          "lang": "apex",
+          "title": "래퍼 클래스 (요지만 간추린 예)"
+        },
+        {
+          "type": "table",
+          "title": "어노테이션 속성이 액션 설정으로 넘어가는 방식",
+          "headers": [
+            "코드",
+            "Agent Action 화면"
+          ],
+          "rows": [
+            [
+              "@InvocableMethod `label`",
+              "Agent Action Label"
+            ],
+            [
+              "@InvocableMethod `description`",
+              "Agent Action Instructions (에이전트가 언제 쓸지 판단)"
+            ],
+            [
+              "입력 @InvocableVariable `description`",
+              "Input Instructions"
+            ],
+            [
+              "`required=true`",
+              "'Require input to execute action' 기본 체크"
+            ],
+            [
+              "변수의 Apex 타입",
+              "입력 데이터 타입 / 출력 렌더링 (String → Text)"
+            ],
+            [
+              "출력 @InvocableVariable `description`",
+              "Output Instructions"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "invocable 메서드는 **static**, 인자와 반환은 **List** (여러 요청을 한 번에 받는 bulk 형태). 한 클래스에 @InvocableMethod는 하나만.",
+            "Date 입력은 yyyy-MM-dd 형식이어야 합니다."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Apex 액션이 실패하는 주요 원인은 **권한** 입니다. 에이전트 사용자에게 Permission Set으로 그 Apex 클래스 접근을 주지 않으면 액션을 추가해도 에이전트가 계획에서 고려하지 않습니다."
+        }
+      ]
+    },
+    {
+      "title": "Create an Apex Agent Action",
+      "ko": "Apex 에이전트 액션 만들기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/agent-customization-with-apex/create-an-apex-agent-action",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "액션 만들고 붙이기",
+          "items": [
+            "App Launcher > **Agentforce Studio** > 에이전트 선택 > **New Version**",
+            "Subagents에서 'Answer Weather Questions' 선택",
+            "Actions Available For Reasoning > Add action > **Create a custom action**",
+            "Name: Check Weather, Reference Action Type: **Apex**, Category: **Invocable Method**, Reference Action: Check Weather",
+            "Create and Open: 입력·출력 설명과 타입이 코드에서 자동으로 채워짐",
+            "temperatureDescription 출력에 **Show in conversation** 체크 후 Save",
+            "Commit Version > **Activate**"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "테스트",
+          "items": [
+            "Builder의 **Preview** (Live Test Mode)",
+            "\"What's the weather like this Monday?\" 입력, 날짜를 물으면 선택",
+            "추적(trace)에서 Subagent 전환과 Check Weather 액션 선택 과정을 확인"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "코드에 쓴 label, description, required, 타입이 그대로 액션 설정이 되므로 **설명을 구체적으로** 쓰는 것이 에이전트 품질을 좌우합니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "@InvocableMethod",
+      "Flow, REST, Agentforce에서 부를 수 있게 하는 Apex 메서드 어노테이션"
+    ],
+    [
+      "@InvocableVariable",
+      "invocable 메서드 입출력 클래스의 변수 어노테이션"
+    ],
+    [
+      "Agent Action",
+      "에이전트가 추론 중 실행하는 작업 (Flow, Apex, Prompt Template 등)"
+    ]
+  ]
+}

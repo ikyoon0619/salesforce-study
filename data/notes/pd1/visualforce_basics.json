@@ -1,0 +1,287 @@
+{
+  "intro": "서버에서 HTML을 그려 보내는 예전 UI 프레임워크 **Visualforce** 의 페이지, 표현식, Standard·List·Custom Controller, 정적 리소스를 익힙니다. 새 UI는 LWC가 기본이지만 PD1에는 Visualforce 코드를 읽는 문제가 꾸준히 나옵니다.",
+  "units": [
+    {
+      "title": "Get Started with Visualforce",
+      "ko": "Visualforce 시작하기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/visualforce_fundamentals/visualforce_intro",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Visualforce는 Lightning Platform에서 호스팅되는 페이지를 태그 기반 마크업으로 만드는 프레임워크입니다. 서버가 데이터를 처리하고 HTML을 만들어 브라우저에 보냅니다. 페이지마다 고유 URL(`/apex/PageName`)이 있습니다."
+        },
+        {
+          "type": "code",
+          "code": "<apex:page standardController=\"Contact\">\n    <apex:form>\n        <apex:pageBlock title=\"Edit Contact\">\n            <apex:pageBlockSection columns=\"1\">\n                <apex:inputField value=\"{!Contact.FirstName}\"/>\n                <apex:inputField value=\"{!Contact.Email}\"/>\n            </apex:pageBlockSection>\n            <apex:pageBlockButtons>\n                <apex:commandButton action=\"{!save}\" value=\"Save\"/>\n            </apex:pageBlockButtons>\n        </apex:pageBlock>\n    </apex:form>\n</apex:page>",
+          "lang": "xml",
+          "title": "id가 없으면 새로 만들고, 있으면 수정하는 폼"
+        },
+        {
+          "type": "table",
+          "title": "Lightning Experience에서 Visualforce를 쓰는 곳",
+          "headers": [
+            "위치",
+            "조건"
+          ],
+          "rows": [
+            [
+              "App Launcher · 내비게이션 바",
+              "Visualforce **탭** 을 만들어 앱에 추가"
+            ],
+            [
+              "페이지 레이아웃",
+              "레이아웃에 포함, Details에서 보임"
+            ],
+            [
+              "Lightning App Builder",
+              "Visualforce 컴포넌트. 페이지에 'Available for Lightning Experience...' 체크 필요"
+            ],
+            [
+              "Quick Action",
+              "레이아웃의 액션 영역에 추가"
+            ],
+            [
+              "버튼 Override, 커스텀 버튼·링크",
+              "Visualforce·URL 버튼 가능, **JavaScript 버튼은 미지원**"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Create & Edit Visualforce Pages",
+      "ko": "페이지 만들고 고치기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/visualforce_fundamentals/visualforce_creating_pages",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "편집기: **Developer Console** (File > New > Visualforce Page), Setup > Quick Find 'Visualforce Pages', VS Code. Development Mode 푸터는 Classic에서만.",
+            "Visualforce 컴포넌트는 150개 가까이 있고 HTML, CSS, JavaScript와 섞어 쓸 수 있습니다.",
+            "`<apex:page sidebar=\"false\" showHeader=\"false\">`: Classic에서는 기본 true, **Lightning Experience와 모바일에서는 항상 false** (LEX 헤더는 숨길 수 없음).",
+            "`standardStylesheets=\"false\"` 로 Salesforce 기본 스타일 제거",
+            "`<apex:pageBlockSection>` 은 반드시 `<apex:pageBlock>` 안에, `<apex:pageBlockSectionItem>` 은 pageBlockSection 안에 둡니다."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "LEX에서 미리보기: 브라우저 콘솔에서 `$A.get(\"e.force:navigateToURL\").setParams({\"url\": \"/apex/pageName\"}).fire();` 직접 `/apex/...` URL은 Classic 화면으로 열립니다."
+        }
+      ]
+    },
+    {
+      "title": "Use Simple Variables and Formulas",
+      "ko": "변수와 수식",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/visualforce_fundamentals/visualforce_variables_expressions",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "표현식 문법: `{! expression }`. 공백은 무시되고 **대소문자를 구분하지 않으며**, 표현식 안에서 메서드를 직접 호출할 수 없습니다.",
+            "전역 변수: `$User`, `$Organization`, `$Setup`, `$ObjectType`, `$Action`, `$Resource` 등 20여 개",
+            "연산자·함수: `&` (문자열 연결), `TODAY()`, `YEAR()`, `MAX()`, `CONTAINS(text, sub)`, `IF(조건, 참, 거짓)`"
+          ]
+        },
+        {
+          "type": "code",
+          "code": "{! $User.FirstName & ' ' & $User.LastName }\n{! IF($User.isActive, $User.Username, 'inactive') }\n{! CONTAINS('salesforce.com', 'force.com') }",
+          "lang": "xml"
+        }
+      ]
+    },
+    {
+      "title": "Use Standard Controllers",
+      "ko": "Standard Controller",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/visualforce_fundamentals/visualforce_standard_controllers",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 230\" role=\"img\" aria-label=\"Visualforce MVC: 페이지와 컨트롤러\"><rect class=\"d-box\" x=\"20\" y=\"70\" width=\"190\" height=\"90\" rx=\"10\"/><text class=\"d-strong\" x=\"115.0\" y=\"103.5\" text-anchor=\"middle\">Visualforce Page (View)</text><text class=\"d-sub\" x=\"115.0\" y=\"122.5\" text-anchor=\"middle\">&lt;apex:page&gt;</text><text class=\"d-sub\" x=\"115.0\" y=\"138.5\" text-anchor=\"middle\">{! expression }</text><rect class=\"d-accent\" x=\"270\" y=\"20\" width=\"190\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"365.0\" y=\"48.5\" text-anchor=\"middle\">Standard Controller</text><text class=\"d-sub\" x=\"365.0\" y=\"67.5\" text-anchor=\"middle\">standardController=&quot;Account&quot;</text><text class=\"d-sub\" x=\"365.0\" y=\"83.5\" text-anchor=\"middle\">save, edit, delete 제공</text><rect class=\"d-accent\" x=\"270\" y=\"130\" width=\"190\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"365.0\" y=\"158.5\" text-anchor=\"middle\">Custom Controller</text><text class=\"d-sub\" x=\"365.0\" y=\"177.5\" text-anchor=\"middle\">controller=&quot;MyCtrl&quot;</text><text class=\"d-sub\" x=\"365.0\" y=\"193.5\" text-anchor=\"middle\">직접 쓴 Apex 클래스</text><rect class=\"d-box\" x=\"520\" y=\"70\" width=\"180\" height=\"90\" rx=\"10\"/><text class=\"d-strong\" x=\"610.0\" y=\"103.5\" text-anchor=\"middle\">Data (Model)</text><text class=\"d-sub\" x=\"610.0\" y=\"122.5\" text-anchor=\"middle\">sObject 레코드</text><text class=\"d-sub\" x=\"610.0\" y=\"138.5\" text-anchor=\"middle\">?id=레코드Id</text><line class=\"d-line\" x1=\"214\" y1=\"100\" x2=\"266\" y2=\"60\"/><polygon class=\"d-arrow\" points=\"266.0,60.0 262.0,68.0 257.2,61.8\"/><line class=\"d-line\" x1=\"214\" y1=\"130\" x2=\"266\" y2=\"170\"/><polygon class=\"d-arrow\" points=\"266.0,170.0 257.2,168.2 262.0,162.0\"/><line class=\"d-line\" x1=\"464\" y1=\"60\" x2=\"516\" y2=\"100\"/><polygon class=\"d-arrow\" points=\"516.0,100.0 507.2,98.2 512.0,92.0\"/><line class=\"d-line\" x1=\"464\" y1=\"170\" x2=\"516\" y2=\"130\"/><polygon class=\"d-arrow\" points=\"516.0,130.0 512.0,138.0 507.2,131.8\"/></svg>",
+          "caption": "Visualforce도 MVC: 페이지는 View, 컨트롤러가 데이터와 동작을 연결"
+        },
+        {
+          "type": "list",
+          "items": [
+            "대부분의 표준 오브젝트와 **모든 커스텀 오브젝트** 에 Standard Controller가 있어 코드 없이 레코드를 읽고 저장합니다.",
+            "레코드는 URL 파라미터 **`?id=레코드Id`** 로 지정합니다. 레코드는 오브젝트 이름 변수(`{! Account.Name }`)로 접근.",
+            "관계는 점 표기: `{! Account.Owner.Name }`, 커스텀 필드는 API 이름: `{! MyObject__c.Foo__c }`",
+            "페이지 레이아웃에 넣거나, 오브젝트별 Custom Action, 모바일 카드로 쓰는 페이지는 **그 오브젝트의 Standard Controller** 를 써야 합니다."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "`{! Account.AnnualRevenue }` 를 그대로 찍으면 지수 표기로 나옵니다. 서식은 `<apex:outputField>` 같은 컴포넌트가 맞춰 줍니다."
+        }
+      ]
+    },
+    {
+      "title": "Display Records, Fields, and Tables",
+      "ko": "레코드, 필드, 표 보여주기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/visualforce_fundamentals/visualforce_output_components",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "출력 컴포넌트",
+          "headers": [
+            "컴포넌트",
+            "용도"
+          ],
+          "rows": [
+            [
+              "`<apex:detail />`",
+              "표준 레코드 상세 화면 통째로 (coarse-grained). `relatedList=\"false\"` 로 관련 목록 제외"
+            ],
+            [
+              "`<apex:relatedList list=\"Opportunities\" pageSize=\"5\"/>`",
+              "관련 목록 하나 (Edit/Del, New 버튼 포함)"
+            ],
+            [
+              "`<apex:outputField value=\"{!Account.Name}\"/>`",
+              "필드 하나, 타입에 맞게 서식. pageBlockSection 안에 두면 플랫폼 스타일"
+            ],
+            [
+              "`<apex:pageBlockTable value=\"{!Account.Contacts}\" var=\"c\">`",
+              "반복 컴포넌트, 안에 `<apex:column>`"
+            ],
+            [
+              "`apex:dataTable`, `apex:dataList`, `apex:repeat`",
+              "스타일 없는 반복 / 임의 마크업 반복"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Input Data Using Forms",
+      "ko": "폼으로 입력받기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/visualforce_fundamentals/visualforce_forms",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "서버로 보내는 입력은 **`<apex:form>`** 안에 있어야 합니다.",
+            "`<apex:inputField>` 는 필드 타입에 맞는 위젯(날짜 달력, picklist 드롭다운)을 그리고 **필수·고유 여부와 사용자의 FLS** 를 따릅니다.",
+            "`<apex:commandButton action=\"{! save }\">` 로 Standard Controller의 save 실행, `<apex:pageMessages/>` 로 오류 메시지 표시",
+            "기존 관련 레코드 링크: `URLFOR($Action.Contact.Edit, contact.Id)`. 새 관련 레코드를 같은 페이지에서 만들려면 Custom Controller 코드가 필요합니다."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "`apex:inputField` 는 필드 수준 보안을 자동으로 지키지만, `apex:inputText` 같은 일반 입력은 sObject 필드 메타데이터와 연결되지 않습니다."
+        }
+      ]
+    },
+    {
+      "title": "Use Standard List Controllers",
+      "ko": "Standard List Controller",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/visualforce_fundamentals/visualforce_standard_list_controllers",
+      "blocks": [
+        {
+          "type": "code",
+          "code": "<apex:page standardController=\"Contact\" recordSetVar=\"contacts\">\n    <apex:form>\n        <apex:selectList value=\"{! filterId }\" size=\"1\">\n            <apex:selectOptions value=\"{! listViewOptions }\"/>\n            <apex:actionSupport event=\"onchange\" reRender=\"contacts_list\"/>\n        </apex:selectList>\n        <apex:pageBlock id=\"contacts_list\">\n            <apex:pageBlockTable value=\"{! contacts }\" var=\"ct\">\n                <apex:column value=\"{! ct.FirstName }\"/>\n            </apex:pageBlockTable>\n            <apex:commandLink action=\"{! Previous }\" value=\"« Previous\" rendered=\"{! HasPrevious }\"/>\n            <apex:commandLink action=\"{! Next }\" value=\"Next »\" rendered=\"{! HasNext }\"/>\n        </apex:pageBlock>\n    </apex:form>\n</apex:page>",
+          "lang": "xml"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**`recordSetVar`** 를 쓰면 레코드 하나가 아니라 **목록** 을 다루는 List Controller가 됩니다 (Apex의 `StandardSetController` 기반).",
+            "기본 페이지 크기 **20건**. 액션: `Previous`, `Next`, `First`, `Last`, 값: `PageNumber`, `ResultSize`, `PageSize`, `HasPrevious`, `HasNext`",
+            "list view 필터는 `filterId` 와 `listViewOptions`. **정렬은 Visualforce만으로 안 되고** 커스텀 코드가 필요합니다."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Use Static Resources",
+      "ko": "정적 리소스",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/visualforce_fundamentals/visualforce_static_resources",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "이미지, CSS, JS, zip 파일을 Setup > Quick Find 'Static Resources' > New 로 올립니다 (Cache Control: Public). CDN으로 배포되고 캐시됩니다.",
+            "단일 파일: `{! $Resource.jQuery }`, zip 안의 파일: `URLFOR($Resource.jQueryMobile, 'images/icons-png/cloud-black.png')`",
+            "컴포넌트: `<apex:includeScript>` (JS), `<apex:stylesheet>` (CSS), `<apex:image>`",
+            "리소스를 고쳐도 참조하는 페이지는 바꿀 필요가 없습니다."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Create & Use Custom Controllers",
+      "ko": "Custom Controller",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/visualforce_fundamentals/visualforce_custom_controllers",
+      "blocks": [
+        {
+          "type": "code",
+          "code": "public class ContactsListWithController {\n    private String sortOrder = 'LastName';\n\n    public List<Contact> getContacts() {          // {! contacts } 가 이 getter 호출\n        return Database.query(\n            'SELECT Id, FirstName, LastName, Title, Email FROM Contact ' +\n            'ORDER BY ' + sortOrder + ' ASC LIMIT 10');\n    }\n    public void sortByLastName()  { this.sortOrder = 'LastName'; }   // 액션 메서드\n    public void sortByFirstName() { this.sortOrder = 'FirstName'; }\n}",
+          "lang": "apex"
+        },
+        {
+          "type": "code",
+          "code": "<apex:page controller=\"ContactsListWithController\">\n  <apex:form>\n    <apex:pageBlockTable value=\"{! contacts }\" var=\"ct\" id=\"contacts_list\">\n      <apex:column value=\"{! ct.FirstName }\">\n        <apex:facet name=\"header\">\n          <apex:commandLink action=\"{! sortByFirstName }\" reRender=\"contacts_list\">First Name</apex:commandLink>\n        </apex:facet>\n      </apex:column>\n    </apex:pageBlockTable>\n  </apex:form>\n</apex:page>",
+          "lang": "xml"
+        },
+        {
+          "type": "table",
+          "title": "이름 규칙",
+          "headers": [
+            "마크업",
+            "Apex"
+          ],
+          "rows": [
+            [
+              "`{! contacts }` (값 읽기)",
+              "`getContacts()`"
+            ],
+            [
+              "입력 값 쓰기",
+              "`setXxx(값)` setter"
+            ],
+            [
+              "`action=\"{! sortByLastName }\"`",
+              "같은 이름의 액션 메서드"
+            ],
+            [
+              "속성",
+              "`public String name { get; set; }`"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "`controller=\"...\"` 로 지정. Custom Controller를 쓰는 페이지는 **Standard Controller를 같이 쓸 수 없습니다** (Standard Controller에 기능을 더하려면 **Controller Extension**).",
+            "getter와 setter의 **호출 순서는 보장되지 않으므로** 순서에 의존하는 코드를 쓰면 안 됩니다."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "문자열로 SOQL을 만드는 `Database.query` 는 사용자 입력을 그대로 붙이면 **SOQL Injection** 위험이 있습니다. 바인드 변수나 `String.escapeSingleQuotes()` 를 씁니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Standard Controller",
+      "오브젝트마다 자동 제공되는 Visualforce 컨트롤러"
+    ],
+    [
+      "recordSetVar",
+      "Standard List Controller를 쓰게 하는 속성"
+    ],
+    [
+      "Custom Controller",
+      "controller 속성으로 지정한 Apex 클래스"
+    ],
+    [
+      "Controller Extension",
+      "Standard/Custom Controller에 기능을 더하는 클래스 (extensions 속성)"
+    ],
+    [
+      "$Resource",
+      "정적 리소스 전역 변수"
+    ]
+  ]
+}

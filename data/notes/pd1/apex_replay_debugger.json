@@ -1,0 +1,144 @@
+{
+  "intro": "VS Code에서 **디버그 로그를 재생** 해 실제 실행처럼 변수와 호출 스택을 확인하는 무료 도구 **Apex Replay Debugger** 로 버그를 찾아 고칩니다.",
+  "units": [
+    {
+      "title": "Launch Your Trailhead Playground",
+      "ko": "준비와 개념",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/find-and-fix-bugs-with-apex-replay-debugger/apex-replay-debugger-launch-playground",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "Apex 디버거 비교",
+          "headers": [
+            "도구",
+            "특징"
+          ],
+          "rows": [
+            [
+              "**Apex Replay Debugger**",
+              "무료. 이미 만들어진 **디버그 로그** 를 VS Code에서 재생 (라이브 세션 흉내)"
+            ],
+            [
+              "Apex Interactive Debugger",
+              "Sandbox·Scratch Org에서 **실시간** 디버깅 (유료)"
+            ],
+            [
+              "ISV Customer Debugger",
+              "ISV 파트너가 구독자 org를 디버깅"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "흐름: 코드 수정 → 배포 → 버그 재현 → 디버그 로그 다운로드 → 그 로그로 Replay Debugger 실행",
+            "재생 가능한 로그 조건: **Apex Code는 FINEST**, **Visualforce는 FINER 또는 FINEST**"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Set Up Visual Studio Code",
+      "ko": "VS Code 준비",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/find-and-fix-bugs-with-apex-replay-debugger/apex-replay-debugger-set-up-vscode",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "필요: VS Code, Salesforce CLI, Salesforce Extension Pack, **JDK 11 이상 (21 권장)**",
+            "JAVA_HOME / JDK_HOME 이나 설정 `salesforcedx-vscode-apex.java.home` 으로 JDK 위치 지정"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Set Up Apex Replay Debugger",
+      "ko": "프로젝트와 클래스 준비",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/find-and-fix-bugs-with-apex-replay-debugger/apex-replay-debugger-set-up-debugger",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Command Palette (Ctrl/Cmd+Shift+P) > **SFDX: Create Project** > classes 폴더 우클릭 > **SFDX: Create Apex Class** (New File은 메타데이터 xml을 만들지 않으므로 X) > **SFDX: Authorize an Org**"
+          ]
+        },
+        {
+          "type": "code",
+          "code": "public with sharing class AccountService {\n    public Account createAccount(String accountName, String accountNumber, String tickerSymbol) {\n        Account newAcct = new Account(\n            Name = accountName,\n            AccountNumber = accountNumber,\n            TickerSymbol = accountNumber     // 버그: tickerSymbol 이어야 함\n        );\n        return newAcct;\n    }\n}",
+          "lang": "apex",
+          "title": "일부러 버그를 넣은 클래스"
+        }
+      ]
+    },
+    {
+      "title": "Debug Your Code",
+      "ko": "디버깅하기",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/find-and-fix-bugs-with-apex-replay-debugger/apex-replay-debugger-debug-your-code",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 200\" role=\"img\" aria-label=\"Apex Replay Debugger 흐름\"><rect class=\"d-box\" x=\"20\" y=\"60\" width=\"125\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"82.5\" y=\"88.5\" text-anchor=\"middle\">배포</text><text class=\"d-sub\" x=\"82.5\" y=\"107.5\" text-anchor=\"middle\">Deploy This</text><text class=\"d-sub\" x=\"82.5\" y=\"123.5\" text-anchor=\"middle\">Source To Org</text><rect class=\"d-accent\" x=\"160\" y=\"60\" width=\"125\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"222.5\" y=\"88.5\" text-anchor=\"middle\">중단점·체크포인트</text><text class=\"d-sub\" x=\"222.5\" y=\"107.5\" text-anchor=\"middle\">Toggle Breakpoint</text><text class=\"d-sub\" x=\"222.5\" y=\"123.5\" text-anchor=\"middle\">Update Checkpoints</text><line class=\"d-line\" x1=\"147\" y1=\"100\" x2=\"158\" y2=\"100\"/><polygon class=\"d-arrow\" points=\"158.0,100.0 149.9,103.9 149.9,96.1\"/><rect class=\"d-box\" x=\"300\" y=\"60\" width=\"125\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"362.5\" y=\"88.5\" text-anchor=\"middle\">로그 켜고 재현</text><text class=\"d-sub\" x=\"362.5\" y=\"107.5\" text-anchor=\"middle\">Turn On Apex Debug</text><text class=\"d-sub\" x=\"362.5\" y=\"123.5\" text-anchor=\"middle\">Log for Replay</text><line class=\"d-line\" x1=\"287\" y1=\"100\" x2=\"298\" y2=\"100\"/><polygon class=\"d-arrow\" points=\"298.0,100.0 289.9,103.9 289.9,96.1\"/><rect class=\"d-box\" x=\"440\" y=\"60\" width=\"125\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"502.5\" y=\"88.5\" text-anchor=\"middle\">로그 받기</text><text class=\"d-sub\" x=\"502.5\" y=\"107.5\" text-anchor=\"middle\">Get Apex Debug</text><text class=\"d-sub\" x=\"502.5\" y=\"123.5\" text-anchor=\"middle\">Logs</text><line class=\"d-line\" x1=\"427\" y1=\"100\" x2=\"438\" y2=\"100\"/><polygon class=\"d-arrow\" points=\"438.0,100.0 429.9,103.9 429.9,96.1\"/><rect class=\"d-accent\" x=\"580\" y=\"60\" width=\"125\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"642.5\" y=\"88.5\" text-anchor=\"middle\">재생</text><text class=\"d-sub\" x=\"642.5\" y=\"107.5\" text-anchor=\"middle\">Launch Apex Replay</text><text class=\"d-sub\" x=\"642.5\" y=\"123.5\" text-anchor=\"middle\">Debugger</text><line class=\"d-line\" x1=\"567\" y1=\"100\" x2=\"578\" y2=\"100\"/><polygon class=\"d-arrow\" points=\"578.0,100.0 569.9,103.9 569.9,96.1\"/></svg>",
+          "caption": "명령 팔레트 명령 순서"
+        },
+        {
+          "type": "table",
+          "title": "중단점과 체크포인트",
+          "headers": [
+            "",
+            "Breakpoint",
+            "Checkpoint"
+          ],
+          "rows": [
+            [
+              "표시",
+              "빨간 점",
+              "가운데 줄이 있는 빨간 원"
+            ],
+            [
+              "하는 일",
+              "그 줄에서 멈춰 변수 확인",
+              "**heap dump** 를 떠서 local, static, trigger 변수까지 자세히"
+            ],
+            [
+              "개수",
+              "무제한",
+              "**동시에 최대 5개**"
+            ],
+            [
+              "유효 기간",
+              "-",
+              "체크포인트 30분, heap dump 1일"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "체크포인트를 바꾸면 **SFDX: Update Checkpoints in Org** 를 다시 실행합니다.",
+            "**SFDX: Turn On Apex Debug Log for Replay Debugger** 는 30분짜리 trace flag를 만듭니다 (Setup > Debug Logs에서 기간 변경).",
+            "테스트 실행 후 **SFDX: Get Apex Debug Logs** 로 로그를 받고, 로그에서 우클릭 > **Launch Apex Replay Debugger with Current File**",
+            "재생 중 `tickerSymbol` 은 'CRM' 인데 `newAcct.TickerSymbol` 은 'SFDC' → 버그 위치 확인, 고친 뒤 배포하고 테스트 재실행"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "로컬 소스가 로그를 만든 코드와 같아야 줄 번호와 변수가 맞습니다. 받은 로그는 `.sfdx/tools/debug/logs` 에 저장되어 팀원과 공유해 재생할 수도 있습니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Apex Replay Debugger",
+      "디버그 로그를 재생하는 VS Code 디버거"
+    ],
+    [
+      "Checkpoint",
+      "heap dump를 남기는 특수 중단점 (최대 5개)"
+    ],
+    [
+      "Trace Flag",
+      "어떤 사용자·기간에 어떤 로그 레벨로 기록할지 정한 설정"
+    ]
+  ]
+}

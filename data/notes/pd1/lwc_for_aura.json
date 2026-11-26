@@ -1,0 +1,265 @@
+{
+  "intro": "Aura 개발자가 LWC로 옮길 때 필요한 대응표: 번들 파일, 마크업, CSS, JavaScript, 데이터, 컴포지션, 이벤트. 시험에서는 \"Aura의 X는 LWC에서 무엇인가\" 문제로 자주 나옵니다.",
+  "units": [
+    {
+      "title": "Understand How Lightning Web Components Work with Aura Components",
+      "ko": "LWC와 Aura가 같이 동작하는 방식",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning-web-components-for-aura-developers/understand-how-lightning-web-components-work-with-aura-components",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "LWC는 W3C Web Components 표준 구현이라 ES6+, 템플릿, Custom Element를 쓰고 브라우저가 더 많은 일을 해 빠릅니다.",
+            "**Aura는 LWC를 포함할 수 있고, LWC는 Aura를 포함할 수 없습니다.** LWC가 트리 맨 바깥이면 안쪽에 Aura가 올 수 없습니다.",
+            "두 모델은 이벤트로 통신하고, ES6 모듈은 양쪽에서 import할 수 있습니다.",
+            "마이그레이션은 줄 단위 번역이 아닙니다. UI만 있는 단순 컴포넌트가 가장 쉽고, 트리 단위로 옮겨야 효과가 큽니다."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Migrate Markup and CSS",
+      "ko": "마크업과 CSS 옮기기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning-web-components-for-aura-developers/migrate-markup-and-css",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "번들 파일 대응",
+          "headers": [
+            "Aura",
+            "LWC"
+          ],
+          "rows": [
+            [
+              "sample.cmp",
+              "sample.html"
+            ],
+            [
+              "sampleController.js + Helper + Renderer",
+              "sample.js 하나"
+            ],
+            [
+              "sample.css",
+              "sample.css"
+            ],
+            [
+              "sample.design",
+              "sample.js-meta.xml"
+            ],
+            [
+              "sample.svg",
+              "HTML에 넣거나 정적 리소스"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "title": "마크업 대응",
+          "headers": [
+            "Aura",
+            "LWC"
+          ],
+          "rows": [
+            [
+              "`<aura:component>`",
+              "`<template>`"
+            ],
+            [
+              "`<aura:attribute name=\"recordId\" type=\"Id\"/>`",
+              "`@api recordId;`"
+            ],
+            [
+              "`{!v.total}`",
+              "`{totalItemCount}` (`!`, `v.` 없음)"
+            ],
+            [
+              "`<aura:if isTrue=\"{!v.page > 1}\">`",
+              "`<template lwc:if={isNotFirstPage}>` + JS getter"
+            ],
+            [
+              "`<aura:iteration items=... var=...>`",
+              "`<template for:each={...} for:item=\"...\">` + key"
+            ],
+            [
+              "`<aura:handler name=\"init\">`",
+              "`connectedCallback()`"
+            ],
+            [
+              "`<lightning:formattedNumber currencyCode=...>`",
+              "`<lightning-formatted-number currency-code=...></...>`"
+            ],
+            [
+              "인터페이스 `flexipage:availableForRecordHome`",
+              "js-meta.xml의 target"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "LWC 템플릿에는 복잡한 식을 못 쓰므로 비교·삼항 연산은 **JS getter** 로 옮깁니다.",
+            "LWC 커스텀 태그는 **self-closing 불가**: 닫는 태그를 써야 합니다.",
+            "CSS: Aura의 `.THIS` 선택자 대신 표준 선택자. Aura 스타일은 중첩 컴포넌트로 흘러가지만 LWC 스타일은 **Shadow DOM** 으로 자기 컴포넌트에만 적용됩니다.",
+            "UI 없는 서비스 컴포넌트는 JS 파일과 설정 파일만 있으면 됩니다."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Migrate JavaScript",
+      "ko": "JavaScript 옮기기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning-web-components-for-aura-developers/migrate-javascript",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Aura 컨트롤러는 이름-함수 객체 리터럴(`component` 를 인자로 받음), LWC는 `LightningElement` 를 상속하는 **ES6 모듈 클래스**.",
+            "공유 코드는 ES6 모듈로: LWC는 `import { isFunction } from 'c/utils';`, Aura는 그 모듈을 컴포넌트로 넣고 `cmp.find('utils')`",
+            "서드파티 라이브러리는 **정적 리소스** 로 올리고, Aura는 `<ltng:require>`, LWC는 `@salesforce/resourceUrl` + `loadScript` / `loadStyle`",
+            "Aura의 `$A.createComponent()` 같은 동적 생성은 LWC에 없습니다. 여러 HTML 템플릿을 `render()` 로 바꾸는 방식을 씁니다."
+          ]
+        },
+        {
+          "type": "code",
+          "code": "import { LightningElement } from 'lwc';\nimport { loadScript } from 'lightning/platformResourceLoader';\nimport chartjs from '@salesforce/resourceUrl/chartjs';\n\nexport default class Chart extends LightningElement {\n    loaded = false;\n    renderedCallback() {\n        if (this.loaded) return;\n        this.loaded = true;\n        loadScript(this, chartjs).then(() => { /* 라이브러리 사용 */ });\n    }\n}",
+          "lang": "javascript"
+        }
+      ]
+    },
+    {
+      "title": "Work with Salesforce Data",
+      "ko": "Salesforce 데이터 다루기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning-web-components-for-aura-developers/work-with-salesforce-data",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "폼과 데이터 대응",
+          "headers": [
+            "Aura",
+            "LWC"
+          ],
+          "rows": [
+            [
+              "`lightning:recordForm`",
+              "`lightning-record-form` (가장 먼저 고려)"
+            ],
+            [
+              "`lightning:recordViewForm` / `recordEditForm`",
+              "`lightning-record-view-form` / `lightning-record-edit-form`"
+            ],
+            [
+              "`force:recordData`",
+              "`@wire(getRecord)` 와 uiRecordApi 함수"
+            ],
+            [
+              "`component.get('c.method')` + `setCallback` + `$A.enqueueAction`",
+              "`import method from '@salesforce/apex/Class.method'`"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "읽기: `@wire` + `lightning/uiRecordApi` 어댑터. 반응형 값은 `'$recordId'`. 커스텀 wire 어댑터는 만들 수 없습니다.",
+            "쓰기: `createRecord`, `updateRecord`, `deleteRecord` 는 **@wire가 아니라 JS 함수로** 호출 (Promise 반환).",
+            "Apex: `static` + `public`/`global` + `@AuraEnabled`. 같은 Apex를 Aura와 LWC가 같이 쓸 수 있습니다.",
+            "읽기 전용 메서드만 `@AuraEnabled(cacheable=true)` 로 **@wire** 가능. 데이터를 바꾸는 메서드는 cacheable이 아니고 **명령형(imperative)** 으로 호출합니다.",
+            "외부 API 호출은 기본으로 막혀 있으며 **CSP Trusted Site** 로 등록해야 합니다."
+          ]
+        },
+        {
+          "type": "code",
+          "code": "import { LightningElement, wire } from 'lwc';\nimport getAccounts from '@salesforce/apex/MyAccountController.getAccounts';\nimport saveContact from '@salesforce/apex/MyContactController.saveContact';\n\nexport default class Accounts extends LightningElement {\n    @wire(getAccounts) accounts;                   // cacheable=true 메서드\n\n    handleSave() {\n        saveContact({ lastName: 'Kim' })            // DML 메서드는 명령형\n            .then(result => { /* 성공 */ })\n            .catch(error => { /* 오류 */ });\n    }\n}",
+          "lang": "javascript"
+        }
+      ]
+    },
+    {
+      "title": "Compose Components",
+      "ko": "컴포넌트 조합",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning-web-components-for-aura-developers/compose-components",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Owner**: 템플릿에 다른 컴포넌트를 둔 컴포넌트. 자식의 public 속성 설정, public 메서드 호출, 이벤트 수신이 가능합니다.",
+            "마크업: LWC `<c-child first-name=\"Moonbeam\"></c-child>` (하이픈, kebab-case, 닫는 태그) / Aura `<c:child firstName=\"...\"/>`",
+            "Aura **facet**(`Aura.Component[]`, 기본 `body`) → LWC **`<slot>`**. 이름 있는 slot은 `<slot name=\"header\">`.",
+            "**바인딩**: Aura는 양방향(`{!v.x}`), LWC는 **owner → 자식 단방향**. 자식은 받은 속성을 읽기 전용으로 다루고, 바꾸려면 이벤트를 보내 owner가 바꿉니다."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Communicate with Events",
+      "ko": "이벤트로 통신",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lightning-web-components-for-aura-developers/communicate-with-events",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "이벤트 대응",
+          "headers": [
+            "Aura",
+            "LWC"
+          ],
+          "rows": [
+            [
+              "Component Event + `<aura:registerEvent>`",
+              "표준 DOM 이벤트 `CustomEvent` (등록 불필요)"
+            ],
+            [
+              "`event.fire()`",
+              "`this.dispatchEvent(evt)`"
+            ],
+            [
+              "`<c:child notification=\"{!c.handle}\"/>`",
+              "`<c-child onnotification={handle}></c-child>`"
+            ],
+            [
+              "Application Event",
+              "pub-sub 패턴 / **Lightning Message Service**"
+            ],
+            [
+              "`<aura:method>`",
+              "`@api` 메서드"
+            ],
+            [
+              "Lightning Testing Service",
+              "**Jest**"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "DOM 이벤트는 위로만 전파되므로 먼저 고려하고, 관계없는 형제 컴포넌트 통신에만 pub-sub를 씁니다.",
+            "Aura가 LWC를 감싸면 Aura에서 `onnotification=\"{!c.handleCustomEvent}\"` 로 받고 `evt.getParam('detail')` 처럼 읽습니다."
+          ]
+        },
+        {
+          "type": "code",
+          "code": "// LWC 자식\nthis.dispatchEvent(new CustomEvent('selected', { detail: this.property.Id }));\n// 부모 템플릿:  <c-tile onselected={handleSelected}></c-tile>\nhandleSelected(event) { this.selectedId = event.detail; }",
+          "lang": "javascript"
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Facet",
+      "Aura에서 컴포넌트 배열을 받는 속성 (LWC의 slot)"
+    ],
+    [
+      "Owner",
+      "자식 컴포넌트를 템플릿에 둔 컴포넌트"
+    ],
+    [
+      "Imperative Apex",
+      "@wire 없이 Promise로 직접 호출하는 Apex"
+    ],
+    [
+      "CSP Trusted Site",
+      "LWC가 외부 도메인을 호출하도록 허용하는 설정"
+    ]
+  ]
+}
