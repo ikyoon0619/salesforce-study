@@ -1,0 +1,336 @@
+{
+  "intro": "Picklist(선택 목록)를 언제 쓰는지, 종류와 속성, 값 관리(비활성화·삭제·교체), 의존 Picklist, 수식 기본값, 여러 필드가 값을 공유하는 Global Value Set을 다룹니다. 예시는 쿠키 가게입니다.",
+  "units": [
+    {
+      "title": "Get Started with Picklists",
+      "ko": "Picklist 시작하기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/picklist_admin/picklist_admin_start",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Picklist는 사용자가 정해진 선택지 중에서 고르게 하는 필드입니다. 메뉴판처럼 고를 수 있는 것을 보여 주니 입력 실수가 줄고 데이터가 깔끔해집니다."
+        },
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 200\" role=\"img\" aria-label=\"Picklist는 필드와 값 세트 두 부분\"><rect class=\"d-accent\" x=\"20\" y=\"40\" width=\"300\" height=\"120\" rx=\"10\"/><text class=\"d-strong\" x=\"170.0\" y=\"80.5\" text-anchor=\"middle\">① Field (필드)</text><text class=\"d-sub\" x=\"170.0\" y=\"99.5\" text-anchor=\"middle\">타입: 단일 / Multi-Select</text><text class=\"d-sub\" x=\"170.0\" y=\"115.5\" text-anchor=\"middle\">Restricted, Dependent 여부</text><text class=\"d-sub\" x=\"170.0\" y=\"131.5\" text-anchor=\"middle\">Field-Level Security</text><rect class=\"d-warn\" x=\"400\" y=\"40\" width=\"300\" height=\"120\" rx=\"10\"/><text class=\"d-strong\" x=\"550.0\" y=\"80.5\" text-anchor=\"middle\">② Value Set (값)</text><text class=\"d-sub\" x=\"550.0\" y=\"99.5\" text-anchor=\"middle\">선택지와 순서</text><text class=\"d-sub\" x=\"550.0\" y=\"115.5\" text-anchor=\"middle\">기본값(Default)</text><text class=\"d-sub\" x=\"550.0\" y=\"131.5\" text-anchor=\"middle\">활성 / 비활성 값</text><line class=\"d-line-accent\" x1=\"325\" y1=\"100\" x2=\"395\" y2=\"100\"/><polygon class=\"d-arrow-accent\" points=\"395.0,100.0 386.9,103.9 386.9,96.1\"/><text class=\"d-sub\" x=\"360.0\" y=\"92.0\" text-anchor=\"middle\">값을 가져옴</text></svg>",
+          "caption": "Picklist는 필드와 값 세트 두 부분으로 나뉘고, 따로 관리합니다."
+        },
+        {
+          "type": "table",
+          "title": "값을 정하는 3가지 방법",
+          "headers": [
+            "방법",
+            "설명"
+          ],
+          "rows": [
+            [
+              "필드에 직접 입력",
+              "그 필드에만 쓰는 값"
+            ],
+            [
+              "Standard Picklist 값",
+              "기본 제공 값. 예: Lead의 Lead Source, Opportunity의 Stage. 일부는 표준 값 세트를 공유 (Lead Source와 Account Source는 같은 값)"
+            ],
+            [
+              "Global Value Set",
+              "여러 Picklist 필드가 공유하는 값 세트"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "커스텀 Picklist 만들기",
+          "items": [
+            "Setup > Object Manager > [오브젝트] > Fields & Relationships > New",
+            "Picklist 선택 → Field Label 입력 (API 이름 자동)",
+            "값을 한 줄에 하나씩 입력. 알파벳 정렬, 첫 값을 기본값으로 지정 가능 (둘 다 고르면 정렬 후 첫 값이 기본값)",
+            "필요하면 **Restrict picklist to the values defined in the value set** 체크",
+            "Field-Level Security → Page Layout 선택 → Save"
+          ]
+        },
+        {
+          "type": "p",
+          "text": "**Multi-Select Picklist** 는 여러 값을 고를 수 있고 화면에는 세미콜론(;)으로 구분해 보입니다. Lightning에서는 Ctrl(Mac은 Command)을 누른 채 클릭해 여러 개를 고릅니다."
+        },
+        {
+          "type": "list",
+          "items": [
+            "값 개수 한도가 단일 Picklist보다 낮음",
+            "Multi-Select를 단일 Picklist로 바꾸면 기존 레코드 값이 지워짐",
+            "리포트 필터는 equals 대신 **contains / includes** 사용",
+            "리포트 그룹은 선택 조합마다 따로 생김",
+            "수식에서 쓸 수 있는 함수가 제한됨"
+          ]
+        },
+        {
+          "type": "p",
+          "text": "**Restricted Picklist** 는 목록에 없는 값이 들어오는 것을 막아 'Vamilla' 같은 오타를 방지합니다. 관리자는 계속 값을 추가·수정할 수 있습니다."
+        },
+        {
+          "type": "p",
+          "text": "**Dependent Picklist** 는 같은 레코드의 Controlling field(Picklist 또는 Checkbox) 값에 따라 선택지를 걸러 줍니다."
+        },
+        {
+          "type": "table",
+          "title": "Picklist 종류별 기능",
+          "headers": [
+            "기능",
+            "Standard",
+            "Custom",
+            "Multi-Select"
+          ],
+          "rows": [
+            [
+              "Page Layout 추가·제거",
+              "가능",
+              "가능",
+              "가능"
+            ],
+            [
+              "org에서 삭제",
+              "불가",
+              "가능",
+              "가능"
+            ],
+            [
+              "기본값",
+              "가능",
+              "가능",
+              "가능"
+            ],
+            [
+              "수식 기본값",
+              "불가",
+              "가능",
+              "가능"
+            ],
+            [
+              "여러 값 선택",
+              "불가",
+              "불가",
+              "가능"
+            ],
+            [
+              "Restricted",
+              "불가",
+              "가능",
+              "가능"
+            ],
+            [
+              "Dependent 필드 되기",
+              "불가",
+              "가능",
+              "가능"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Standard Picklist는 삭제·Restricted·Dependent가 안 됩니다. Multi-Select 리포트 필터는 includes를 씁니다."
+        }
+      ]
+    },
+    {
+      "title": "Manage Your Picklist Values",
+      "ko": "Picklist 값 관리",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/picklist_admin/picklist_admin_manage",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "값 목록 열기",
+          "items": [
+            "Setup > Object Manager > [오브젝트] > Fields & Relationships",
+            "Picklist 필드 이름 클릭 → 아래 **Values** 목록"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "Values 목록의 버튼",
+          "headers": [
+            "버튼",
+            "하는 일"
+          ],
+          "rows": [
+            [
+              "New",
+              "새 값 추가"
+            ],
+            [
+              "Reorder",
+              "순서 변경"
+            ],
+            [
+              "Replace",
+              "기존 레코드의 값을 다른 값이나 빈 값으로 일괄 교체"
+            ],
+            [
+              "Printable View",
+              "모든 값을 한눈에 (의존 관계 설정 시 유용)"
+            ],
+            [
+              "Chart Colors",
+              "리포트·차트에서 값별 색"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "title": "비활성화 vs 삭제",
+          "headers": [
+            "동작",
+            "기존 레코드",
+            "다시 쓰기"
+          ],
+          "rows": [
+            [
+              "Deactivate (비활성화)",
+              "값이 그대로 남음",
+              "다시 활성화 가능 (계절 메뉴처럼)"
+            ],
+            [
+              "Delete (삭제)",
+              "다른 값으로 교체하거나 비움. 백그라운드 작업으로 처리되고 끝나면 메일",
+              "불가"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "값마다 **Label**(화면에 보이는 이름)과 **API Name**(수식·코드가 참조하는 이름)이 있습니다. Label을 바꿔도 API Name을 참조하는 수식은 계속 동작하므로 API Name은 함부로 바꾸지 않습니다."
+        },
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 190\" role=\"img\" aria-label=\"Dependent Picklist 동작\"><rect class=\"d-accent\" x=\"20\" y=\"50\" width=\"230\" height=\"90\" rx=\"10\"/><text class=\"d-strong\" x=\"135.0\" y=\"83.5\" text-anchor=\"middle\">Controlling field</text><text class=\"d-sub\" x=\"135.0\" y=\"102.5\" text-anchor=\"middle\">Picklist 또는 Checkbox</text><text class=\"d-sub\" x=\"135.0\" y=\"118.5\" text-anchor=\"middle\">예: Preference = Gluten-Free</text><rect class=\"d-box\" x=\"470\" y=\"50\" width=\"230\" height=\"90\" rx=\"10\"/><text class=\"d-strong\" x=\"585.0\" y=\"83.5\" text-anchor=\"middle\">Dependent field</text><text class=\"d-sub\" x=\"585.0\" y=\"102.5\" text-anchor=\"middle\">걸러진 값만 표시</text><text class=\"d-sub\" x=\"585.0\" y=\"118.5\" text-anchor=\"middle\">예: Flavor = 글루텐 없는 맛만</text><line class=\"d-line-accent\" x1=\"255\" y1=\"95\" x2=\"465\" y2=\"95\"/><polygon class=\"d-arrow-accent\" points=\"465.0,95.0 456.9,98.9 456.9,91.1\"/><text class=\"d-sub\" x=\"360.0\" y=\"87.0\" text-anchor=\"middle\">Field Dependency 매트릭스</text></svg>",
+          "caption": "Controlling field 값마다 어떤 Dependent 값을 보여 줄지 매트릭스로 지정합니다."
+        },
+        {
+          "type": "steps",
+          "title": "Field Dependency 만들기",
+          "items": [
+            "Setup > Object Manager > [오브젝트] > Fields & Relationships > Field Dependencies > New",
+            "Controlling field와 Dependent field 선택 → Continue",
+            "매트릭스에서 Controlling 값마다 허용할 Dependent 값 선택",
+            "Preview로 확인 → Save"
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Custom Picklist: Controlling, Dependent 모두 가능",
+            "Standard Picklist: **Controlling만** 가능",
+            "Multi-Select: **Dependent만** 가능",
+            "기본값은 Controlling field에만 지정 가능",
+            "Record Type도 값에 영향: 선택한 Record Type과 Controlling 값 **둘 다**에서 허용된 값만 보임",
+            "Controlling의 부모 값을 Replace하면 그 값의 의존 설정이 사라지므로 다시 설정"
+          ]
+        },
+        {
+          "type": "p",
+          "text": "**수식 기본값**: 조건에 따라 기본값을 바꿉니다. 예: `IF($Profile.Name = \"Fast Response Sales\", \"High\", \"Standard\")` → 해당 프로필이면 High, 아니면 Standard. 결과가 활성 값이 아닐 경우를 대비해 항상 대체값을 넣습니다."
+        },
+        {
+          "type": "steps",
+          "title": "필드 타입 바꾸기",
+          "items": [
+            "Setup > Object Manager > [오브젝트] > Fields & Relationships > 해당 Picklist Edit",
+            "**Change Field Type** 클릭 (비활성 값은 사라짐, Multi-Select → 단일로 바꾸면 기존 값 삭제)"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "기존 레코드의 값을 지키려면 삭제 대신 비활성화. 기존 값을 다른 값으로 바꾸려면 Replace 또는 삭제 시 교체 값 지정."
+        }
+      ]
+    },
+    {
+      "title": "Share Values with Global Value Sets",
+      "ko": "Global Value Set으로 값 공유",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/picklist_admin/picklist_admin_global",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 240\" role=\"img\" aria-label=\"Global Value Set 공유 구조\"><rect class=\"d-warn\" x=\"250\" y=\"20\" width=\"220\" height=\"70\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"51.5\" text-anchor=\"middle\">Global Value Set</text><text class=\"d-sub\" x=\"360.0\" y=\"70.5\" text-anchor=\"middle\">Ingredient: 밀가루, 설탕, 버터…</text><rect class=\"d-box\" x=\"40\" y=\"150\" width=\"260\" height=\"64\" rx=\"10\"/><text class=\"d-strong\" x=\"170.0\" y=\"178.5\" text-anchor=\"middle\">Recipe.Ingredient__c</text><text class=\"d-sub\" x=\"170.0\" y=\"197.5\" text-anchor=\"middle\">단일 Picklist</text><rect class=\"d-box\" x=\"420\" y=\"150\" width=\"260\" height=\"64\" rx=\"10\"/><text class=\"d-strong\" x=\"550.0\" y=\"178.5\" text-anchor=\"middle\">Shopping_List.Items__c</text><text class=\"d-sub\" x=\"550.0\" y=\"197.5\" text-anchor=\"middle\">Multi-Select Picklist</text><line class=\"d-line\" x1=\"320\" y1=\"94\" x2=\"190\" y2=\"146\"/><polygon class=\"d-arrow\" points=\"190.0,146.0 196.1,139.4 199.0,146.6\"/><line class=\"d-line\" x1=\"400\" y1=\"94\" x2=\"530\" y2=\"146\"/><polygon class=\"d-arrow\" points=\"530.0,146.0 521.0,146.6 523.9,139.4\"/><text class=\"d-sub\" x=\"360\" y=\"128\" text-anchor=\"middle\">값을 한 곳에서 수정하면 두 필드에 모두 반영</text></svg>",
+          "caption": "여러 Picklist 필드가 하나의 값 세트를 함께 씁니다."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Global Value Set은 **항상 Restricted** (Unrestricted로 바꿀 수 없음)",
+            "값을 바꾸면 쓰는 모든 필드에 반영되므로 모든 필드에서 말이 되는 값으로"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Global Value Set 만들기",
+          "items": [
+            "Setup > Picklist Value Sets",
+            "Global Value Sets 옆 **New**",
+            "Label, Description, 값(한 줄에 하나) 입력 → Save"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "새 Picklist에서 사용",
+          "items": [
+            "Setup > Object Manager > [오브젝트] > Fields & Relationships > New > Picklist",
+            "Values에서 **Use a global value set** 선택 후 세트 고르기",
+            "Field-Level Security, Page Layout → Save"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "기존 필드 값을 Global로 올리기",
+          "items": [
+            "Setup > Object Manager > [오브젝트] > Fields & Relationships > 필드 클릭 > Edit",
+            "**Promote to Global Value Set** → Label 입력 → 다시 Promote to Global Value Set"
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "세트의 기본값과 별개로 **필드마다 기본값(수식 포함)** 지정 가능",
+            "Replace의 **Replace all blank values** 옵션: 비어 있는 레코드에 새 값 채우기"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "\"여러 오브젝트에서 같은 값 목록을 한 곳에서 관리\" = Global Value Set. 항상 Restricted라는 점도 나옵니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Picklist",
+      "선택 목록 필드"
+    ],
+    [
+      "Value Set",
+      "선택지 모음"
+    ],
+    [
+      "Restricted Picklist",
+      "목록에 없는 값 금지"
+    ],
+    [
+      "Dependent Picklist",
+      "앞 필드에 따라 걸러지는 목록"
+    ],
+    [
+      "Controlling Field",
+      "걸러 주는 기준 필드"
+    ],
+    [
+      "Global Value Set",
+      "여러 필드가 공유하는 값 세트"
+    ],
+    [
+      "Deactivate",
+      "비활성화 (기존 값 유지)"
+    ],
+    [
+      "Replace",
+      "기존 값 일괄 교체"
+    ]
+  ]
+}

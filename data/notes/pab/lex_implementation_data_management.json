@@ -1,0 +1,212 @@
+{
+  "intro": "데이터를 Salesforce로 가져오는 두 도구(Data Import Wizard, Data Loader)를 비교하고, Data Export Service로 정기 백업하는 방법을 다룹니다.",
+  "units": [
+    {
+      "title": "Import Data",
+      "ko": "데이터 가져오기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_implementation_data_management/lex_implementation_data_import",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "쉼표로 구분한 **CSV** 파일을 만들 수 있는 프로그램이면 무엇이든 Salesforce로 데이터를 넘길 수 있습니다."
+        },
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 250\" role=\"img\" aria-label=\"가져오기 도구 고르기\"><rect class=\"d-box\" x=\"250\" y=\"16\" width=\"220\" height=\"56\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"48.5\" text-anchor=\"middle\">가져올 데이터</text><rect class=\"d-accent\" x=\"20\" y=\"150\" width=\"300\" height=\"84\" rx=\"10\"/><text class=\"d-strong\" x=\"170.0\" y=\"180.5\" text-anchor=\"middle\">Data Import Wizard</text><text class=\"d-sub\" x=\"170.0\" y=\"199.5\" text-anchor=\"middle\">5만 건 이하, 지원 오브젝트</text><text class=\"d-sub\" x=\"170.0\" y=\"215.5\" text-anchor=\"middle\">자동화 불필요, 브라우저에서</text><rect class=\"d-warn\" x=\"400\" y=\"150\" width=\"300\" height=\"84\" rx=\"10\"/><text class=\"d-strong\" x=\"550.0\" y=\"180.5\" text-anchor=\"middle\">Data Loader</text><text class=\"d-sub\" x=\"550.0\" y=\"199.5\" text-anchor=\"middle\">5만 ~ 1억 5천만 건, 모든 오브젝트</text><text class=\"d-sub\" x=\"550.0\" y=\"215.5\" text-anchor=\"middle\">예약·명령줄, export·delete</text><line class=\"d-line\" x1=\"320\" y1=\"76\" x2=\"190\" y2=\"146\"/><polygon class=\"d-arrow\" points=\"190.0,146.0 195.3,138.7 199.0,145.6\"/><text class=\"d-sub\" x=\"255.0\" y=\"103.0\" text-anchor=\"middle\">적고 단순</text><line class=\"d-line\" x1=\"400\" y1=\"76\" x2=\"550\" y2=\"146\"/><polygon class=\"d-arrow\" points=\"550.0,146.0 541.0,146.1 544.3,139.0\"/><text class=\"d-sub\" x=\"475.0\" y=\"103.0\" text-anchor=\"middle\">많거나 자동화</text></svg>",
+          "caption": "건수, 오브젝트, 자동화 필요 여부로 도구를 고릅니다."
+        },
+        {
+          "type": "table",
+          "title": "두 가져오기 도구",
+          "headers": [
+            "비교 항목",
+            "Data Import Wizard",
+            "Data Loader"
+          ],
+          "rows": [
+            [
+              "형태",
+              "Setup 안의 마법사",
+              "따로 설치하는 클라이언트 앱 (UI, 명령줄)"
+            ],
+            [
+              "한 번에",
+              "최대 50,000건",
+              "최대 1억 5천만 건"
+            ],
+            [
+              "오브젝트",
+              "Account, Contact, Lead, Solution, Person Account, Campaign Member, 커스텀 오브젝트",
+              "API로 접근 가능한 모든 오브젝트, 파일 또는 DB 연결"
+            ],
+            [
+              "자동화",
+              "불가",
+              "명령줄 + 설정 파일로 예약 실행 (예: 매일 밤)"
+            ],
+            [
+              "API",
+              "-",
+              "기본은 SOAP API, 대량은 **Bulk API** 로 설정하면 병렬 처리로 더 빠름"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "두 도구 모두 사용자 권한, 데이터 종류, org 저장 용량에 따라 실제로 넣을 수 있는 양이 달라집니다. 1억 5천만 건이 넘으면 파트너나 AgentExchange 제품을 검토합니다."
+        },
+        {
+          "type": "steps",
+          "title": "가져오기 전 준비",
+          "items": [
+            "기존 시스템에서 내보내기 파일 만들기",
+            "정리: 중복 제거, 불필요한 데이터 삭제, 철자·이름 규칙 통일",
+            "파일 열과 Salesforce 필드를 비교해 매핑 준비",
+            "필요한 org 변경: 새 커스텀 필드, 새 Picklist 값, 방해되는 자동화 잠시 끄기",
+            "작은 테스트 파일로 먼저 시험"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Data Import Wizard 사용",
+          "items": [
+            "Setup > Data Import Wizard > **Launch Wizard!**",
+            "Standard 또는 Custom Objects 선택 → 추가 / 업데이트 / 추가+업데이트 선택 → 매칭 기준 지정",
+            "CSV 업로드, 문자 인코딩 선택 → Next",
+            "필드 매핑 (자동 매핑 확인, 안 된 필드는 Map으로 직접 연결. 매핑 안 된 열은 가져오지 않음) → Next",
+            "Review에서 확인 → **Start Import**",
+            "진행 상황: Setup > Bulk Data Load Jobs (끝나면 메일)"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "가져올 때 값 규칙",
+          "headers": [
+            "필드",
+            "규칙"
+          ],
+          "rows": [
+            [
+              "Picklist",
+              "Unrestricted면 목록에 없는 값도 들어감. Restricted면 기본값이 쓰이거나 실패"
+            ],
+            [
+              "Multi-Select",
+              "값을 세미콜론(;)으로 구분"
+            ],
+            [
+              "Checkbox",
+              "1 = 체크, 0 = 해제"
+            ],
+            [
+              "매핑 안 한 Picklist·Checkbox",
+              "기본값이 들어감"
+            ],
+            [
+              "날짜",
+              "org 로캘 표시 형식과 같아야 함"
+            ],
+            [
+              "Formula",
+              "읽기 전용이라 가져올 수 없음"
+            ],
+            [
+              "Validation Rule",
+              "가져오기 전에 실행. 통과 못 한 레코드는 들어가지 않음"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "5만 건 이하 + 지원 오브젝트 + 일회성 = Data Import Wizard. 그 밖(대량, 예약, 삭제·내보내기) = Data Loader."
+        }
+      ]
+    },
+    {
+      "title": "Export Data",
+      "ko": "데이터 내보내기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_implementation_data_management/lex_implementation_data_export",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "내보내기 결과는 **CSV 파일 묶음(zip)** 입니다. 백업이나 다른 시스템으로 옮길 때 씁니다."
+        },
+        {
+          "type": "table",
+          "title": "두 내보내기 방법",
+          "headers": [
+            "비교 항목",
+            "Data Export Service",
+            "Data Loader"
+          ],
+          "rows": [
+            [
+              "형태",
+              "Setup 안 (브라우저)",
+              "설치형 클라이언트, 명령줄 가능"
+            ],
+            [
+              "주기",
+              "수동: 주간 7일에 한 번 / 월간 29일에 한 번. 자동: 매주 또는 매월",
+              "원할 때, 명령줄로 예약"
+            ],
+            [
+              "용도",
+              "org 전체 정기 백업",
+              "조건을 골라 내보내기, 통합"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "주간 내보내기: Enterprise, Performance, Unlimited Edition",
+            "Professional, Developer Edition: 29일마다 또는 월간 자동 백업만"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Data Export Service 사용",
+          "items": [
+            "Setup > Data Export > **Export Now** 또는 **Schedule Export**",
+            "인코딩 선택, 이미지·문서·첨부 포함 여부 선택",
+            "**Replace carriage returns with spaces** 체크 (다시 가져오거나 통합할 때 편함)",
+            "예약이면 주기, 시작·종료일, 시간 선택",
+            "내보낼 데이터 선택 (모르면 Include all data) → Start Export 또는 Save",
+            "완료 메일의 링크나 Data Export 페이지에서 다운로드. **48시간 후 파일 삭제**"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "\"매주 org 전체를 CSV로 백업\" = Data Export Service. 파일은 48시간 안에 받아야 합니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "CSV",
+      "쉼표로 구분한 텍스트 파일"
+    ],
+    [
+      "Data Import Wizard",
+      "Setup 안의 가져오기 마법사"
+    ],
+    [
+      "Data Loader",
+      "대량 데이터 클라이언트 앱"
+    ],
+    [
+      "Bulk API",
+      "대량 처리용 API"
+    ],
+    [
+      "Data Export Service",
+      "정기 백업 내보내기"
+    ],
+    [
+      "Field Mapping",
+      "파일 열과 필드 연결"
+    ]
+  ]
+}
