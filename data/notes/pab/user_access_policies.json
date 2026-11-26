@@ -1,0 +1,181 @@
+{
+  "intro": "**User Access Policy**는 Permission Set, Permission Set Group, 라이선스, Public Group, Queue를 조건에 맞는 사용자들에게 **한 번에** 주거나 빼는 기능입니다. 수동(Manual)과 자동(Active) 두 방식이 있습니다.",
+  "units": [
+    {
+      "title": "Get Started with User Access Policies",
+      "ko": "User Access Policy란",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/user-access-policies/get-started-with-user-access-policies",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 230\" role=\"img\" aria-label=\"User Access Policy 구조\"><rect class=\"d-box\" x=\"20\" y=\"70\" width=\"170\" height=\"90\" rx=\"10\"/><text class=\"d-strong\" x=\"105.0\" y=\"103.5\" text-anchor=\"middle\">User Criteria</text><text class=\"d-sub\" x=\"105.0\" y=\"122.5\" text-anchor=\"middle\">Role, Profile, Title…</text><text class=\"d-sub\" x=\"105.0\" y=\"138.5\" text-anchor=\"middle\">최대 10개 필터, 모두 AND</text><rect class=\"d-accent\" x=\"270\" y=\"50\" width=\"180\" height=\"130\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"95.5\" text-anchor=\"middle\">User Access Policy</text><text class=\"d-sub\" x=\"360.0\" y=\"114.5\" text-anchor=\"middle\">Manual: Apply Policy로 실행</text><text class=\"d-sub\" x=\"360.0\" y=\"130.5\" text-anchor=\"middle\">Active: 생성/수정 시 자동</text><text class=\"d-sub\" x=\"360.0\" y=\"146.5\" text-anchor=\"middle\">Order: 적용 순서</text><rect class=\"d-warn\" x=\"530\" y=\"70\" width=\"170\" height=\"90\" rx=\"10\"/><text class=\"d-strong\" x=\"615.0\" y=\"103.5\" text-anchor=\"middle\">Actions (최대 20)</text><text class=\"d-sub\" x=\"615.0\" y=\"122.5\" text-anchor=\"middle\">Grant / Revoke</text><text class=\"d-sub\" x=\"615.0\" y=\"138.5\" text-anchor=\"middle\">PS, PSG, PSL, Group, Queue</text><line class=\"d-line\" x1=\"194\" y1=\"115\" x2=\"266\" y2=\"115\"/><polygon class=\"d-arrow\" points=\"266.0,115.0 257.9,118.9 257.9,111.1\"/><line class=\"d-line-accent\" x1=\"454\" y1=\"115\" x2=\"526\" y2=\"115\"/><polygon class=\"d-arrow-accent\" points=\"526.0,115.0 517.9,118.9 517.9,111.1\"/></svg>",
+          "caption": "조건(Criteria)에 맞는 사용자에게 액션(Grant/Revoke)을 한꺼번에 적용"
+        },
+        {
+          "type": "table",
+          "title": "부여·회수할 수 있는 것",
+          "headers": [
+            "종류",
+            ""
+          ],
+          "rows": [
+            [
+              "Permission Set, Permission Set Group",
+              "권한"
+            ],
+            [
+              "Permission Set License, Package License",
+              "라이선스"
+            ],
+            [
+              "Public Group, Queue",
+              "그룹 멤버십"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Profile 기반에서 Permission Set 기반으로 **이전(migration)**",
+            "새 사용자에게 **자동으로** 접근 권한 주기 (Profile, Role, Title, Department, Division 기준)",
+            "승진·부서 이동 같은 **직무 변경** 시 권한 갱신",
+            "비활성 사용자의 권한·라이선스 **회수**"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "Manual vs Active",
+          "headers": [
+            "",
+            "Manual",
+            "Active"
+          ],
+          "rows": [
+            [
+              "실행",
+              "관리자가 **Apply Policy**를 눌러야 함",
+              "사용자 **생성/수정/둘 다** 때 자동"
+            ],
+            [
+              "용도",
+              "이전, 일회성 정리",
+              "신규 입사, 직무 변경"
+            ],
+            [
+              "개수",
+              "",
+              "최대 **200개**"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Active 정책은 이미 조건에 맞는 기존 사용자에게 소급 적용되지 않습니다. 사용자 레코드가 **수정되어 새로** 조건에 맞게 될 때 적용됩니다."
+        }
+      ]
+    },
+    {
+      "title": "Create a User Access Policy",
+      "ko": "정책 만들고 자동화",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/user-access-policies/create-user-access-policy",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "켜기와 만들기",
+          "items": [
+            "Setup > **User Management Settings** > User Access Policies 켜기",
+            "Setup > User Access Policies > **New User Access Policy**",
+            "Policy Name, **Order**(여러 Active 정책에 걸릴 때 적용 순서), Description → Save"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "조건과 액션",
+          "items": [
+            "Edit Criteria > Define User Criteria: 예) Role Equals Eastern Sales Team, Active Equals True",
+            "Define Actions: Grant Permission Set Group Sales_Rep, Grant Group All_Sales_Reps, Grant Permission Set License Sales Console User"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "한도",
+          "headers": [
+            "항목",
+            "한도"
+          ],
+          "rows": [
+            [
+              "필터",
+              "사용자 필드(Checkbox, Number, Picklist, Text) 최대 10개, 모두 만족해야 함, `In`으로 여러 Role/Profile"
+            ],
+            [
+              "액션",
+              "정책당 최대 20개"
+            ],
+            [
+              "Active 정책",
+              "조직당 200개"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "자동화와 확인",
+          "items": [
+            "**Automate Policy** > 트리거: 생성 시 / 수정 시 / 둘 다 → Activate",
+            "새 사용자(Role: Eastern Sales Team)를 만들어 테스트",
+            "정책 상세 > **Recent User Access Changes** 탭에서 언제 누구에게 적용됐는지 확인"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Migrate Users with User Access Policies",
+      "ko": "수동 정책으로 이전",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/user-access-policies/migrate-users-with-user-access-policies",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "이전(migration) 같은 일회성 작업은 **Manual** 정책이 좋습니다. 언제 적용할지 직접 정하고, 영향을 받은 사용자를 추적할 수 있습니다."
+        },
+        {
+          "type": "steps",
+          "title": "Profile → Permission Set Group 이전",
+          "items": [
+            "New User Access Policy (Manual이므로 **Order는 비움**)",
+            "Criteria: Profile Equals Custom: Support Profile, Active = True",
+            "Action: Grant Permission Set Group Support_User",
+            "**Apply Policy** → 대상 일부 선택 또는 **Apply to All**",
+            "Recent User Access Changes에서 결과 확인"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Profile은 **회수(Revoke)할 수 없습니다**. 사용자는 항상 Profile 1개가 있어야 하니까요. 이전이 끝나면 Profile에서 권한을 직접 덜어내 기본 설정만 남깁니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "User Access Policy",
+      "조건별 권한 일괄 부여·회수"
+    ],
+    [
+      "Manual policy",
+      "관리자가 Apply Policy로 실행"
+    ],
+    [
+      "Active policy",
+      "사용자 생성/수정 시 자동 실행"
+    ],
+    [
+      "Order",
+      "Active 정책 적용 순서"
+    ],
+    [
+      "Permission Set License",
+      "추가 기능 라이선스"
+    ]
+  ]
+}

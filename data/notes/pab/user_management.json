@@ -1,0 +1,229 @@
+{
+  "intro": "사용자 계정을 만들고, 잠그고(Freeze), 비활성화하는 법과 **누가 무엇에 접근하는지**를 정하는 네 단계(조직·오브젝트·필드·레코드)를 배웁니다. Permission Set / Permission Set Group과 OWD가 핵심입니다.",
+  "units": [
+    {
+      "title": "Add New Users",
+      "ko": "사용자 추가와 관리",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_implementation_user_setup_mgmt/lex_implementation_user_setup_mgmt_adding_users-hoc",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "로그인하는 사람은 모두 User입니다. 직원은 내부 사용자, 고객·파트너는 Experience Cloud 사이트에 들어오는 외부 사용자입니다."
+        },
+        {
+          "type": "table",
+          "title": "사용자 주요 필드",
+          "headers": [
+            "필드",
+            "설명"
+          ],
+          "rows": [
+            [
+              "Username",
+              "이메일 형식, **Salesforce 전체에서 유일**해야 함 (Email 주소는 다른 조직과 겹쳐도 됨)"
+            ],
+            [
+              "Email, Last Name, Alias",
+              "Alias 기본값 = 이름 첫 글자 + 성 앞 4글자"
+            ],
+            [
+              "User License",
+              "쓸 수 있는 기능과 고를 수 있는 Profile을 결정"
+            ],
+            [
+              "Profile",
+              "사용자당 **딱 1개** (필수)"
+            ],
+            [
+              "Role",
+              "선택, 사용자당 최대 1개. 레코드 공유 계층에 쓰임"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "title": "Profile에 두는 것 vs Permission Set에 두는 것",
+          "headers": [
+            "Profile (기본 설정)",
+            "Permission Set / Group (권한)"
+          ],
+          "rows": [
+            [
+              "기본 Record Type, 기본 앱, Page Layout 할당",
+              "오브젝트·필드 권한, 사용자 권한"
+            ],
+            [
+              "Login Hours, Login IP Ranges",
+              "Custom Permission, Apex 클래스·Visualforce·Connected App 접근, 탭 설정"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "권장 방식: 모두에게 **Minimum Access - Salesforce** 프로필을 주고, 필요한 권한은 Permission Set과 Permission Set Group으로 더합니다."
+        },
+        {
+          "type": "steps",
+          "title": "사용자 추가",
+          "items": [
+            "Setup > Users > Users",
+            "**New User** (1명) 또는 **Add Multiple Users** (한 번에 최대 10명)",
+            "이름, 이메일, Username, License, Profile 입력",
+            "Generate password and notify user immediately 체크 → Save (첫 로그인 시 비밀번호 변경)"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "Freeze vs Deactivate",
+          "headers": [
+            "",
+            "Freeze",
+            "Deactivate"
+          ],
+          "rows": [
+            [
+              "하는 법",
+              "사용자 상세 > Freeze",
+              "Edit > Active 체크 해제"
+            ],
+            [
+              "로그인",
+              "즉시 막힘",
+              "막힘"
+            ],
+            [
+              "라이선스",
+              "**그대로 사용 중**",
+              "**반환됨**"
+            ],
+            [
+              "언제",
+              "퇴사 처리 전 급히 막을 때, 다른 설정에 얽혀 바로 비활성화 못 할 때",
+              "정식으로 계정을 끌 때"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "사용자는 **삭제할 수 없고** 비활성화만 됩니다. 그 사용자가 가진 레코드가 고아가 되지 않게 하기 위함입니다.",
+            "**User Access Summary**: 사용자 > View Summary에서 권한·그룹·큐를 보고, **Access Granted By**로 어떤 Profile/Permission Set이 그 권한을 줬는지 확인합니다."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "시험 단골: '퇴사자를 즉시 막아야 하는데 다른 기능(예: 기본 Lead Owner)에 걸려 비활성화가 안 된다' → **Freeze**. 라이선스를 회수하려면 Deactivate."
+        }
+      ]
+    },
+    {
+      "title": "Control What Your Users Can Access",
+      "ko": "데이터 접근 제어",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_implementation_user_setup_mgmt/lex_implementation_user_setup_mgmt_configure_user_access-hoc",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 260\" role=\"img\" aria-label=\"데이터 접근의 네 단계\"><rect class=\"d-box\" x=\"20\" y=\"14\" width=\"680\" height=\"50\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"35.5\" text-anchor=\"middle\">Organization</text><text class=\"d-sub\" x=\"360.0\" y=\"54.5\" text-anchor=\"middle\">누가 로그인하나: 사용자, 비밀번호 정책, Login Hours, IP 범위</text><rect class=\"d-box\" x=\"50\" y=\"74\" width=\"620\" height=\"50\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"95.5\" text-anchor=\"middle\">Object</text><text class=\"d-sub\" x=\"360.0\" y=\"114.5\" text-anchor=\"middle\">어떤 오브젝트를: Create / Read / Edit / Delete</text><rect class=\"d-box\" x=\"80\" y=\"134\" width=\"560\" height=\"50\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"155.5\" text-anchor=\"middle\">Field</text><text class=\"d-sub\" x=\"360.0\" y=\"174.5\" text-anchor=\"middle\">어떤 필드를: Field-Level Security (Visible / Read-Only)</text><rect class=\"d-accent\" x=\"110\" y=\"194\" width=\"500\" height=\"50\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"215.5\" text-anchor=\"middle\">Record</text><text class=\"d-sub\" x=\"360.0\" y=\"234.5\" text-anchor=\"middle\">어떤 레코드를: OWD → Role Hierarchy → Sharing Rule → Manual Sharing</text></svg>",
+          "caption": "바깥(조직)부터 안쪽(레코드)까지 네 단계를 모두 통과해야 데이터를 봅니다."
+        },
+        {
+          "type": "steps",
+          "title": "Permission Set 만들기",
+          "items": [
+            "Setup > Permission Sets > New: Label, 설명, (선택) License 제한",
+            "Object Settings에서 오브젝트·필드 권한 편집",
+            "App Permissions / System Permissions에서 사용자 권한 켜기"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Permission Set Group",
+          "items": [
+            "Setup > Permission Set Groups > New Permission Set Group",
+            "Permission Sets in Group > Add Permission Set (한 Permission Set이 여러 Group에 들어갈 수 있음)",
+            "특정 권한만 빼려면 **Muting Permission Set in Group**에서 Muted 체크",
+            "Manage Assignments > Add Assignments → 사용자 선택, (선택) **만료일** 지정 → Assign"
+          ]
+        },
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 250\" role=\"img\" aria-label=\"OWD는 바닥, 공유 기능은 위로만 연다\"><rect class=\"d-warn\" x=\"20\" y=\"180\" width=\"680\" height=\"50\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"201.5\" text-anchor=\"middle\">OWD (Organization-Wide Defaults)</text><text class=\"d-sub\" x=\"360.0\" y=\"220.5\" text-anchor=\"middle\">가장 제한적인 기본값: Private / Public Read Only / Public Read/Write / Controlled by Parent</text><rect class=\"d-box\" x=\"20\" y=\"110\" width=\"680\" height=\"50\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"131.5\" text-anchor=\"middle\">Role Hierarchy</text><text class=\"d-sub\" x=\"360.0\" y=\"150.5\" text-anchor=\"middle\">위 역할은 아래 역할의 레코드를 봄 (Grant Access Using Hierarchies)</text><rect class=\"d-box\" x=\"20\" y=\"40\" width=\"330\" height=\"50\" rx=\"10\"/><text class=\"d-strong\" x=\"185.0\" y=\"61.5\" text-anchor=\"middle\">Sharing Rules</text><text class=\"d-sub\" x=\"185.0\" y=\"80.5\" text-anchor=\"middle\">소유자·조건 기준으로 그룹에 공유</text><rect class=\"d-box\" x=\"370\" y=\"40\" width=\"330\" height=\"50\" rx=\"10\"/><text class=\"d-strong\" x=\"535.0\" y=\"61.5\" text-anchor=\"middle\">Manual Sharing / Teams</text><text class=\"d-sub\" x=\"535.0\" y=\"80.5\" text-anchor=\"middle\">레코드마다 개별 공유</text><line class=\"d-line-accent\" x1=\"710\" y1=\"225\" x2=\"710\" y2=\"30\"/><polygon class=\"d-arrow-accent\" points=\"710.0,30.0 713.9,38.1 706.1,38.1\"/><text class=\"d-sub\" x=\"360\" y=\"24\" text-anchor=\"middle\">접근을 넓히기만 한다 (좁히는 건 OWD와 권한으로)</text></svg>",
+          "caption": "OWD로 가장 제한적인 바닥을 깔고, 공유 기능으로 필요한 만큼 엽니다."
+        },
+        {
+          "type": "table",
+          "title": "OWD 값",
+          "headers": [
+            "값",
+            "소유자가 아닌 사용자"
+          ],
+          "rows": [
+            [
+              "Private",
+              "못 봄 (소유자와 역할 계층상 위 사용자만)"
+            ],
+            [
+              "Public Read Only",
+              "모두 보기·리포트 가능, 편집은 소유자와 위 사용자만"
+            ],
+            [
+              "Public Read/Write",
+              "모두 보기·편집·리포트"
+            ],
+            [
+              "Controlled by Parent",
+              "부모 레코드 접근을 따름 (Master-Detail의 Detail)"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "OWD 설정",
+          "items": [
+            "Setup > Sharing Settings > Organization-Wide Defaults > Edit",
+            "오브젝트별 Default Internal Access 선택",
+            "Custom Object는 **Grant Access Using Hierarchies** 선택 여부도 결정"
+          ]
+        },
+        {
+          "type": "p",
+          "text": "OWD 정하는 세 가지 질문: 가장 제한해야 할 사용자는 누구인가? 이 레코드를 보면 안 되는 사람이 있나? 편집하면 안 되는 사람이 있나?"
+        },
+        {
+          "type": "tip",
+          "text": "공유 기능(Role Hierarchy, Sharing Rule, Manual Sharing)은 **접근을 넓히기만** 합니다. OWD보다 좁히려면 OWD 자체를 낮추거나 오브젝트·필드 권한을 빼야 합니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "User License",
+      "사용자 라이선스"
+    ],
+    [
+      "Profile",
+      "사용자당 1개, 기본 설정"
+    ],
+    [
+      "Permission Set Group",
+      "Permission Set 묶음"
+    ],
+    [
+      "Muting Permission Set",
+      "그룹에서 일부 권한 제거"
+    ],
+    [
+      "Freeze",
+      "로그인만 막음, 라이선스 유지"
+    ],
+    [
+      "Organization-Wide Defaults (OWD)",
+      "레코드 기본 공유 수준"
+    ],
+    [
+      "Grant Access Using Hierarchies",
+      "역할 계층으로 위쪽에 공유"
+    ]
+  ]
+}

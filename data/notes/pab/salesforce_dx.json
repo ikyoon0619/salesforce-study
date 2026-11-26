@@ -1,0 +1,222 @@
+{
+  "intro": "**Salesforce DX**와 Salesforce CLI(`sf`)로 앱을 만들고 배포하는 개발자 모듈입니다. App Builder 시험에서는 명령어보다 **Scratch Org, Dev Hub, Sandbox의 역할 차이**와 소스 기반 개발 개념이 중요합니다.",
+  "units": [
+    {
+      "title": "Set Up Salesforce DX Tools",
+      "ko": "DX 도구 준비",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/sfdx_app_dev/sfdx_app_dev_setup_dx",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 250\" role=\"img\" aria-label=\"Salesforce DX 개발 흐름\"><rect class=\"d-warn\" x=\"20\" y=\"90\" width=\"150\" height=\"70\" rx=\"10\"/><text class=\"d-strong\" x=\"95.0\" y=\"121.5\" text-anchor=\"middle\">VCS (Git)</text><text class=\"d-sub\" x=\"95.0\" y=\"140.5\" text-anchor=\"middle\">진실의 원천</text><rect class=\"d-box\" x=\"250\" y=\"90\" width=\"170\" height=\"70\" rx=\"10\"/><text class=\"d-strong\" x=\"335.0\" y=\"113.5\" text-anchor=\"middle\">DX 프로젝트</text><text class=\"d-sub\" x=\"335.0\" y=\"132.5\" text-anchor=\"middle\">force-app</text><text class=\"d-sub\" x=\"335.0\" y=\"148.5\" text-anchor=\"middle\">sfdx-project.json</text><rect class=\"d-box\" x=\"510\" y=\"14\" width=\"190\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"605.0\" y=\"40.5\" text-anchor=\"middle\">Dev Hub</text><text class=\"d-sub\" x=\"605.0\" y=\"59.5\" text-anchor=\"middle\">Scratch Org를 만듦</text><rect class=\"d-accent\" x=\"510\" y=\"104\" width=\"190\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"605.0\" y=\"130.5\" text-anchor=\"middle\">Scratch Org</text><text class=\"d-sub\" x=\"605.0\" y=\"149.5\" text-anchor=\"middle\">개발·테스트, 최대 30일</text><rect class=\"d-box\" x=\"510\" y=\"184\" width=\"190\" height=\"56\" rx=\"10\"/><text class=\"d-strong\" x=\"605.0\" y=\"208.5\" text-anchor=\"middle\">Sandbox</text><text class=\"d-sub\" x=\"605.0\" y=\"227.5\" text-anchor=\"middle\">UAT·스테이징</text><line class=\"d-line\" x1=\"174\" y1=\"125\" x2=\"246\" y2=\"125\"/><polygon class=\"d-arrow\" points=\"246.0,125.0 237.9,128.9 237.9,121.1\"/><polygon class=\"d-arrow\" points=\"174.0,125.0 182.1,121.1 182.1,128.9\"/><text class=\"d-sub\" x=\"210.0\" y=\"117.0\" text-anchor=\"middle\">commit / pull</text><line class=\"d-line-accent\" x1=\"424\" y1=\"118\" x2=\"506\" y2=\"126\"/><polygon class=\"d-arrow-accent\" points=\"506.0,126.0 497.6,129.1 498.3,121.3\"/><text class=\"d-sub\" x=\"465.0\" y=\"116.0\" text-anchor=\"middle\">deploy</text><line class=\"d-dash\" x1=\"506\" y1=\"148\" x2=\"424\" y2=\"142\"/><polygon class=\"d-arrow\" points=\"424.0,142.0 432.4,138.7 431.8,146.5\"/><text class=\"d-sub\" x=\"465.0\" y=\"161.0\" text-anchor=\"middle\">retrieve</text><line class=\"d-dash\" x1=\"605\" y1=\"78\" x2=\"605\" y2=\"100\"/><polygon class=\"d-arrow\" points=\"605.0,100.0 601.1,91.9 608.9,91.9\"/><line class=\"d-line\" x1=\"424\" y1=\"155\" x2=\"506\" y2=\"205\"/><polygon class=\"d-arrow\" points=\"506.0,205.0 497.0,204.1 501.1,197.4\"/><text class=\"d-sub\" x=\"465.0\" y=\"200.0\" text-anchor=\"middle\">release</text></svg>",
+          "caption": "버전 관리 시스템이 진실의 원천. 프로젝트를 Scratch Org에 배포해 개발·테스트하고, Sandbox는 UAT·스테이징에 씁니다."
+        },
+        {
+          "type": "table",
+          "title": "핵심 개념",
+          "headers": [
+            "개념",
+            "설명"
+          ],
+          "rows": [
+            [
+              "Salesforce DX",
+              "협업, 자동 테스트, CI, 릴리스까지 전체 개발 수명 주기. Change Set 방식의 대안"
+            ],
+            [
+              "진실의 원천",
+              "조직(org)이 아니라 **버전 관리 시스템(VCS)**"
+            ],
+            [
+              "Scratch Org",
+              "정의 파일로 모양을 정하는 일회용 조직. **최대 30일**. 팀과 정의 파일 공유"
+            ],
+            [
+              "Dev Hub",
+              "Scratch Org를 만들고 관리하는 조직. Setup > Dev Hub에서 켬 (실습은 Developer Edition/Playground)"
+            ],
+            [
+              "Sandbox",
+              "Scratch Org가 대체하지 않음. UAT, CD, 스테이징에 계속 필요"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "title": "CLI 기본",
+          "headers": [
+            "명령",
+            "하는 일"
+          ],
+          "rows": [
+            [
+              "`sf org login web --set-default-dev-hub --alias DevHub`",
+              "Dev Hub 로그인 (이 플래그는 Dev Hub에만)"
+            ],
+            [
+              "`sf org login web --instance-url https://…--Sandbox.my.salesforce.com --alias FullSandbox`",
+              "Sandbox 로그인"
+            ],
+            [
+              "`sf org list`",
+              "로그인한 조직 목록"
+            ],
+            [
+              "`sf --help`, `-h`",
+              "도움말"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Get Ready to Create an App",
+      "ko": "프로젝트와 Scratch Org",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/sfdx_app_dev/sfdx_app_dev_create_app",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "프로젝트 구조 (`sf project generate --name geolocation`)",
+          "headers": [
+            "파일",
+            "역할"
+          ],
+          "rows": [
+            [
+              "sfdx-project.json",
+              "DX 프로젝트 표시, 패키지 경로(force-app), 네임스페이스, API 버전"
+            ],
+            [
+              "config/project-scratch-def.json",
+              "Scratch Org 모양 (에디션, 기능, 설정)"
+            ],
+            [
+              "force-app/",
+              "소스 폴더"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Scratch Org와 샘플 데이터",
+          "items": [
+            "`sf org create scratch --set-default --definition-file config/project-scratch-def.json --alias GeoAppScratch`",
+            "`sf data create record --sobject Account --values \"…\"`로 Account 3개 생성",
+            "`sf data export tree --query \"…\" --output-dir ./data`로 내보내기",
+            "다른 조직에 `sf data import tree --files data/Account.json`"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Dev Hub 에디션에 따라 하루에 만들 수 있는 Scratch Org 수와 동시에 활성 가능한 수가 정해져 있습니다. 다 쓴 것은 `sf org delete scratch`로 지우세요."
+        }
+      ]
+    },
+    {
+      "title": "Build the Geolocation App Using Salesforce CLI",
+      "ko": "Apex와 Aura 컴포넌트",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/sfdx_app_dev/sfdx_app_dev_build_app",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Account Search 컴포넌트가 Apex 메서드를 호출하고, 결과를 **애플리케이션 이벤트**로 알리면 목록·지도 컴포넌트가 받아서 보여 줍니다. 컴포넌트마다 한 가지 일만 합니다."
+        },
+        {
+          "type": "table",
+          "title": "만드는 것",
+          "headers": [
+            "명령",
+            "결과"
+          ],
+          "rows": [
+            [
+              "`sf apex generate class --name AccountSearchController`",
+              "`@AuraEnabled` static 메서드 `searchAccounts(searchTerm)` — SOSL로 Account 최대 10개"
+            ],
+            [
+              "`sf lightning generate event --name AccountsLoaded`",
+              "APPLICATION 타입 이벤트, accounts 속성"
+            ],
+            [
+              "`sf lightning generate component --name AccountSearch`",
+              ".cmp, Controller.js, Helper.js 등 번들"
+            ],
+            [
+              "`sf project deploy start`",
+              "로컬 소스를 조직에 배포"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Lightning 컴포넌트가 Apex를 호출하려면 메서드에 **@AuraEnabled**가 필요합니다. `with sharing`은 사용자의 공유 규칙을 지키게 합니다."
+        }
+      ]
+    },
+    {
+      "title": "Build the Account Map Display And Put It All Together",
+      "ko": "앱 완성과 배포 검증",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/sfdx_app_dev/sfdx_app_dev_create_visuals",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "AccountMap: `lightning:map`으로 Account 주소를 지도에 표시",
+            "AccountLocator: `force:appHostable`(탭으로 띄움), `flexipage:availableForAllPageTypes`(Lightning App Builder에서 사용)로 세 컴포넌트를 배치"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "탭과 권한",
+          "items": [
+            "Setup > Tabs > **Lightning Component Tabs** > New: c:AccountLocator, 라벨 Account Locator, 모든 프로필에 Tab Hidden",
+            "Permission Set **Geolocation**: Object Settings > Account Locator 탭 Available + Visible",
+            "할당: Users > Permission Set Assignments 또는 `sf org assign permset --name Geolocation`"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "가져오기와 새 조직에서 검증",
+          "items": [
+            "`.forceignore`에 `**/profiles` 추가 → `sf project retrieve start` (탭·Permission Set 메타데이터)",
+            "새 Scratch Org 생성 → `sf project deploy start` → `sf data import tree` → `sf org open`"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "탭은 모두에게 숨기고 **Permission Set으로 필요한 사람에게만** 보이게 하는 것이 권장 방식입니다. 깨끗한 새 조직에 배포해 보면 빠진 메타데이터를 찾을 수 있어요."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Salesforce DX",
+      "소스 기반 개발 도구 모음"
+    ],
+    [
+      "Salesforce CLI (sf)",
+      "명령줄 도구"
+    ],
+    [
+      "Dev Hub",
+      "Scratch Org 관리 조직"
+    ],
+    [
+      "Scratch Org",
+      "최대 30일 일회용 조직"
+    ],
+    [
+      "sfdx-project.json",
+      "DX 프로젝트 설정 파일"
+    ],
+    [
+      "@AuraEnabled",
+      "컴포넌트에서 Apex 호출 허용"
+    ],
+    [
+      ".forceignore",
+      "동기화에서 제외할 파일"
+    ]
+  ]
+}

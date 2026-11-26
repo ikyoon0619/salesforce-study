@@ -1,0 +1,164 @@
+{
+  "intro": "Lightning Experience 레코드 페이지의 각 부분이 어디서 정해지는지(**Page Layout**, **Compact Layout**), 그리고 **액션(Action)**이 어디에 어떤 순서로 나타나는지를 배웁니다.",
+  "units": [
+    {
+      "title": "Customize the User Interface",
+      "ko": "Page Layout과 Compact Layout",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_migration_customization/lex_migration_customization_layouts_ui",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 260\" role=\"img\" aria-label=\"Lightning 레코드 페이지에서 각 부분을 정하는 것\"><rect class=\"d-accent\" x=\"20\" y=\"20\" width=\"680\" height=\"64\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"48.5\" text-anchor=\"middle\">Highlights Panel</text><text class=\"d-sub\" x=\"360.0\" y=\"67.5\" text-anchor=\"middle\">Compact Layout의 처음 7개 필드 + 액션 메뉴</text><rect class=\"d-box\" x=\"20\" y=\"100\" width=\"430\" height=\"140\" rx=\"10\"/><text class=\"d-strong\" x=\"235.0\" y=\"158.5\" text-anchor=\"middle\">Details 탭</text><text class=\"d-sub\" x=\"235.0\" y=\"177.5\" text-anchor=\"middle\">Page Layout: 필드, 섹션, 커스텀 링크</text><text class=\"d-sub\" x=\"235.0\" y=\"193.5\" text-anchor=\"middle\">관련 목록 (Related Lists)</text><rect class=\"d-box\" x=\"470\" y=\"100\" width=\"230\" height=\"64\" rx=\"10\"/><text class=\"d-strong\" x=\"585.0\" y=\"128.5\" text-anchor=\"middle\">Activity 탭</text><text class=\"d-sub\" x=\"585.0\" y=\"147.5\" text-anchor=\"middle\">New Task / Event, Log a Call, Email</text><rect class=\"d-box\" x=\"470\" y=\"176\" width=\"230\" height=\"64\" rx=\"10\"/><text class=\"d-strong\" x=\"585.0\" y=\"204.5\" text-anchor=\"middle\">Chatter 탭</text><text class=\"d-sub\" x=\"585.0\" y=\"223.5\" text-anchor=\"middle\">Post, Poll, Question</text></svg>",
+          "caption": "Highlights Panel은 Compact Layout이, Details 탭은 Page Layout이 정합니다."
+        },
+        {
+          "type": "p",
+          "text": "Page Layout은 Setup > Object Manager > [오브젝트] > **Page Layouts**에서 편집합니다. Classic에서 바꾼 레이아웃도 Lightning에 반영되지만 보이는 모양이 다르고 일부는 지원되지 않습니다."
+        },
+        {
+          "type": "table",
+          "title": "Page Layout 요소의 Lightning 지원",
+          "headers": [
+            "요소",
+            "Lightning에서"
+          ],
+          "rows": [
+            [
+              "필드, 섹션, 빈 칸",
+              "Details 탭에 표시 (탭 이동은 위→아래가 아니라 왼쪽→오른쪽)"
+            ],
+            [
+              "관련 목록",
+              "**Basic List** = 처음 4개 필드, **Enhanced List** = 최대 10개 필드 + 정렬·크기 조절 (Lightning App Builder에서 변경)"
+            ],
+            [
+              "표준·커스텀 버튼",
+              "액션으로 취급. **JavaScript 버튼은 미지원**"
+            ],
+            [
+              "Visualforce 페이지",
+              "'Available for Lightning Experience…' 체크 시에만"
+            ],
+            [
+              "미지원",
+              "Expanded lookups, Mobile cards, S-controls, Tags, Edit 페이지 섹션 헤더 표시 설정"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "title": "Compact Layout",
+          "headers": [
+            "어디에",
+            "몇 개"
+          ],
+          "rows": [
+            [
+              "Highlights Panel",
+              "처음 **7개** 필드 (작은 화면은 더 적게). 첫 필드는 강조 글꼴 → Name을 첫째로"
+            ],
+            [
+              "Lookup 호버 카드",
+              "처음 **5개** 필드"
+            ],
+            [
+              "Activity Timeline",
+              "Task·Event Compact Layout이 결정"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Highlights Panel은 Page Layout 편집기로 못 바꾸고 **Compact Layout**으로만 바꿉니다. Compact Layout은 Record Type별로 지정할 수 있고 모바일 앱에도 똑같이 적용됩니다."
+        }
+      ]
+    },
+    {
+      "title": "Understand How Actions Work in Lightning Experience",
+      "ko": "액션의 위치와 순서",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/lex_migration_customization/lex_migration_customization_actions",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "여기서 '액션'은 Quick Action뿐 아니라 **표준 버튼, 커스텀 버튼**까지 포함합니다."
+        },
+        {
+          "type": "table",
+          "title": "액션이 나타나는 곳",
+          "headers": [
+            "위치",
+            "어디서 정하나"
+          ],
+          "rows": [
+            [
+              "Global Actions 메뉴 (헤더의 +)",
+              "Global Publisher Layout의 'Salesforce Mobile and Lightning Experience Actions' 섹션 (Chatter 표준 액션은 제외)"
+            ],
+            [
+              "레코드 페이지 액션 메뉴",
+              "그 오브젝트 **Page Layout**의 'Salesforce Mobile and Lightning Experience Actions' 섹션 순서"
+            ],
+            [
+              "Activity 탭",
+              "New Task, New Event, Log a Call, Email"
+            ],
+            [
+              "Chatter 탭 / Chatter 페이지",
+              "Post, Poll, Question (+ Groups가 켜지면 Announcement)"
+            ],
+            [
+              "리스트 뷰",
+              "List View Button Layout의 커스텀 버튼 (Recently Viewed 제외). Kanban은 New만"
+            ],
+            [
+              "관련 목록",
+              "커스텀 List 버튼 + 지원되는 표준 버튼"
+            ],
+            [
+              "홈 Assistant",
+              "New Task, New Event, Edit, Email"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Page Layout의 액션 섹션을 **직접 수정하지 않으면** Global Publisher Layout과 버튼 섹션에서 자동으로 가져옵니다.",
+            "섹션을 **재정의(override)**하면 커스텀 버튼이 자동으로 추가되지 않으니 팔레트의 'Mobile & Lightning Actions'에서 직접 끌어 넣어야 합니다.",
+            "Task·Event·Log a Call 생성 액션은 페이지 액션 메뉴가 아니라 **Activity 탭**에 나옵니다."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "'레코드 페이지에 새 Quick Action을 추가했는데 안 보인다' → Page Layout의 Salesforce Mobile and Lightning Experience Actions 섹션에 넣었는지 확인. 시험 단골입니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Page Layout",
+      "필드·섹션·관련 목록·버튼 배치"
+    ],
+    [
+      "Compact Layout",
+      "Highlights Panel·호버 카드 필드"
+    ],
+    [
+      "Highlights Panel",
+      "레코드 페이지 상단 요약"
+    ],
+    [
+      "Quick Action",
+      "빠른 작업 액션"
+    ],
+    [
+      "Global Publisher Layout",
+      "전역 액션 레이아웃"
+    ],
+    [
+      "Enhanced List",
+      "최대 10개 필드 관련 목록"
+    ]
+  ]
+}
