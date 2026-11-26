@@ -1,0 +1,192 @@
+{
+  "intro": "출장 승인 앱(Travel Approval)에 비즈니스 로직 다섯 가지를 차례로 붙이고 끝에서 전체를 테스트합니다. Validation Rule → Roll-Up Summary → Formula(아이콘) → Flow → Approval Process.",
+  "units": [
+    {
+      "title": "Create Validation Rules",
+      "ko": "날짜 검증 규칙",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/add-business-logic-to-a-travel-approval-app/create-validation-rules-travel",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 230\" role=\"img\" aria-label=\"Travel Approval 앱의 비즈니스 로직\"><rect class=\"d-accent\" x=\"260\" y=\"80\" width=\"200\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"116.5\" text-anchor=\"middle\">Travel Approval</text><text class=\"d-sub\" x=\"360.0\" y=\"135.5\" text-anchor=\"middle\">Status, Destination State</text><rect class=\"d-box\" x=\"20\" y=\"20\" width=\"200\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"120.0\" y=\"46.5\" text-anchor=\"middle\">Validation Rule</text><text class=\"d-sub\" x=\"120.0\" y=\"65.5\" text-anchor=\"middle\">종료일 ≥ 시작일</text><rect class=\"d-box\" x=\"500\" y=\"20\" width=\"200\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"600.0\" y=\"46.5\" text-anchor=\"middle\">Roll-Up Summary</text><text class=\"d-sub\" x=\"600.0\" y=\"65.5\" text-anchor=\"middle\">Total Expenses = SUM</text><rect class=\"d-box\" x=\"20\" y=\"160\" width=\"200\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"120.0\" y=\"186.5\" text-anchor=\"middle\">Formula + IMAGE()</text><text class=\"d-sub\" x=\"120.0\" y=\"205.5\" text-anchor=\"middle\">Status 아이콘</text><rect class=\"d-warn\" x=\"500\" y=\"160\" width=\"200\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"600.0\" y=\"186.5\" text-anchor=\"middle\">Flow + Approval</text><text class=\"d-sub\" x=\"600.0\" y=\"205.5\" text-anchor=\"middle\">주 밖 출장 → 추가 승인</text><line class=\"d-line\" x1=\"224\" y1=\"55\" x2=\"256\" y2=\"100\"/><polygon class=\"d-arrow\" points=\"256.0,100.0 248.1,95.7 254.5,91.1\"/><line class=\"d-line\" x1=\"496\" y1=\"55\" x2=\"464\" y2=\"100\"/><polygon class=\"d-arrow\" points=\"464.0,100.0 465.5,91.1 471.9,95.7\"/><line class=\"d-line\" x1=\"224\" y1=\"185\" x2=\"256\" y2=\"140\"/><polygon class=\"d-arrow\" points=\"256.0,140.0 254.5,148.9 248.1,144.3\"/><line class=\"d-line\" x1=\"496\" y1=\"185\" x2=\"464\" y2=\"140\"/><polygon class=\"d-arrow\" points=\"464.0,140.0 471.9,144.3 465.5,148.9\"/></svg>",
+          "caption": "이 실습에서 Travel Approval 오브젝트에 붙이는 다섯 가지 로직"
+        },
+        {
+          "type": "steps",
+          "title": "규칙",
+          "items": [
+            "Setup > Object Manager > Travel Approval > Validation Rules > New",
+            "Rule Name: Trip end date after start date, Active",
+            "Error Condition Formula: `Trip_End_Date__c < Trip_Start_Date__c`",
+            "Error Message: Trip end date must be greater than or equal to start date",
+            "Error Location: Field → Trip End Date"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "수식은 '잘못된 상태'(종료일이 시작일보다 빠름)를 적습니다."
+        }
+      ]
+    },
+    {
+      "title": "Create a Roll-Up Summary Field",
+      "ko": "경비 합계",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/add-business-logic-to-a-travel-approval-app/create-a-rollup-summary-field-travel",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "Total Expenses",
+          "items": [
+            "Travel Approval > Fields & Relationships > New > **Roll-Up Summary**",
+            "Label: Total Expenses",
+            "Summarized Object: Expense Items, Type: **SUM**, Field to Aggregate: Amount",
+            "Filter: All records → Save (레이아웃에 자동 추가)"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Expense Item이 Travel Approval의 **Master-Detail** 자식이라서 가능합니다. 이 합계는 다음 단계의 승인 Entry Criteria(> 0)에 쓰입니다."
+        }
+      ]
+    },
+    {
+      "title": "Create Formula Fields",
+      "ko": "상태 아이콘 수식",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/add-business-logic-to-a-travel-approval-app/create-formula-fields-travel",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "Static Resource 올리기",
+          "items": [
+            "Setup > Static Resources > New",
+            "Name: StatusImages, File: StatusImages.zip, Cache Control: Public"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Status Indicator 필드",
+          "items": [
+            "Travel Approval > Fields & Relationships > New > Formula, Return Type: **Text**",
+            "Approved → thumbs-up.png, Rejected → thumbs-down.png, 그 외 → draft.png (모두 20×20)"
+          ]
+        },
+        {
+          "type": "p",
+          "text": "수식 모양: `IF( ISPICKVAL(Status__c, 'Approved'), IMAGE(\"/resource/StatusImages/thumbs-up.png\", \"Accepted\", 20, 20), IF( ISPICKVAL(Status__c, 'Rejected'), IMAGE(…thumbs-down…), IMAGE(…draft…) ) )`"
+        },
+        {
+          "type": "tip",
+          "text": "Picklist는 `=`로 비교할 수 없고 **ISPICKVAL()**(또는 TEXT())을 써야 합니다. IMAGE(경로, 대체 텍스트, 높이, 너비)는 Text 수식에서 그림을 보여 줍니다."
+        }
+      ]
+    },
+    {
+      "title": "Create a Flow",
+      "ko": "주 밖 출장 표시 Flow",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/add-business-logic-to-a-travel-approval-app/create-a-workflow-travel",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "Out of State Travel Flag",
+          "items": [
+            "Flows > New > Record-Triggered Flow, Travel Approval, **A record is created or updated**, 조건 None",
+            "Optimize for: **Fast Field Updates** (같은 레코드 수정)",
+            "Decision 'Is Travel Out of State?': 결과 Yes Out of State (Destination State ≠ TX) / In State (= TX)",
+            "Yes 경로: Update Records → Out-of-State = True",
+            "요소를 **Duplicate**해서 In State 경로: Out-of-State = False",
+            "Save → Activate"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Decision 요소는 if/else 분기입니다. 트리거한 레코드 자체만 바꿀 때는 before-save(Fast Field Updates)가 가장 빠르고 DML도 추가로 쓰지 않습니다."
+        }
+      ]
+    },
+    {
+      "title": "Create an Approval Process",
+      "ko": "출장 승인 프로세스",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/add-business-logic-to-a-travel-approval-app/create-an-approval-process-travel",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "Jump Start Wizard",
+          "items": [
+            "Setup > Approval Processes > Travel Approval > Create New Approval Process > **Use Jump Start Wizard**",
+            "Name: Travel Approval Request, Entry Criteria: Total Expenses > 0",
+            "Approver: 계층 필드 **Manager**로 자동 지정"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "단계와 액션 추가",
+          "items": [
+            "Step 2 'Travel Coordinator Approval': 조건 Out-of-State = True, 특정 User에게 자동 할당",
+            "Final Approval: Field Update Status = Approved",
+            "Final Rejection: Field Update Status = Rejected",
+            "Activate"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "메일로 승인하기",
+          "items": [
+            "Setup > Process Automation Settings > **Enable email approval response** 체크"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Jump Start Wizard는 단계 1개짜리 기본 프로세스를 빠르게 만들고, Standard Setup Wizard는 모든 옵션을 처음부터 설정합니다. 이메일 응답을 켜면 승인자가 메일에 Approve/Reject로 답장만 해도 됩니다."
+        }
+      ]
+    },
+    {
+      "title": "Test Your Approval Process",
+      "ko": "전체 테스트",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/add-business-logic-to-a-travel-approval-app/test-your-approval-process",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "테스트 순서",
+          "items": [
+            "Travel Approvals 탭에서 경비가 있는(합계 > 0) 레코드 → **Submit for Approval** + 코멘트",
+            "승인자 메일 확인, Approval History가 Pending",
+            "Manager로 Approve → 주 밖 출장이면 Travel Coordinator 단계로 넘어감 → 다시 Approve",
+            "Status = Approved, Status Indicator가 엄지 위 아이콘",
+            "다른 레코드는 메일에 'Reject'로 답장 → Rejected, 엄지 아래 아이콘 (메일 처리에 1분쯤 걸릴 수 있음)"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "승인 중인 레코드는 **잠겨(Locked)** 있어 관리자나 현재 승인자만 편집할 수 있습니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Static Resource",
+      "zip·이미지 등 업로드 자원"
+    ],
+    [
+      "IMAGE()",
+      "수식에서 이미지 표시"
+    ],
+    [
+      "ISPICKVAL()",
+      "Picklist 값 비교"
+    ],
+    [
+      "Decision element",
+      "Flow 분기"
+    ],
+    [
+      "Jump Start Wizard",
+      "간단한 승인 프로세스 마법사"
+    ],
+    [
+      "Email approval response",
+      "메일 답장으로 승인"
+    ]
+  ]
+}

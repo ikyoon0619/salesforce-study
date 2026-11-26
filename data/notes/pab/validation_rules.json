@@ -1,0 +1,265 @@
+{
+  "intro": "Validation Rule을 **잘** 만드는 법을 다루는 모듈입니다. 기본 작성법, 사용자 친화적인 메시지와 기존 데이터를 고려하는 설계(`ISNEW`, `ISCHANGED`, `PRIORVALUE`), 그리고 특정 사용자만 규칙을 건너뛰게 하는 **Bypass 스위치**를 배웁니다.",
+  "units": [
+    {
+      "title": "Get Started with Validation Rules",
+      "ko": "검증 규칙 시작하기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/validation-rules/get-started-with-validation-rules",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Validation Rule은 데이터 품질을 지키는 안전장치입니다. 비즈니스 규칙에 어긋나는 레코드를 저장하려 하면 막고, 사용자가 고치도록 오류를 보여 줍니다."
+        },
+        {
+          "type": "table",
+          "title": "쓰임새 세 가지",
+          "headers": [
+            "분류",
+            "예"
+          ],
+          "rows": [
+            [
+              "데이터 형식",
+              "길이, 범위, 형식 (전화번호, 8자리 번호)"
+            ],
+            [
+              "업무 프로세스",
+              "단계별 필수/제한 필드 (Case가 New → Assigned → Resolved로 갈 때)"
+            ],
+            [
+              "규정 준수 (Compliance)",
+              "의료·금융 같은 규제 업종의 데이터 기준"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "수식은 **나쁜 상황**을 적습니다. TRUE = 잘못됨.",
+            "`IF(조건, TRUE, FALSE)`는 필요 없어요. 조건 자체가 이미 TRUE/FALSE입니다.",
+            "**실행 순서**: Validation Rule은 before-save Flow와 before 트리거 **뒤**에 실행됩니다. 그래서 자동화가 바꾼 값 때문에 사용자가 건드리지 않은 규칙이 걸릴 수 있어요."
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "ACT001 규칙 만들기",
+          "items": [
+            "Setup > Object Manager > Account > Validation Rules > New",
+            "Rule Name: `ACT001_Account_Number_8_Characters`",
+            "Description: 값이 있을 때 계정 번호는 정확히 8자리",
+            "Error Condition Formula: `AND( NOT(ISBLANK(AccountNumber)), LEN(AccountNumber) != 8 )`",
+            "Error Message: Account number must be 8 characters long [ACT001]",
+            "Error Location: Field → Account Number → Save"
+          ]
+        },
+        {
+          "type": "p",
+          "text": "테스트: Sales 앱에서 Account Number에 `1`을 넣어 저장하면 필드 아래 오류가 뜹니다. 비워 두면 통과, 9자리 이상이면 다시 오류."
+        },
+        {
+          "type": "tip",
+          "text": "`NOT(ISBLANK(...))`를 함께 쓰면 '값이 있을 때만' 검사합니다. 빈 값을 허용할지 여부는 시험 보기에서 자주 갈리는 포인트입니다."
+        }
+      ]
+    },
+    {
+      "title": "Implement Best Practices",
+      "ko": "모범 사례",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/validation-rules/implement-best-practices",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "좋은 규칙의 조건",
+          "headers": [
+            "원칙",
+            "이유"
+          ],
+          "rows": [
+            [
+              "메시지는 짧게, 원인과 고치는 법을 함께",
+              "예: 'Stage가 Qualification 이상이면 Amount를 입력하세요 [OPP003]'"
+            ],
+            [
+              "고유 **에러 코드** (OPP001, LEAD002…)",
+              "관리자가 어떤 규칙인지 바로 찾음. 자동화가 관련 레코드에서 규칙을 건드릴 때 특히 유용"
+            ],
+            [
+              "Error Location은 가능하면 **필드**",
+              "오류 옆에 그 필드로 가는 링크가 생김"
+            ],
+            [
+              "**한 규칙 = 한 상황**",
+              "Amount와 Next Steps가 둘 다 필요하면 규칙 두 개. 합치면 무엇이 빠졌는지 말해 줄 수 없음"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "**기존 데이터 문제**: 새 규칙을 만들면, 그 규칙을 어기고 있던 옛 레코드는 사용자가 **다른 필드만 고쳐도** 저장이 막힙니다. 그 필드를 고칠 권한이 없는 사용자라면 아예 꼼짝 못 해요. 그래서 '새로 만들 때'나 '그 필드가 바뀔 때'만 검사하도록 범위를 좁힙니다."
+        },
+        {
+          "type": "table",
+          "title": "범위를 좁히는 함수",
+          "headers": [
+            "함수",
+            "TRUE가 되는 때"
+          ],
+          "rows": [
+            [
+              "`ISNEW()`",
+              "레코드를 새로 만들 때"
+            ],
+            [
+              "`ISCHANGED(field)`",
+              "그 필드 값이 바뀌었을 때 (생성 시에는 바뀐 것으로 안 봄 → ISNEW와 같이 씀)"
+            ],
+            [
+              "`PRIORVALUE(field)`",
+              "바뀌기 전 값을 돌려줌. 예: 이전 Stage가 Closed Won이었으면 변경 금지"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "OPP001 규칙",
+          "items": [
+            "Setup > Object Manager > Opportunity > Validation Rules > New",
+            "Rule Name: `OPP001_Close_Date_After_Today`",
+            "Error Condition Formula: `AND( OR( ISNEW(), ISCHANGED(CloseDate) ), CloseDate < TODAY() )`",
+            "Error Message: The close date must be today or later [OPP001]",
+            "Error Location: Field → Close Date → Save"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "결과",
+          "headers": [
+            "상황",
+            "저장?"
+          ],
+          "rows": [
+            [
+              "새 Opportunity, Close Date가 어제",
+              "막힘"
+            ],
+            [
+              "기존 레코드 Close Date를 어제로 변경",
+              "막힘"
+            ],
+            [
+              "기존 레코드 Close Date를 오늘로 변경",
+              "통과"
+            ],
+            [
+              "Close Date가 이미 지난 레코드에서 다른 필드만 수정",
+              "통과"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "`ISCHANGED`와 `PRIORVALUE`는 Validation Rule, Workflow/Flow 조건 같은 '변경 시점'에만 의미가 있고 Formula Field에는 못 씁니다."
+        }
+      ]
+    },
+    {
+      "title": "Bypass Your Validation Rules",
+      "ko": "규칙 우회 스위치",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/validation-rules/bypass-your-validation-rules",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "옛 데이터를 정리하거나 대량 적재할 때 특정 사용자만 규칙을 건너뛰게 하고 싶을 때가 있습니다. 규칙을 끄면 모두에게 꺼지니, **Custom Permission**으로 사람 단위 스위치를 만듭니다."
+        },
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 170\" role=\"img\" aria-label=\"Bypass 스위치 구성\"><rect class=\"d-accent\" x=\"20\" y=\"30\" width=\"150\" height=\"70\" rx=\"10\"/><text class=\"d-strong\" x=\"95.0\" y=\"61.5\" text-anchor=\"middle\">Custom Permission</text><text class=\"d-sub\" x=\"95.0\" y=\"80.5\" text-anchor=\"middle\">Bypass_Lead_VR</text><rect class=\"d-box\" x=\"200\" y=\"30\" width=\"150\" height=\"70\" rx=\"10\"/><text class=\"d-strong\" x=\"275.0\" y=\"61.5\" text-anchor=\"middle\">Permission Set</text><text class=\"d-sub\" x=\"275.0\" y=\"80.5\" text-anchor=\"middle\">권한을 담음</text><rect class=\"d-box\" x=\"380\" y=\"30\" width=\"120\" height=\"70\" rx=\"10\"/><text class=\"d-strong\" x=\"440.0\" y=\"61.5\" text-anchor=\"middle\">User</text><text class=\"d-sub\" x=\"440.0\" y=\"80.5\" text-anchor=\"middle\">할당</text><rect class=\"d-warn\" x=\"530\" y=\"20\" width=\"170\" height=\"90\" rx=\"10\"/><text class=\"d-strong\" x=\"615.0\" y=\"53.5\" text-anchor=\"middle\">Validation Rule</text><text class=\"d-sub\" x=\"615.0\" y=\"72.5\" text-anchor=\"middle\">NOT($Permission.</text><text class=\"d-sub\" x=\"615.0\" y=\"88.5\" text-anchor=\"middle\">Bypass_Lead_VR)</text><line class=\"d-line\" x1=\"174\" y1=\"65\" x2=\"196\" y2=\"65\"/><polygon class=\"d-arrow\" points=\"196.0,65.0 187.9,68.9 187.9,61.1\"/><line class=\"d-line\" x1=\"354\" y1=\"65\" x2=\"376\" y2=\"65\"/><polygon class=\"d-arrow\" points=\"376.0,65.0 367.9,68.9 367.9,61.1\"/><line class=\"d-line-accent\" x1=\"504\" y1=\"65\" x2=\"526\" y2=\"65\"/><polygon class=\"d-arrow-accent\" points=\"526.0,65.0 517.9,68.9 517.9,61.1\"/><text class=\"d-sub\" x=\"360\" y=\"150\" text-anchor=\"middle\">권한이 있는 사용자는 첫 조건이 FALSE → 규칙 전체가 FALSE → 통과</text></svg>",
+          "caption": "Custom Permission → Permission Set → User 할당 → 규칙에서 $Permission 확인"
+        },
+        {
+          "type": "steps",
+          "title": "1. Custom Permission",
+          "items": [
+            "Setup > Custom Permissions > New",
+            "Label: Bypass Lead Validation Rules, Name: `Bypass_Lead_Validation_Rules` → Save"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "2. Permission Set에 담아 할당",
+          "items": [
+            "Setup > Permission Sets > New (같은 이름, License: None) → Save",
+            "Custom Permissions > Edit → Bypass Lead Validation Rules 추가 → Save",
+            "Manage Assignments > Add Assignment → 내 사용자 선택 → Assign"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "3. 규칙에서 확인",
+          "items": [
+            "Setup > Object Manager > Lead > Validation Rules > New",
+            "Rule Name: `LEAD002_Product_Interest_Required`",
+            "Error Condition Formula: `AND( NOT($Permission.Bypass_Lead_Validation_Rules), NOT(ISBLANK(TEXT(PRIORVALUE(ProductInterest__c)))), ISBLANK(TEXT(ProductInterest__c)) )`",
+            "Error Message: Once Product Interest has been populated, it cannot be cleared [LEAD002]"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "수식 읽기",
+          "headers": [
+            "조건",
+            "뜻"
+          ],
+          "rows": [
+            [
+              "`NOT($Permission.Bypass…)`",
+              "우회 권한이 **없는** 사용자"
+            ],
+            [
+              "`NOT(ISBLANK(TEXT(PRIORVALUE(…))))`",
+              "이전에는 값이 있었고"
+            ],
+            [
+              "`ISBLANK(TEXT(…))`",
+              "지금은 비웠다"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Product Interest는 Picklist라서 `ISBLANK` 전에 `TEXT()`로 바꿔야 합니다. 세 조건이 모두 참일 때만 막히니, 권한이 있는 사람은 첫 조건이 FALSE가 되어 통과합니다."
+        },
+        {
+          "type": "tip",
+          "text": "더 안전하게 하려면 **Session-Based Permission Set**을 Flow로 켜서, 평소엔 규칙을 지키다 필요할 때만 우회하게 할 수 있습니다. 규칙 설계를 ISNEW/ISCHANGED로 잘 해 두면 우회가 필요한 일 자체가 줄어듭니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "ISNEW()",
+      "새 레코드 생성 중"
+    ],
+    [
+      "ISCHANGED()",
+      "필드 값이 바뀜"
+    ],
+    [
+      "PRIORVALUE()",
+      "바뀌기 전 값"
+    ],
+    [
+      "Error Location",
+      "오류 표시 위치 (Top of Page / Field)"
+    ],
+    [
+      "Custom Permission",
+      "직접 만드는 권한 스위치"
+    ],
+    [
+      "$Permission",
+      "수식에서 Custom Permission 확인"
+    ]
+  ]
+}

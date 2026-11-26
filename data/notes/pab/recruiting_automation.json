@@ -1,0 +1,268 @@
+{
+  "intro": "채용 앱(Recruiting)에 자동화를 붙이는 실습입니다. **Record-Triggered Flow**로 관련 레코드를 만들고, **다단계 Approval Process**를 설계하고, Flow로 승인을 자동 제출하고, **Screen Flow**와 버튼으로 면접 평가를 입력받습니다.",
+  "units": [
+    {
+      "title": "Build an Automation for Creating Interviewer Records",
+      "ko": "면접관 레코드 자동 생성",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/automate-business-processes-recruiting-app/build-process-interview-records",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "새 Position이 생기면 그 Hiring Manager를 면접관(Interviewer)으로 자동 등록합니다. 먼저 이 자동화를 막을 수 있는 기존 Validation Rule `Every_Position_Must_Have_a_Hiring_Mgr`를 **비활성화**합니다."
+        },
+        {
+          "type": "steps",
+          "title": "Flow 만들기",
+          "items": [
+            "Setup > Object Manager > Position > Validation Rules > Every_Position_Must_Have_a_Hiring_Mgr > Edit > Active 해제",
+            "App Launcher > Flows > New > **Record-Triggered Flow**",
+            "Object: Position, Trigger: **A record is created**",
+            "Entry Condition: Hiring Manager | Is Null | False",
+            "Optimize for: **Actions and Related Records** (다른 레코드를 만들기 때문)",
+            "Create Records 'Create Interviewer Record': Interviewer 오브젝트, Employee = Triggering Position > Hiring Manager, Position = Triggering Position > Record ID",
+            "Save (Create Interviewer Record) → Activate"
+          ]
+        },
+        {
+          "type": "p",
+          "text": "테스트: 사용자 Kathy Cooper를 만들고, 그를 Hiring Manager로 Position 'Super Support Supervisor'를 저장하면 Interviewer 레코드가 생깁니다."
+        },
+        {
+          "type": "tip",
+          "text": "Fast Field Updates(before-save)는 **같은 레코드** 필드 수정용, Actions and Related Records(after-save)는 **다른 레코드 생성·수정**, 메일 등에 씁니다."
+        }
+      ]
+    },
+    {
+      "title": "Lay the Groundwork for an Approval Process",
+      "ko": "승인 프로세스 준비",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/automate-business-processes-recruiting-app/groundwork-approval-process",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "이메일 템플릿",
+          "items": [
+            "Setup > Classic Email Templates > Create New Folder: Position Request Responses (모든 사용자 Read/Write)",
+            "New Template (Text): **Position Approved**, 제목 'Your position request was approved', 본문에 `{!Position__c.OwnerFirstName}` 같은 Merge Field",
+            "같은 방식으로 **Position Rejected**"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "승인자 필드",
+          "items": [
+            "Object Manager > Position > Fields & Relationships > New > Lookup Relationship → User",
+            "Approver 1, Approver 2, Approver 3 세 개 생성",
+            "Lightning App Builder로 Technical Position Page에 'Approvers' 섹션(1열) 추가 후 세 필드 배치"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "승인자를 레코드의 **User Lookup 필드**로 두면, 승인 단계에서 'Related User'로 레코드마다 다른 사람에게 보낼 수 있습니다."
+        }
+      ]
+    },
+    {
+      "title": "Create an Approval Process",
+      "ko": "승인 프로세스 만들기",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/automate-business-processes-recruiting-app/create-approval-process-rec-app",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 330\" role=\"img\" aria-label=\"다단계 승인 프로세스 흐름\"><rect class=\"d-box\" x=\"20\" y=\"20\" width=\"150\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"95.0\" y=\"46.5\" text-anchor=\"middle\">Submit</text><text class=\"d-sub\" x=\"95.0\" y=\"65.5\" text-anchor=\"middle\">Flow가 자동 제출</text><rect class=\"d-accent\" x=\"200\" y=\"20\" width=\"150\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"275.0\" y=\"46.5\" text-anchor=\"middle\">Initial Action</text><text class=\"d-sub\" x=\"275.0\" y=\"65.5\" text-anchor=\"middle\">Approval Status=Pending</text><rect class=\"d-box\" x=\"380\" y=\"20\" width=\"150\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"455.0\" y=\"54.5\" text-anchor=\"middle\">① Owner의 Manager</text><rect class=\"d-box\" x=\"560\" y=\"20\" width=\"140\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"630.0\" y=\"54.5\" text-anchor=\"middle\">② Approver 1</text><rect class=\"d-box\" x=\"560\" y=\"120\" width=\"140\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"630.0\" y=\"154.5\" text-anchor=\"middle\">③ Approver 2</text><rect class=\"d-warn\" x=\"380\" y=\"120\" width=\"150\" height=\"60\" rx=\"10\"/><text class=\"d-strong\" x=\"455.0\" y=\"146.5\" text-anchor=\"middle\">④ Approver 3</text><text class=\"d-sub\" x=\"455.0\" y=\"165.5\" text-anchor=\"middle\">연봉 90K 이상일 때만</text><line class=\"d-line\" x1=\"174\" y1=\"50\" x2=\"196\" y2=\"50\"/><polygon class=\"d-arrow\" points=\"196.0,50.0 187.9,53.9 187.9,46.1\"/><line class=\"d-line\" x1=\"354\" y1=\"50\" x2=\"376\" y2=\"50\"/><polygon class=\"d-arrow\" points=\"376.0,50.0 367.9,53.9 367.9,46.1\"/><line class=\"d-line\" x1=\"534\" y1=\"50\" x2=\"556\" y2=\"50\"/><polygon class=\"d-arrow\" points=\"556.0,50.0 547.9,53.9 547.9,46.1\"/><line class=\"d-line\" x1=\"630\" y1=\"84\" x2=\"630\" y2=\"116\"/><polygon class=\"d-arrow\" points=\"630.0,116.0 626.1,107.9 633.9,107.9\"/><line class=\"d-line\" x1=\"556\" y1=\"150\" x2=\"534\" y2=\"150\"/><polygon class=\"d-arrow\" points=\"534.0,150.0 542.1,146.1 542.1,153.9\"/><rect class=\"d-accent\" x=\"40\" y=\"230\" width=\"300\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"190.0\" y=\"258.5\" text-anchor=\"middle\">Final Approval</text><text class=\"d-sub\" x=\"190.0\" y=\"277.5\" text-anchor=\"middle\">Approved, Status=Open</text><text class=\"d-sub\" x=\"190.0\" y=\"293.5\" text-anchor=\"middle\">승인 메일</text><rect class=\"d-warn\" x=\"380\" y=\"230\" width=\"300\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"530.0\" y=\"258.5\" text-anchor=\"middle\">Final Rejection</text><text class=\"d-sub\" x=\"530.0\" y=\"277.5\" text-anchor=\"middle\">Not Approved, Status=Closed</text><text class=\"d-sub\" x=\"530.0\" y=\"293.5\" text-anchor=\"middle\">반려 메일</text><line class=\"d-line-accent\" x1=\"420\" y1=\"184\" x2=\"220\" y2=\"226\"/><polygon class=\"d-arrow-accent\" points=\"220.0,226.0 227.1,220.5 228.7,228.2\"/><line class=\"d-dash\" x1=\"470\" y1=\"184\" x2=\"520\" y2=\"226\"/><polygon class=\"d-arrow\" points=\"520.0,226.0 511.3,223.8 516.3,217.8\"/><text class=\"d-sub\" x=\"150\" y=\"120\" text-anchor=\"middle\">어느 단계든 반려 → Final Rejection</text><text class=\"d-sub\" x=\"150\" y=\"140\" text-anchor=\"middle\">Recall → Approval Status=Recalled</text></svg>",
+          "caption": "New Position Approval: 4단계, 마지막 단계는 조건부. 결과에 따라 필드 업데이트와 메일 알림."
+        },
+        {
+          "type": "steps",
+          "title": "만들기",
+          "items": [
+            "Setup > Approval Processes > Manage Approval Processes For: Position > Create New Approval Process > **Use Standard Setup Wizard**",
+            "이름: New Position Approval, Entry: criteria are met",
+            "Next Automated Approver: **Manager** (Owner의 Manager 필드)",
+            "편집 권한: Administrators OR the current approver",
+            "승인 화면 필드: Department, Education, Job Description, Location, Pay Grade, Salary Range, Skills Required",
+            "제출자: Owner, **Recall 허용**"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "단계 (Approval Steps)",
+          "headers": [
+            "단계",
+            "승인자",
+            "조건"
+          ],
+          "rows": [
+            [
+              "Manager of Position Owner",
+              "자동: Manager",
+              "모든 레코드"
+            ],
+            [
+              "Position Approver 1",
+              "Related User: Approver 1",
+              "모든 레코드, 반려 시 Final Rejection"
+            ],
+            [
+              "Position Approver 2",
+              "Related User: Approver 2",
+              "모든 레코드"
+            ],
+            [
+              "Position Approver 3",
+              "Related User: Approver 3",
+              "Salary Range = 90K-120K, 120K+"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "title": "액션",
+          "headers": [
+            "시점",
+            "액션"
+          ],
+          "rows": [
+            [
+              "Initial Submission",
+              "Field Update: Approval Status = Pending (제출하면 레코드 잠김)"
+            ],
+            [
+              "Final Approval",
+              "Approval Status = Approved, Status = Open, Email Alert (Position Approved)"
+            ],
+            [
+              "Final Rejection",
+              "Approval Status = Not Approved, Status = Closed, Email Alert (Position Rejected)"
+            ],
+            [
+              "Recall",
+              "Approval Status = Recalled"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "승인 프로세스의 네 가지 액션 시점(Initial Submission, Final Approval, Final Rejection, Recall)과 액션 종류(Field Update, Email Alert, Task, Outbound Message)는 시험 단골입니다. 승인자는 Manager 같은 **계층 필드**, **Related User**, 특정 사용자/Queue로 지정합니다."
+        }
+      ]
+    },
+    {
+      "title": "Create Automation for Submitting Positions for Approval",
+      "ko": "승인 자동 제출",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/automate-business-processes-recruiting-app/process-submitting-positions-approval",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "Flow",
+          "items": [
+            "Flows > New > Record-Triggered Flow, Object: Position, **A record is created or updated**",
+            "조건(AND): Status = New, Job Description·Department·Education·Hiring Manager 모두 Is Null = False",
+            "When to run: **Only when a record is updated to meet the condition requirements**",
+            "Action: **Submit for Approval** — Record ID = Triggering Position > Record ID, Approval Process Name: `New_Position_Approval`",
+            "Save: Submit New Positions for Approval → Activate"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "'조건을 새로 만족하게 됐을 때만'을 고르면 같은 레코드가 저장될 때마다 반복 제출되지 않습니다. 제출하는 사용자에게 Manager가 없으면 첫 단계에서 실패하니 테스트 사용자에 Manager를 지정하세요."
+        }
+      ]
+    },
+    {
+      "title": "Create a Candidate Rating Flow",
+      "ko": "평가 입력 Screen Flow",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/automate-business-processes-recruiting-app/candidate-rating-flow",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "**Screen Flow**는 사용자에게 화면을 보여 주고 입력을 받는 Flow입니다. 면접관이 버튼 하나로 평가(Review)를 입력하게 만듭니다."
+        },
+        {
+          "type": "table",
+          "title": "New Review 화면 구성",
+          "headers": [
+            "컴포넌트",
+            "내용"
+          ],
+          "rows": [
+            [
+              "Radio Buttons ×3 (Number)",
+              "Experience, Leadership Skills, Core Competencies — 선택지 Excellent=5 … Poor=1"
+            ],
+            [
+              "Text ×3",
+              "각 항목 Comments"
+            ],
+            [
+              "Checkbox",
+              "Recommend for Hire"
+            ],
+            [
+              "Text",
+              "Reason Recommended"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Flow 만들기",
+          "items": [
+            "Flows > New > **Screen Flow** → Screen 'New Review'에 위 컴포넌트 배치",
+            "텍스트 변수 `varJobAppId` (Available for input/output)",
+            "Create Records 'createReview': Review 오브젝트, Job Application = varJobAppId, 나머지 8개 필드는 화면 값",
+            "성공 화면 'Record Created', **Fault 경로**에 오류 화면(`{!$Flow.FaultMessage}`)",
+            "Save: New Review → Activate"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "버튼으로 실행",
+          "items": [
+            "Object Manager > Job Application > Buttons, Links, and Actions > New Button or Link",
+            "Label: New Review, Detail Page Button, URL: `/flow/New_Review?varJobAppId={!Job_Application__c.Id}&retURL=/{!Job_Application__c.Id}`",
+            "Job Application Layout의 Custom Buttons에 추가"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Flow 변수에 **Available for input**을 켜야 URL이나 다른 곳에서 값을 넘겨받을 수 있습니다. Lightning에서는 버튼 대신 Quick Action이나 Lightning 페이지의 Flow 컴포넌트로도 실행할 수 있어요."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Record-Triggered Flow",
+      "레코드 저장 시 실행되는 Flow"
+    ],
+    [
+      "Screen Flow",
+      "화면으로 입력받는 Flow"
+    ],
+    [
+      "Approval Process",
+      "승인 프로세스"
+    ],
+    [
+      "Approval Step",
+      "승인 단계"
+    ],
+    [
+      "Initial Submission Action",
+      "제출 직후 액션"
+    ],
+    [
+      "Recall",
+      "제출 회수"
+    ],
+    [
+      "Email Alert",
+      "템플릿 메일 알림 액션"
+    ],
+    [
+      "Fault Path",
+      "Flow 오류 처리 경로"
+    ]
+  ]
+}
