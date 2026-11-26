@@ -1,0 +1,385 @@
+{
+  "intro": "코드 없이(point-and-click) 계산하고 검사하는 세 가지 도구를 배웁니다. **Formula Field**는 한 레코드 안에서 값을 계산하고, **Roll-Up Summary Field**는 자식 레코드들을 모아 부모에 요약하며, **Validation Rule**은 잘못된 데이터 저장을 막습니다.",
+  "units": [
+    {
+      "title": "Use Formula Fields",
+      "ko": "수식 필드 쓰기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/point_click_business_logic/formula_fields",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Formula Field는 같은 레코드의 다른 필드(그리고 부모 레코드의 필드)를 이용해 값을 **자동 계산**해서 보여 주는 읽기 전용 필드입니다. 두 숫자로 비율 구하기, 클릭 가능한 링크 만들기, 날짜 사이 일수 세기 같은 데 씁니다. 페이지 레이아웃, 리스트 뷰, 리포트 어디에나 넣을 수 있어요."
+        },
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 220\" role=\"img\" aria-label=\"Formula와 Roll-Up Summary 비교\"><text class=\"d-strong\" x=\"180\" y=\"26\" text-anchor=\"middle\">Formula Field</text><text class=\"d-strong\" x=\"540\" y=\"26\" text-anchor=\"middle\">Roll-Up Summary Field</text><rect class=\"d-accent\" x=\"60\" y=\"50\" width=\"240\" height=\"140\" rx=\"10\"/><text class=\"d-strong\" x=\"180.0\" y=\"100.5\" text-anchor=\"middle\">한 레코드</text><text class=\"d-sub\" x=\"180.0\" y=\"119.5\" text-anchor=\"middle\">같은 레코드 필드 +</text><text class=\"d-sub\" x=\"180.0\" y=\"135.5\" text-anchor=\"middle\">부모(Lookup/M-D) 필드</text><text class=\"d-sub\" x=\"180.0\" y=\"151.5\" text-anchor=\"middle\">예: CloseDate - TODAY()</text><rect class=\"d-warn\" x=\"440\" y=\"50\" width=\"200\" height=\"56\" rx=\"10\"/><text class=\"d-strong\" x=\"540.0\" y=\"74.5\" text-anchor=\"middle\">Master (Account)</text><text class=\"d-sub\" x=\"540.0\" y=\"93.5\" text-anchor=\"middle\">SUM / COUNT / MIN / MAX</text><rect class=\"d-box\" x=\"400\" y=\"150\" width=\"80\" height=\"44\" rx=\"10\"/><text class=\"d-strong\" x=\"440.0\" y=\"176.5\" text-anchor=\"middle\">Opp 1</text><rect class=\"d-box\" x=\"500\" y=\"150\" width=\"80\" height=\"44\" rx=\"10\"/><text class=\"d-strong\" x=\"540.0\" y=\"176.5\" text-anchor=\"middle\">Opp 2</text><rect class=\"d-box\" x=\"600\" y=\"150\" width=\"80\" height=\"44\" rx=\"10\"/><text class=\"d-strong\" x=\"640.0\" y=\"176.5\" text-anchor=\"middle\">Opp 3</text><line class=\"d-line-accent\" x1=\"440\" y1=\"146\" x2=\"500.0\" y2=\"110\"/><polygon class=\"d-arrow-accent\" points=\"500.0,110.0 495.1,117.5 491.0,110.8\"/><line class=\"d-line-accent\" x1=\"540\" y1=\"146\" x2=\"540.0\" y2=\"110\"/><polygon class=\"d-arrow-accent\" points=\"540.0,110.0 543.9,118.1 536.1,118.1\"/><line class=\"d-line-accent\" x1=\"640\" y1=\"146\" x2=\"580.0\" y2=\"110\"/><polygon class=\"d-arrow-accent\" points=\"580.0,110.0 589.0,110.8 584.9,117.5\"/><text class=\"d-sub\" x=\"540\" y=\"212\" text-anchor=\"middle\">Master-Detail의 자식들을 모아 계산</text></svg>",
+          "caption": "Formula는 한 레코드 기준, Roll-Up Summary는 Master-Detail 자식들을 모아 계산합니다."
+        },
+        {
+          "type": "steps",
+          "title": "수식 필드 만들기",
+          "items": [
+            "Setup > Object Manager > Opportunity > Fields & Relationships > New",
+            "Data Type: **Formula** 선택 → Next",
+            "Field Label 입력, **Return Type**(결과 타입: Text, Number, Date, Checkbox 등) 선택 → Next",
+            "수식 편집기에서 수식 작성 → **Check Syntax** → Next → Save"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "수식 편집기 버튼",
+          "headers": [
+            "버튼",
+            "하는 일"
+          ],
+          "rows": [
+            [
+              "Insert Field",
+              "필드를 골라 정확한 API 이름으로 넣어 줌 (부모 오브젝트 필드도 `>`로 따라 들어감)"
+            ],
+            [
+              "Insert Operator",
+              "`+ - * / & = <> AND OR` 같은 연산자"
+            ],
+            [
+              "Functions",
+              "`TODAY()`, `LEN(text)`, `IF()`, `ROUND()` 등 함수 목록과 설명"
+            ],
+            [
+              "Check Syntax",
+              "저장 전에 문법 오류 확인"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "편집기는 Simple / Advanced 두 모드가 있는데 Advanced를 쓰세요. 공백은 무시되지만 **필드·오브젝트 이름은 대소문자를 구분**하고, 사칙연산 우선순위는 수학과 같습니다."
+        },
+        {
+          "type": "table",
+          "title": "예시 수식",
+          "headers": [
+            "목적",
+            "Return Type",
+            "수식"
+          ],
+          "rows": [
+            [
+              "Contact에 부모 Account 번호 보여 주기 (cross-object)",
+              "Text",
+              "`Account.AccountNumber`"
+            ],
+            [
+              "마감까지 남은 일수 (Days to Close)",
+              "Number",
+              "`CloseDate - TODAY()`"
+            ],
+            [
+              "클릭 가능한 링크",
+              "Text",
+              "`HYPERLINK(\"http://www.example.com\", \"사이트\")`"
+            ],
+            [
+              "12% 할인가, 소수 둘째 자리",
+              "Currency",
+              "`ROUND( Amount - (Amount * 0.12), 2 )`"
+            ],
+            [
+              "큰 고객의 큰 거래인가?",
+              "Checkbox",
+              "`AND( Account.NumberOfEmployees > 1000, Amount > 1000 )`"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "title": "자주 나는 오류",
+          "headers": [
+            "오류",
+            "예"
+          ],
+          "rows": [
+            [
+              "괄호 빠짐",
+              "`IF(a > 1, 2, 3`"
+            ],
+            [
+              "쉼표 빠짐 (괄호 오류로 표시되기도 함)",
+              "`IF(a > 1 2, 3)`"
+            ],
+            [
+              "인자 타입이 틀림",
+              "`LEN(123456)` → LEN은 텍스트를 받음"
+            ],
+            [
+              "인자 개수가 틀림",
+              "`ABS(-18, 2)`"
+            ],
+            [
+              "결과 타입 불일치",
+              "Number 필드에 `TODAY()` (날짜)"
+            ],
+            [
+              "텍스트에 따옴표 없음 / 필드명 오타",
+              "`LEN(Hello)`"
+            ],
+            [
+              "없는 함수",
+              "`FAKEFUNCTION()`"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Formula Field는 **읽기 전용**이고 저장 시점이 아니라 **볼 때마다 계산**됩니다. 부모 필드는 참조할 수 있지만 자식 레코드를 모으는 건 Formula로 못 하고 Roll-Up Summary가 필요합니다."
+        }
+      ]
+    },
+    {
+      "title": "Implement Roll-Up Summary Fields",
+      "ko": "롤업 요약 필드",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/point_click_business_logic/roll_up_summary_fields",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Roll-Up Summary Field는 **자식(Detail) 레코드들의 값을 모아 부모(Master) 레코드에** 보여 줍니다. 예를 들어 Account에 딸린 Opportunity 금액의 합계."
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Master-Detail 관계**에서만 만들 수 있습니다 (Lookup에서는 불가).",
+            "필드는 **Master 쪽**에 만듭니다.",
+            "예외: Account ↔ Opportunity, Opportunity ↔ Opportunity Product 같은 일부 표준 관계도 지원합니다."
+          ]
+        },
+        {
+          "type": "table",
+          "title": "롤업 종류",
+          "headers": [
+            "Type",
+            "하는 일",
+            "모을 수 있는 필드"
+          ],
+          "rows": [
+            [
+              "COUNT",
+              "자식 레코드 개수",
+              "필드 지정 없음"
+            ],
+            [
+              "SUM",
+              "합계",
+              "Number, Currency, Percent"
+            ],
+            [
+              "MIN",
+              "최솟값",
+              "Number, Currency, Percent, Date, Date/Time"
+            ],
+            [
+              "MAX",
+              "최댓값",
+              "Number, Currency, Percent, Date, Date/Time"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Account에 '영업기회 합계' 만들기",
+          "items": [
+            "Setup > Object Manager > Account > Fields & Relationships > New",
+            "**Roll-Up Summary** 선택 → Next → Field Label: Sum of Opportunities → Next",
+            "Summarized Object: Opportunities",
+            "Roll-Up Type: **SUM**, Field to Aggregate: Amount",
+            "(선택) Filter Criteria로 일부 자식만 포함 → Next → Next → Save"
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Amount가 목록에 안 보이면 Currency Setup에서 Advanced Currency Management가 켜져 있는지 확인하세요."
+        },
+        {
+          "type": "table",
+          "title": "다른 예",
+          "headers": [
+            "Master",
+            "설정",
+            "결과"
+          ],
+          "rows": [
+            [
+              "Account",
+              "MIN of Opportunity Created Date",
+              "가장 오래된 영업기회 생성일"
+            ],
+            [
+              "Opportunity",
+              "SUM of Opportunity Product Total Price",
+              "상품 합계"
+            ],
+            [
+              "Opportunity",
+              "MIN of Opportunity Product List Price",
+              "가장 싼 상품 정가"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "시험 단골: '자식들을 합쳐 부모에 보여 주고 싶다' → Master-Detail이 있으면 Roll-Up Summary. Lookup뿐이면 Flow 등 다른 방법이 필요합니다. 롤업 종류마다 모을 수 있는 필드 타입이 다르다는 것도 기억하세요."
+        }
+      ]
+    },
+    {
+      "title": "Create Validation Rules",
+      "ko": "검증 규칙 만들기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/point_click_business_logic/validation_rules",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Validation Rule은 사용자가 저장할 때 수식을 평가해서 결과가 **TRUE면 저장을 막고** 오류 메시지를 보여 줍니다. 전화번호 형식 맞추기, 할인율 상한 같은 데 씁니다."
+        },
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 200\" role=\"img\" aria-label=\"Validation Rule 동작\"><rect class=\"d-box\" x=\"20\" y=\"60\" width=\"150\" height=\"70\" rx=\"10\"/><text class=\"d-strong\" x=\"95.0\" y=\"99.5\" text-anchor=\"middle\">사용자가 Save</text><rect class=\"d-accent\" x=\"240\" y=\"50\" width=\"220\" height=\"90\" rx=\"10\"/><text class=\"d-strong\" x=\"350.0\" y=\"91.5\" text-anchor=\"middle\">Error Condition Formula</text><text class=\"d-sub\" x=\"350.0\" y=\"110.5\" text-anchor=\"middle\">잘못된 상태를 적는다</text><rect class=\"d-warn\" x=\"540\" y=\"20\" width=\"160\" height=\"64\" rx=\"10\"/><text class=\"d-strong\" x=\"620.0\" y=\"40.5\" text-anchor=\"middle\">TRUE</text><text class=\"d-sub\" x=\"620.0\" y=\"59.5\" text-anchor=\"middle\">저장 막고</text><text class=\"d-sub\" x=\"620.0\" y=\"75.5\" text-anchor=\"middle\">Error Message</text><rect class=\"d-box\" x=\"540\" y=\"110\" width=\"160\" height=\"64\" rx=\"10\"/><text class=\"d-strong\" x=\"620.0\" y=\"138.5\" text-anchor=\"middle\">FALSE</text><text class=\"d-sub\" x=\"620.0\" y=\"157.5\" text-anchor=\"middle\">그대로 저장</text><line class=\"d-line\" x1=\"174\" y1=\"95\" x2=\"236\" y2=\"95\"/><polygon class=\"d-arrow\" points=\"236.0,95.0 227.9,98.9 227.9,91.1\"/><line class=\"d-line-accent\" x1=\"464\" y1=\"85\" x2=\"536\" y2=\"55\"/><polygon class=\"d-arrow-accent\" points=\"536.0,55.0 530.0,61.7 527.0,54.5\"/><line class=\"d-line\" x1=\"464\" y1=\"105\" x2=\"536\" y2=\"140\"/><polygon class=\"d-arrow\" points=\"536.0,140.0 527.0,140.0 530.4,132.9\"/></svg>",
+          "caption": "수식이 TRUE = 데이터가 잘못됐다는 뜻. 저장이 막힙니다."
+        },
+        {
+          "type": "table",
+          "title": "규칙의 구성 요소",
+          "headers": [
+            "요소",
+            "내용"
+          ],
+          "rows": [
+            [
+              "Rule Name",
+              "규칙 이름 (공백 없이)"
+            ],
+            [
+              "Active",
+              "켜기/끄기"
+            ],
+            [
+              "Error Condition Formula",
+              "**잘못된 상태**를 표현. TRUE면 차단"
+            ],
+            [
+              "Error Message",
+              "사용자에게 보일 문구"
+            ],
+            [
+              "Error Location",
+              "페이지 맨 위(Top of Page) 또는 특정 필드 옆"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Account 번호 8자리 검사",
+          "items": [
+            "Setup > Object Manager > Account > Validation Rules > New",
+            "Rule Name: Account_Number_8_Characters",
+            "Error Condition Formula: `LEN( AccountNumber) <> 8`",
+            "Error Message: Account number must be 8 characters long.",
+            "Check Syntax → Save"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "예시 규칙",
+          "headers": [
+            "목적",
+            "수식"
+          ],
+          "rows": [
+            [
+              "숫자만 허용 (비어 있으면 통과)",
+              "`AND(NOT(ISBLANK(AccountNumber)), NOT(ISNUMBER(AccountNumber)))`"
+            ],
+            [
+              "올해 날짜만",
+              "`YEAR( My_Date__c ) <> YEAR( TODAY() )`"
+            ],
+            [
+              "연봉 범위 2만 달러 이내",
+              "`(Salary_Max__c - Salary_Min__c) > 20000`"
+            ],
+            [
+              "웹사이트는 .com/.org/.net만",
+              "`AND( RIGHT(Web_Site__c, 4) <> \".com\", RIGHT(Web_Site__c, 4) <> \".org\", … )`"
+            ],
+            [
+              "두 글자 국가 코드",
+              "`OR(LEN(BillingCountry) = 1, NOT(CONTAINS(\"AD:AE:…\", BillingCountry)))`"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "title": "자주 쓰는 함수",
+          "headers": [
+            "함수",
+            "뜻"
+          ],
+          "rows": [
+            [
+              "AND / OR / NOT",
+              "모두 참 / 하나라도 참 / 반대"
+            ],
+            [
+              "ISBLANK(f)",
+              "값이 비었나"
+            ],
+            [
+              "ISNUMBER(t)",
+              "숫자 텍스트인가"
+            ],
+            [
+              "LEN(t)",
+              "글자 수"
+            ],
+            [
+              "YEAR(d), TODAY()",
+              "연도, 오늘 날짜"
+            ],
+            [
+              "<> 또는 !=",
+              "같지 않음"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Validation Rule은 Data Loader나 API로 넣는 데이터에도 적용됩니다. 그래서 대량 적재 전에는 규칙을 잠시 끄거나 Bypass 권한을 쓰는 경우가 많습니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Formula Field",
+      "자동 계산 읽기 전용 필드"
+    ],
+    [
+      "Return Type",
+      "수식 결과의 데이터 타입"
+    ],
+    [
+      "Cross-object formula",
+      "부모 오브젝트 필드를 참조하는 수식"
+    ],
+    [
+      "Roll-Up Summary Field",
+      "자식들을 모아 부모에 요약"
+    ],
+    [
+      "Validation Rule",
+      "TRUE면 저장을 막는 규칙"
+    ],
+    [
+      "Error Condition Formula",
+      "잘못된 상태를 적는 수식"
+    ]
+  ]
+}

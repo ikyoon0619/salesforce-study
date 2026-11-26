@@ -1,0 +1,311 @@
+{
+  "intro": "Account, Opportunity, Case 같은 **표준 오브젝트**를 영업팀·지원팀에 맞게 다듬는 실습입니다. 라벨과 Help Text, Field-Level Security, Global Value Set과 Dependent Picklist, Lookup Filter, Formula, Record Type, Dynamic Forms, Field History, Validation Rule까지 한 번에 훑습니다.",
+  "units": [
+    {
+      "title": "Work with Standard and Custom Fields",
+      "ko": "표준·커스텀 필드와 FLS",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-a-salesforce-object/standard-custom-fields",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "준비와 표준 필드 수정",
+          "items": [
+            "Setup > Profiles: Standard User를 Clone해 **Sales User**, **Support User** 생성",
+            "Setup > **Rename Tabs and Labels** > Accounts: Rating 라벨을 **Prospect Rating**으로",
+            "Prospect Rating에 Help Text(6개월 안 판매 가능성 Cold/Warm/Hot), Picklist 값 'Not Known' 추가",
+            "Set Field-Level Security: 모든 프로필 Read-Only, Sales User만 편집 가능"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "커스텀 필드",
+          "items": [
+            "Account에 Checkbox **Has Support Plan** (기본 해제)",
+            "Date **Support Plan Expiration Date**",
+            "두 필드 모두 Sales User, Support User 편집 가능"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "표준 필드는 API 이름은 못 바꾸고 **라벨만** Rename Tabs and Labels에서 바꿉니다. **Field-Level Security**는 프로필/Permission Set 단위로 필드를 보이게(Visible)·읽기 전용(Read-Only)으로 정합니다."
+        }
+      ]
+    },
+    {
+      "title": "Create Picklists and Field Dependencies",
+      "ko": "Picklist와 종속 관계",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-a-salesforce-object/picklists-field-dependencies",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "Region / Zone",
+          "items": [
+            "Setup > **Picklist Value Sets** > New: Region (APAC, EMEA, LATAM, US, Canada)",
+            "Lead와 Account에 Region Picklist (Global Value Set 사용), Sales User만 편집",
+            "Account에 Zone Picklist (21개 값), Sales User만 편집",
+            "Account > Field Dependencies > New: Controlling **Region** → Dependent **Zone** 매트릭스에서 지역별 존 선택"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "Region → Zone 예",
+          "headers": [
+            "Region",
+            "Zone"
+          ],
+          "rows": [
+            [
+              "APAC",
+              "East Asia, Oceania, Southeast Asia"
+            ],
+            [
+              "EMEA",
+              "Africa, Europe, Middle East, UK + Ireland"
+            ],
+            [
+              "LATAM",
+              "Mexico, Caribbean, Central America, South America"
+            ],
+            [
+              "US",
+              "Midwest, Northeast, Southeast, Southwest, West US"
+            ],
+            [
+              "Canada",
+              "Northern Canada, Mountains and the West, The Prairies, Central Canada, East Coast"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Close Reason",
+          "items": [
+            "Opportunity에 **Multi-Select Picklist** Close Reason (Lost: …, Won: … 값 10개)",
+            "Field Dependency: Controlling **Stage** → Closed Won에는 Won 값, Closed Lost에는 Lost 값"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Controlling 필드는 Picklist나 Checkbox, Dependent 필드는 Picklist나 Multi-Select. 표준 필드(Stage)도 Controlling이 될 수 있습니다. Global Value Set은 여러 오브젝트에서 같은 값 목록을 공유합니다."
+        }
+      ]
+    },
+    {
+      "title": "Create Lookup Filters",
+      "ko": "Lookup Filter",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-a-salesforce-object/create-lookup-filters",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "Backup Agent",
+          "items": [
+            "Case > Fields & Relationships > New > Lookup Relationship → User, 이름 Backup Agent",
+            "Lookup Filter: `User: Profile: Name` equals Support User → 지원팀만 고를 수 있음"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Contact Name 제한",
+          "items": [
+            "Case > Contact Name > Edit > Lookup Filter",
+            "`Contact Name: Account ID` equals Field `Case: Account ID`",
+            "Filter Type: **Required**"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Lookup Filter는 조건에 현재 레코드 필드, 대상 오브젝트 필드, **현재 사용자의 프로필·역할**을 쓸 수 있습니다. Required는 위반 시 저장 차단, Optional은 목록만 좁히고 다른 값도 허용."
+        }
+      ]
+    },
+    {
+      "title": "Create Formula Fields",
+      "ko": "수식 필드 네 개",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-a-salesforce-object/create-formula-fields",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "Opportunity 필드",
+          "headers": [
+            "필드",
+            "타입",
+            "수식"
+          ],
+          "rows": [
+            [
+              "Commission",
+              "Formula (Currency)",
+              "`IF( ISPICKVAL(StageName, \"Closed Won\"), Amount * 0.1, 0 )`"
+            ],
+            [
+              "Region/Zone",
+              "Formula (Text)",
+              "`TEXT(Account.Region__c) & \"/\" & TEXT(Account.Zone__c)`"
+            ],
+            [
+              "Discount Percentage",
+              "Percent (길이 3)",
+              "입력 필드"
+            ],
+            [
+              "Amount After Discount",
+              "Formula (Currency)",
+              "`Amount * ( 1 - Discount_Percentage__c )`"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Picklist는 `TEXT()`로 바꿔야 `&`로 이어 붙일 수 있습니다. Percent 필드 값은 수식 안에서 소수(10% = 0.1)로 계산됩니다."
+        }
+      ]
+    },
+    {
+      "title": "Create Record Types",
+      "ko": "Record Type",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-a-salesforce-object/create-record-types",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 230\" role=\"img\" aria-label=\"Record Type이 바꾸는 것\"><rect class=\"d-box\" x=\"230\" y=\"14\" width=\"260\" height=\"64\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"42.5\" text-anchor=\"middle\">Account</text><text class=\"d-sub\" x=\"360.0\" y=\"61.5\" text-anchor=\"middle\">레이아웃·Picklist 값·프로세스를 그룹별로</text><rect class=\"d-accent\" x=\"40\" y=\"130\" width=\"280\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"180.0\" y=\"158.5\" text-anchor=\"middle\">Customer Account</text><text class=\"d-sub\" x=\"180.0\" y=\"177.5\" text-anchor=\"middle\">Customer Account Page</text><text class=\"d-sub\" x=\"180.0\" y=\"193.5\" text-anchor=\"middle\">Industry에서 Consulting·Education 제외</text><rect class=\"d-warn\" x=\"400\" y=\"130\" width=\"280\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"540.0\" y=\"158.5\" text-anchor=\"middle\">Partner Account</text><text class=\"d-sub\" x=\"540.0\" y=\"177.5\" text-anchor=\"middle\">Partner Account Page</text><text class=\"d-sub\" x=\"540.0\" y=\"193.5\" text-anchor=\"middle\">Type: 파트너 값만</text><line class=\"d-line\" x1=\"330\" y1=\"80\" x2=\"200\" y2=\"126\"/><polygon class=\"d-arrow\" points=\"200.0,126.0 206.3,119.6 208.9,127.0\"/><line class=\"d-line\" x1=\"390\" y1=\"80\" x2=\"520\" y2=\"126\"/><polygon class=\"d-arrow\" points=\"520.0,126.0 511.1,127.0 513.7,119.6\"/></svg>",
+          "caption": "Record Type은 같은 오브젝트를 그룹별로 다르게 보여 줍니다."
+        },
+        {
+          "type": "steps",
+          "title": "Customer Account",
+          "items": [
+            "Account > Record Types > New: Customer Account (Master 기반), Sales User·System Administrator",
+            "Industry Picklist에서 Consulting, Education 제거"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Partner Account",
+          "items": [
+            "Partner Account: 파트너 커뮤니티 프로필들에 제공",
+            "Industry는 Consulting, Education만, Type은 Channel Partner/Reseller, Installation Partner, Technology Partner, Other만"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Record Type이 정하는 것: **Picklist 값**, **Page Layout 할당**(프로필별), Sales/Support Process(Stage·Status 값). 사용자에게 Record Type을 쓰게 하려면 프로필/Permission Set에서 할당해야 합니다."
+        }
+      ]
+    },
+    {
+      "title": "Customize Record Pages",
+      "ko": "Dynamic Forms로 페이지 꾸미기",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-a-salesforce-object/create-account-page-layouts",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "Customer Account Page",
+          "items": [
+            "Account 레코드 > Setup > Edit Page → Record Detail에서 **Upgrade Now** (Dynamic Forms)",
+            "섹션 'Sales Region'(Region, Zone), 'Support Plan Information'(Has Support Plan, Expiration Date)을 오른쪽 영역으로",
+            "Prospect Rating을 페이지에서 **Required**로",
+            "Activation: Sales 앱 + Customer Account Record Type + Sales User·Support User"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Page Layout과 Partner 페이지",
+          "items": [
+            "Account Layout: Contacts 관련 목록에 Do Not Call 열, Opportunities를 Contacts 위로",
+            "Customer Account Page를 Clone → Partner Account Page, 영업용 섹션 제거, Partner Account Record Type에 할당"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "**Dynamic Forms**는 필드와 섹션을 Lightning 페이지 아무 곳에 배치하고 조건부로 보이게 합니다. 관련 목록의 열과 순서는 여전히 **Page Layout**에서 정합니다. Lightning 페이지 할당은 앱·Record Type·프로필 조합."
+        }
+      ]
+    },
+    {
+      "title": "Enable Account Field History Tracking",
+      "ko": "필드 변경 이력",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-a-salesforce-object/account-field-history-tracking",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "History 켜기",
+          "items": [
+            "Account > Fields & Relationships > **Set History Tracking** > Enable Account History",
+            "Has Support Plan, Support Plan Expiration Date 선택 → Save",
+            "Account Layout > Related Lists에서 **Account History**를 Contacts 아래로 끌어 놓기 (사용자 설정 덮어쓰기는 No)"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Field History Tracking은 오브젝트당 **최대 20개** 필드, 누가·언제·이전 값·새 값을 기록합니다. Setup 변경 기록인 Setup Audit Trail과 구분하세요."
+        }
+      ]
+    },
+    {
+      "title": "Create Validation Rules",
+      "ko": "검증 규칙 두 개",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-a-salesforce-object/create-validation-rules-1",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "규칙",
+          "headers": [
+            "오브젝트",
+            "수식",
+            "메시지 위치"
+          ],
+          "rows": [
+            [
+              "Account",
+              "`Has_Support_Plan__c = True && ISBLANK(Support_Plan_Expiration_Date__c)`",
+              "Support Plan Expiration Date"
+            ],
+            [
+              "Opportunity",
+              "`ISPICKVAL(StageName, \"Closed Lost\") && ISBLANK(Close_Reason__c)`",
+              "Close Reason"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "'A일 때 B는 필수' 패턴은 `조건 && ISBLANK(B)`. 새 규칙은 **기존 레코드를 수정할 때도** 적용되니 먼저 현재 데이터를 확인하세요."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Rename Tabs and Labels",
+      "표준 탭·필드 라벨 변경"
+    ],
+    [
+      "Field-Level Security (FLS)",
+      "필드 단위 보기·편집 권한"
+    ],
+    [
+      "Global Value Set",
+      "공유 Picklist 값"
+    ],
+    [
+      "Field Dependency",
+      "Controlling → Dependent 매트릭스"
+    ],
+    [
+      "Lookup Filter",
+      "선택 가능한 레코드 제한"
+    ],
+    [
+      "Record Type",
+      "그룹별 레이아웃·Picklist 값"
+    ],
+    [
+      "Dynamic Forms",
+      "Lightning 페이지에 필드 직접 배치"
+    ],
+    [
+      "Field History Tracking",
+      "필드 변경 이력"
+    ]
+  ]
+}

@@ -875,49 +875,56 @@
           "url": "https://trailhead.salesforce.com/content/learn/modules/point_click_business_logic",
           "minutes": 60,
           "kind": "module",
-          "topics": "Formula 필드, Cross-Object Formula, Roll-Up Summary, Validation Rule 기본"
+          "topics": "Formula 필드, Cross-Object Formula, Roll-Up Summary, Validation Rule 기본",
+          "note": "formulas_validations"
         },
         {
           "title": "Validation Rules",
           "url": "https://trailhead.salesforce.com/content/learn/modules/validation-rules",
           "minutes": 75,
           "kind": "module",
-          "topics": "Validation Rule 작성, 자주 쓰는 함수, 오류 메시지 위치"
+          "topics": "Validation Rule 작성, 자주 쓰는 함수, 오류 메시지 위치",
+          "note": "validation_rules"
         },
         {
           "title": "Automate Business Processes for a Recruiting App",
           "url": "https://trailhead.salesforce.com/content/learn/projects/automate-business-processes-recruiting-app",
           "minutes": 105,
           "kind": "project",
-          "topics": "채용 앱 자동화 실습 (Flow, Approval)"
+          "topics": "채용 앱 자동화 실습 (Flow, Approval)",
+          "note": "recruiting_automation"
         },
         {
           "title": "Add Business Logic to a Travel Approval App",
           "url": "https://trailhead.salesforce.com/content/learn/projects/add-business-logic-to-a-travel-approval-app",
           "minutes": 75,
           "kind": "project",
-          "topics": "출장 승인 앱 비즈니스 로직 실습"
+          "topics": "출장 승인 앱 비즈니스 로직 실습",
+          "note": "travel_business_logic"
         },
         {
           "title": "Customize a Salesforce Object",
           "url": "https://trailhead.salesforce.com/content/learn/projects/customize-a-salesforce-object",
           "minutes": 105,
           "kind": "project",
-          "topics": "오브젝트 커스터마이징 실습 (필드, 수식, 검증)"
+          "topics": "오브젝트 커스터마이징 실습 (필드, 수식, 검증)",
+          "note": "customize_object"
         },
         {
           "title": "Build a Space Station App",
           "url": "https://trailhead.salesforce.com/content/learn/projects/workshop-battle-station",
           "minutes": 125,
           "kind": "project",
-          "topics": "앱 전체를 만들며 오브젝트·자동화 복습"
+          "topics": "앱 전체를 만들며 오브젝트·자동화 복습",
+          "note": "space_station"
         },
         {
           "title": "Setup with Agentforce for Admins",
           "url": "https://trailhead.salesforce.com/content/learn/modules/setup-with-agentforce-for-admins",
           "minutes": 100,
           "kind": "module",
-          "topics": "Agentforce로 관리 작업·업무 프로세스 자동화"
+          "topics": "Agentforce로 관리 작업·업무 프로세스 자동화",
+          "note": "setup_agentforce"
         }
       ],
       "summary": [
