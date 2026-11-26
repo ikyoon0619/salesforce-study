@@ -1,0 +1,750 @@
+{
+  "id": "pab",
+  "name": "Platform App Builder",
+  "fullName": "Salesforce Certified Platform App Builder",
+  "intro": "코드 없이 **클릭(declarative)** 으로 Salesforce 앱을 설계하는 능력을 묻는 시험입니다. 대부분의 문제는 \"회사 요구사항이 이런데, 가장 알맞은 해결책은?\" 형식의 시나리오형입니다. 2026년 8월 개정으로 **Flow** 비중이 커졌고 Agentforce가 새로 들어왔어요.",
+  "exam": {
+    "questions": 60,
+    "unscored": 5,
+    "minutes": 105,
+    "passPercent": 73,
+    "fee": "US$200",
+    "retake": "US$100",
+    "prerequisite": "없음",
+    "release": "Summer '26",
+    "verifiedAt": "2026-11-26",
+    "source": "https://help.salesforce.com/s/articleView?id=005298964&language=en_US&type=1"
+  },
+  "sections": [
+    {
+      "id": "fundamentals",
+      "title": "Salesforce Fundamentals",
+      "weight": 18,
+      "status": "draft",
+      "ko": "선언형과 코드의 경계, AgentExchange, 오브젝트·레코드·필드 접근 제어(보안 모델), 공유 설계, 리포트와 대시보드.",
+      "objectives": [
+        "주어진 상황에서 선언형(클릭) 커스터마이징으로 가능한 범위와, 코드(programmatic)가 필요한 경우를 구분한다.",
+        "AgentExchange로 org를 확장하는 일반적인 경우를 안다.",
+        "오브젝트, 레코드, 필드 접근을 제한하거나 넓히는 기능을 적용한다.",
+        "업무 요구사항에 맞는 공유(sharing) 방식을 고른다.",
+        "리포트, 리포트 타입(report type), 대시보드의 기능을 안다."
+      ]
+    },
+    {
+      "id": "data-modeling",
+      "title": "Data Modeling and Management",
+      "weight": 20,
+      "status": "ready",
+      "ko": "오브젝트와 필드, 그리고 오브젝트 사이의 관계(relationship)를 어떻게 설계할지, 데이터를 어떻게 넣고 뺄지를 다룹니다.",
+      "objectives": [
+        "주어진 상황에 맞는 데이터 모델(data model)을 고른다.",
+        "관계 유형별 기능과, 각 유형이 레코드 접근(record access), 화면(UI), 리포트에 주는 영향을 설명한다.",
+        "필드 데이터 타입을 고르거나 바꿀 때의 고려 사항을 안다.",
+        "데이터를 가져오고(import) 내보낼(export) 때의 선택지와 고려 사항을 안다. 외부 데이터 소스(external data source) 포함."
+      ],
+      "summary": [
+        "관계는 두 가지가 핵심입니다. **Lookup** 은 느슨한 연결(각자 소유자·공유), **Master-Detail** 은 강한 연결(자식이 부모의 공유·삭제를 따라가고 **Roll-Up Summary** 가능).",
+        "다대다(many-to-many)는 Master-Detail 두 개를 가진 **Junction Object** 로 만듭니다.",
+        "데이터 넣기는 5만 건 이하·간단하면 **Data Import Wizard**, 그 이상이거나 삭제·내보내기·자동화가 필요하면 **Data Loader**. 외부 시스템 키로 맞추려면 **External ID** + upsert."
+      ],
+      "concepts": [
+        {
+          "term": "Standard / Custom Object",
+          "ko": "표준 오브젝트 / 커스텀 오브젝트",
+          "body": "Account, Contact, Opportunity 같은 기본 오브젝트가 표준, 직접 만든 것이 커스텀입니다. 커스텀 오브젝트와 필드의 API 이름은 `__c` 로 끝나고, 관계를 따라갈 때는 `__r` 을 씁니다(예: `Invoice__r.Name`).",
+          "points": [
+            "외부 오브젝트(External Object)는 `__x` 로 끝남",
+            "오브젝트 = DB 테이블, 필드 = 컬럼, 레코드 = 행으로 생각하면 쉬움"
+          ]
+        },
+        {
+          "term": "Lookup Relationship",
+          "ko": "룩업 관계 (느슨한 연결)",
+          "body": "자식이 부모를 가리키기만 하는 관계입니다. 기본적으로 값이 비어도 되고, 자식은 **자기 소유자(Owner)와 공유 설정**을 따로 가집니다.",
+          "points": [
+            "부모 삭제 시 기본 동작: 자식의 룩업 값만 비움(Clear the value)",
+            "부모 삭제를 막는 옵션(Don't allow deletion)도 선택 가능",
+            "같은 오브젝트를 가리키는 Self-relationship 가능 (예: 상위 Account)"
+          ]
+        },
+        {
+          "term": "Master-Detail Relationship",
+          "ko": "마스터-디테일 관계 (강한 연결)",
+          "body": "자식(Detail)이 부모(Master) 없이는 존재할 수 없는 관계입니다. Detail에는 Owner 필드가 없고 **공유와 보안을 Master에서 상속**(Controlled by Parent)합니다. Master를 지우면 Detail도 함께 지워집니다.",
+          "points": [
+            "Master에 **Roll-Up Summary** 필드를 만들 수 있음",
+            "한 오브젝트는 Master-Detail 관계를 **최대 2개**까지",
+            "**표준 오브젝트는 Detail이 될 수 없음** (Master는 가능)",
+            "부모 변경(reparenting)은 기본적으로 막혀 있고 옵션으로 허용"
+          ]
+        },
+        {
+          "term": "Junction Object",
+          "ko": "정션 오브젝트 (다대다)",
+          "body": "학생과 수업처럼 양쪽 모두 여러 개와 연결되는 다대다 관계를 만들 때, 가운데에 두는 커스텀 오브젝트입니다. 양쪽 오브젝트에 각각 Master-Detail을 겁니다.",
+          "points": [
+            "**먼저 만든 Master-Detail이 Primary**: 화면 색·아이콘과 레코드 소유자를 Primary 쪽에서 가져옴",
+            "어느 한쪽 Master만 지워도 정션 레코드는 삭제됨",
+            "양쪽 Master 모두에 Roll-Up Summary 가능"
+          ]
+        },
+        {
+          "term": "Hierarchical Relationship",
+          "ko": "계층 관계",
+          "body": "**User 오브젝트에서만** 쓸 수 있는 특수 룩업입니다. 사용자의 상사(Manager)처럼 같은 User를 가리킬 때 씁니다."
+        },
+        {
+          "term": "Roll-Up Summary Field",
+          "ko": "롤업 요약 필드",
+          "body": "자식 레코드의 값을 부모에 집계하는 필드입니다. **COUNT, SUM, MIN, MAX** 네 가지를 지원하고, 조건(filter criteria)을 걸어 일부 자식만 셀 수도 있습니다.",
+          "points": [
+            "원칙적으로 **Master-Detail의 Master** 에서만 생성",
+            "예외: Account ← Opportunity, Opportunity ← Opportunity Product 같은 일부 표준 관계도 지원",
+            "TODAY()처럼 계속 변하는 값이나 다른 오브젝트를 참조하는 수식 필드는 집계 불가",
+            "Lookup 관계 집계가 필요하면 Flow 등 다른 방법을 써야 함"
+          ]
+        },
+        {
+          "term": "Field Data Types",
+          "ko": "필드 데이터 타입",
+          "body": "Text, Number, Currency, Percent, Date, Date/Time, Checkbox, Picklist, Multi-Select Picklist, Email, Phone, URL, Text Area(Long/Rich), Auto Number, Formula, Geolocation 등이 있습니다. 쓸 용도와 리포트·필터 방식을 생각해 고릅니다.",
+          "points": [
+            "Auto Number: 자동으로 증가하는 일련번호(예: INV-{0000})",
+            "Formula: 저장하지 않고 볼 때 계산되는 읽기 전용 필드",
+            "Multi-Select Picklist는 리포트·필터·수식에서 다루기 불편하므로 꼭 필요할 때만"
+          ]
+        },
+        {
+          "term": "Changing a Field Type",
+          "ko": "필드 타입 변경 시 주의",
+          "body": "이미 데이터가 있는 필드의 타입을 바꾸면 **데이터가 잘리거나 사라질 수 있습니다.** 예를 들어 Text를 Number로 바꾸면 숫자가 아닌 값은 지워집니다. 바꾸기 전에 데이터를 내보내 백업합니다.",
+          "points": [
+            "수식, Roll-Up, Apex 등에서 참조 중인 필드는 타입 변경이 막힐 수 있음",
+            "삭제한 커스텀 필드는 **15일 동안** 복구 가능"
+          ]
+        },
+        {
+          "term": "Picklist 관리",
+          "ko": "선택 목록, 의존 선택 목록, 전역 값 세트",
+          "body": "**Dependent Picklist** 는 앞 필드(controlling field) 값에 따라 보이는 값을 걸러 줍니다(국가 → 주). **Global Value Set** 은 여러 오브젝트에서 같은 값 목록을 한 곳에서 관리합니다.",
+          "points": [
+            "Controlling field: Picklist 또는 **Checkbox**",
+            "**Multi-Select Picklist는 Controlling field가 될 수 없음** (Dependent는 가능)",
+            "**Restricted Picklist**: API로도 목록에 없는 값 입력 금지"
+          ]
+        },
+        {
+          "term": "Record Type",
+          "ko": "레코드 타입",
+          "body": "같은 오브젝트를 팀마다 다르게 쓰게 해 줍니다. 레코드 타입마다 **Picklist 값, Page Layout, Business Process**(예: Opportunity의 Sales Process)를 다르게 줄 수 있고, 프로필별로 쓸 수 있는 레코드 타입을 정합니다.",
+          "points": [
+            "필드 자체를 숨기거나 읽기 전용으로 만드는 '보안'은 레코드 타입이 아니라 Field-Level Security"
+          ]
+        },
+        {
+          "term": "External ID",
+          "ko": "외부 ID",
+          "body": "다른 시스템(ERP 등)의 고유 번호를 저장하는 필드에 External ID 속성을 켜 둡니다. Data Loader **upsert** 때 Salesforce ID 대신 이 값으로 기존 레코드를 찾아 update 또는 insert합니다.",
+          "points": [
+            "Text, Number, Email, Auto Number 필드에 지정 가능",
+            "보통 Unique도 함께 켜서 중복 방지",
+            "External ID 필드는 인덱싱되어 검색이 빠름"
+          ]
+        },
+        {
+          "term": "Schema Builder",
+          "ko": "스키마 빌더",
+          "body": "오브젝트와 관계를 **다이어그램으로 보고, 끌어다 놓기로 오브젝트·필드·관계를 만드는** 도구입니다. 데이터 모델 전체 구조를 한눈에 파악할 때 좋습니다."
+        },
+        {
+          "term": "Field History Tracking",
+          "ko": "필드 변경 기록",
+          "body": "선택한 필드의 이전 값, 새 값, 바꾼 사람, 시간을 기록합니다. 레코드의 History 관련 목록과 리포트로 확인합니다.",
+          "points": [
+            "오브젝트당 최대 20개 필드 (더 필요하면 Field Audit Trail)"
+          ]
+        },
+        {
+          "term": "Data Import Wizard / Data Loader",
+          "ko": "데이터 가져오기 도구",
+          "body": "Setup 안에서 쓰는 간단한 마법사가 Data Import Wizard, 따로 설치하는 앱(명령줄 포함)이 Data Loader입니다. 아래 비교표를 꼭 외워 두세요."
+        },
+        {
+          "term": "External Data (Salesforce Connect)",
+          "ko": "외부 데이터 연결",
+          "body": "데이터를 Salesforce로 복사하지 않고 외부 시스템에 둔 채 실시간으로 보여 줄 때 **Salesforce Connect** 와 **External Object**(`__x`)를 씁니다.",
+          "points": [
+            "**External Lookup**: 부모가 External Object일 때 (External ID로 연결)",
+            "**Indirect Lookup**: 자식 External Object → 부모 표준/커스텀 오브젝트 (부모의 고유 External ID 필드로 연결)"
+          ]
+        }
+      ],
+      "tables": [
+        {
+          "title": "Lookup vs Master-Detail",
+          "headers": [
+            "비교 항목",
+            "Lookup",
+            "Master-Detail"
+          ],
+          "rows": [
+            [
+              "부모 값 필수",
+              "아니오 (필수로 설정 가능)",
+              "항상 필수"
+            ],
+            [
+              "자식의 Owner",
+              "있음",
+              "없음 (Master의 소유자를 따름)"
+            ],
+            [
+              "공유·보안",
+              "자식이 독립적으로 가짐",
+              "Master에서 상속 (Controlled by Parent)"
+            ],
+            [
+              "부모 삭제 시",
+              "값만 비움 또는 삭제 금지 선택",
+              "자식도 함께 삭제 (cascade delete)"
+            ],
+            [
+              "Roll-Up Summary",
+              "불가 (일부 표준 관계 제외)",
+              "Master에 생성 가능"
+            ],
+            [
+              "오브젝트당 개수",
+              "관계 필드 합계 40개 한도 안에서 여러 개",
+              "최대 2개"
+            ],
+            [
+              "표준 오브젝트를 자식으로",
+              "가능",
+              "불가"
+            ],
+            [
+              "다른 쪽으로 변환",
+              "모든 자식 레코드에 값이 있어야 Master-Detail로 변환 가능",
+              "Roll-Up Summary 필드가 없어야 Lookup으로 변환 가능"
+            ]
+          ]
+        },
+        {
+          "title": "Data Import Wizard vs Data Loader",
+          "headers": [
+            "비교 항목",
+            "Data Import Wizard",
+            "Data Loader"
+          ],
+          "rows": [
+            [
+              "한 번에 처리 건수",
+              "최대 50,000건",
+              "최대 5,000,000건"
+            ],
+            [
+              "지원 오브젝트",
+              "Account, Contact, Lead, Solution, Campaign Member, 커스텀 오브젝트 등",
+              "API로 접근 가능한 거의 모든 오브젝트"
+            ],
+            [
+              "작업 종류",
+              "새로 추가, 기존 업데이트, 추가+업데이트",
+              "insert, update, upsert, delete, hard delete, **export**"
+            ],
+            [
+              "중복 방지",
+              "가져오면서 이름·이메일 등으로 중복 확인 가능",
+              "External ID 또는 Salesforce ID로 upsert"
+            ],
+            [
+              "실행 위치",
+              "브라우저 (Setup 메뉴)",
+              "설치형 앱, 명령줄(CLI)로 예약 실행 가능"
+            ],
+            [
+              "추천 상황",
+              "관리자가 가끔, 소량, 쉽게",
+              "대량, 정기 연동, 삭제·내보내기"
+            ]
+          ]
+        }
+      ],
+      "numbers": [
+        {
+          "value": "2",
+          "label": "오브젝트당 Master-Detail 관계 최대 개수"
+        },
+        {
+          "value": "40",
+          "label": "오브젝트당 관계 필드(Lookup + Master-Detail) 최대 개수"
+        },
+        {
+          "value": "25",
+          "label": "오브젝트당 Roll-Up Summary 필드 기본 한도"
+        },
+        {
+          "value": "20",
+          "label": "오브젝트당 Field History Tracking 필드 수"
+        },
+        {
+          "value": "50,000",
+          "label": "Data Import Wizard 한 번 처리 한도"
+        },
+        {
+          "value": "5,000,000",
+          "label": "Data Loader 한 번 처리 한도"
+        },
+        {
+          "value": "15일",
+          "label": "삭제한 커스텀 필드를 복구할 수 있는 기간"
+        },
+        {
+          "value": "4가지",
+          "label": "Roll-Up 함수: COUNT, SUM, MIN, MAX"
+        }
+      ],
+      "setupPaths": [
+        {
+          "label": "커스텀 오브젝트 만들기",
+          "path": "Setup > Object Manager > Create > Custom Object"
+        },
+        {
+          "label": "필드·관계 추가",
+          "path": "Setup > Object Manager > [오브젝트] > Fields & Relationships > New"
+        },
+        {
+          "label": "Schema Builder",
+          "path": "Setup > Object Manager > Schema Builder"
+        },
+        {
+          "label": "전역 값 세트",
+          "path": "Setup > Picklist Value Sets"
+        },
+        {
+          "label": "의존 Picklist 설정",
+          "path": "Setup > Object Manager > [오브젝트] > Fields & Relationships > Field Dependencies"
+        },
+        {
+          "label": "레코드 타입",
+          "path": "Setup > Object Manager > [오브젝트] > Record Types"
+        },
+        {
+          "label": "필드 변경 기록",
+          "path": "Setup > Object Manager > [오브젝트] > Fields & Relationships > Set History Tracking"
+        },
+        {
+          "label": "Data Import Wizard",
+          "path": "Setup > Data Import Wizard"
+        }
+      ],
+      "traps": [
+        "**\"부모에 합계/개수를 보여 줘야 한다\"** 가 나오면 먼저 Master-Detail + Roll-Up Summary를 떠올리세요. 단, Account ← Opportunity는 Lookup이지만 Roll-Up이 됩니다.",
+        "**\"자식마다 소유자나 공유가 달라야 한다\"**, **\"부모 없이도 저장할 수 있어야 한다\"** 면 Master-Detail이 아니라 Lookup입니다.",
+        "**표준 오브젝트는 Master-Detail의 Detail이 될 수 없습니다.** Contact를 커스텀 오브젝트의 Detail로 만드는 보기는 오답입니다.",
+        "이미 데이터가 있는 오브젝트에 바로 Master-Detail을 만들 수는 없습니다. 먼저 Lookup을 만들고 모든 레코드에 값을 채운 뒤 Master-Detail로 바꿉니다.",
+        "**5만 건 초과, 삭제, 내보내기, 정기 실행** 중 하나라도 있으면 Data Loader입니다.",
+        "Multi-Select Picklist는 Dependent Picklist의 Controlling field가 될 수 없습니다."
+      ],
+      "links": [
+        {
+          "title": "Trailhead: Data Modeling 모듈",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/data_modeling"
+        },
+        {
+          "title": "Trailhead: Platform App Builder 준비 트레일",
+          "url": "https://trailhead.salesforce.com/content/learn/trails/prepare-for-your-salesforce-platform-app-builder-certification"
+        },
+        {
+          "title": "공식 Exam Guide",
+          "url": "https://help.salesforce.com/s/articleView?id=005298964&language=en_US&type=1"
+        }
+      ]
+    },
+    {
+      "id": "business-logic",
+      "title": "Business Logic and Process Automation",
+      "weight": 32,
+      "status": "draft",
+      "ko": "수식 필드, Roll-Up Summary, 검증 규칙(validation rule), Flow 만들기·고르기·점검, Flow Approval, Agentforce 자동화. 가장 비중이 큰 섹션입니다.",
+      "objectives": [
+        "수식 필드(formula field)로 업무 요구사항을 해결한다.",
+        "Roll-Up Summary 필드의 기능, 사용처, 영향을 판단한다.",
+        "검증 규칙(validation rule)으로 업무 요구사항을 해결한다.",
+        "Flow Builder로 Flow를 만들고 설정한다.",
+        "Flow Approval 프로세스의 기능과 사용처를 안다.",
+        "상황에 맞는 Flow 유형을 고른다.",
+        "Flow를 유지·모니터링·문제 해결한다.",
+        "Agentforce로 업무 프로세스를 자동화하는 기능과 사용처를 안다."
+      ]
+    },
+    {
+      "id": "user-interface",
+      "title": "User Interface",
+      "weight": 17,
+      "status": "draft",
+      "ko": "화면 커스터마이징, 버튼·링크·액션, Lightning 컴포넌트(선언형·코드), 전역/오브젝트별 액션과 레이아웃, 모바일.",
+      "objectives": [
+        "화면(UI) 커스터마이징 방법을 안다.",
+        "커스텀 버튼, 링크, 액션의 기능과 사용처를 안다.",
+        "Lightning 컴포넌트를 앱에 넣는 선언형 방법을 고른다.",
+        "커스텀 Lightning 컴포넌트를 넣는 코드 방식을 안다.",
+        "요구사항에 맞는 전역(global)·오브젝트별(object-specific) 액션과 레이아웃을 고른다. 모바일 사용 경험 포함."
+      ]
+    },
+    {
+      "id": "app-deployment",
+      "title": "App Deployment",
+      "weight": 13,
+      "status": "draft",
+      "ko": "Sandbox 종류와 애플리케이션 수명 주기, Change Set, Unmanaged/Managed Package, 배포 계획.",
+      "objectives": [
+        "Sandbox 종류를 포함해 애플리케이션 수명 주기(ALM) 관리 방안을 추천한다.",
+        "Change Set 사용 가능 여부와 문제 해결을 안다.",
+        "Unmanaged / Managed Package의 사용처와 고려 사항을 안다.",
+        "상황에 맞는 배포 계획을 세운다."
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "dm-01",
+      "section": "data-modeling",
+      "q": "Universal Containers는 커스텀 오브젝트 Invoice와 Line Item을 사용합니다. Invoice를 삭제하면 그 Line Item도 모두 지워져야 하고, Invoice 화면에 Line Item 금액의 합계를 보여 줘야 합니다. 가장 알맞은 설계는?",
+      "options": [
+        "Line Item에 Invoice를 가리키는 Lookup을 만들고 Invoice에 Formula 필드를 만든다",
+        "Line Item에 Invoice를 Master로 하는 Master-Detail을 만들고 Invoice에 SUM Roll-Up Summary를 만든다",
+        "Line Item에 Lookup을 만들고 Invoice에 Validation Rule을 만든다",
+        "Invoice에 Line Item을 가리키는 Hierarchical 관계를 만든다"
+      ],
+      "answer": [
+        1
+      ],
+      "explain": "\"부모 삭제 시 자식도 삭제\" + \"자식 값 합계\" 두 조건이 모두 Master-Detail의 특징입니다. Roll-Up Summary(SUM)는 Master 쪽에 만듭니다.",
+      "notes": [
+        "Formula는 자식 여러 개를 합산할 수 없고, Lookup은 기본적으로 부모 삭제 시 자식을 지우지 않습니다.",
+        "cascade delete와 Roll-Up Summary를 모두 제공합니다.",
+        "Validation Rule은 저장을 막는 규칙일 뿐 합계를 계산하지 않습니다.",
+        "Hierarchical 관계는 User 오브젝트에서만 쓸 수 있습니다."
+      ]
+    },
+    {
+      "id": "dm-02",
+      "section": "data-modeling",
+      "q": "한 학생은 여러 수업을 듣고, 한 수업에는 여러 학생이 있습니다. 학생 화면과 수업 화면 양쪽에서 서로를 관련 목록으로 보고 싶습니다. 어떻게 설계해야 하나요?",
+      "options": [
+        "Student에 Course를 가리키는 Lookup을 하나 만든다",
+        "Enrollment라는 커스텀 오브젝트를 만들고 Student와 Course에 각각 Master-Detail을 건다",
+        "Course에 Multi-Select Picklist로 학생 이름을 저장한다",
+        "Student와 Course를 하나의 오브젝트로 합치고 Record Type으로 구분한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explain": "다대다(many-to-many)는 가운데에 **Junction Object** 를 두고 양쪽에 Master-Detail 두 개를 겁니다.",
+      "notes": [
+        "Lookup 하나로는 한 학생이 수업 하나만 가질 수 있습니다(일대다).",
+        "Junction Object 패턴입니다.",
+        "값 목록일 뿐 관계가 아니라서 관련 목록·리포트가 불가능하고 관리가 어렵습니다.",
+        "서로 다른 두 실체를 한 오브젝트에 넣는 것은 데이터 모델을 망칩니다."
+      ]
+    },
+    {
+      "id": "dm-03",
+      "section": "data-modeling",
+      "q": "Master-Detail 관계에 대한 설명으로 옳은 것 2개를 고르세요.",
+      "options": [
+        "Detail 레코드는 Master 레코드의 공유 설정을 상속한다",
+        "Detail 레코드마다 서로 다른 Owner를 지정할 수 있다",
+        "Master 레코드를 삭제하면 Detail 레코드도 삭제된다",
+        "Contact 같은 표준 오브젝트를 커스텀 오브젝트의 Detail로 만들 수 있다"
+      ],
+      "answer": [
+        0,
+        2
+      ],
+      "explain": "Detail은 Owner 필드가 없고 Master를 따라갑니다(Controlled by Parent). 삭제도 함께 일어납니다.",
+      "notes": [
+        "Controlled by Parent입니다.",
+        "Detail에는 Owner 필드가 없습니다.",
+        "cascade delete입니다.",
+        "표준 오브젝트는 Detail이 될 수 없습니다."
+      ]
+    },
+    {
+      "id": "dm-04",
+      "section": "data-modeling",
+      "q": "관리자가 커스텀 오브젝트 Project의 Lookup(Account) 필드를 Master-Detail로 바꾸려는데 Salesforce가 막습니다. 가장 가능성이 높은 이유는?",
+      "options": [
+        "Account에 이미 Roll-Up Summary 필드가 있다",
+        "일부 Project 레코드의 Account 값이 비어 있다",
+        "Project 오브젝트에 Record Type이 2개 이상 있다",
+        "Account가 표준 오브젝트라 Master가 될 수 없다"
+      ],
+      "answer": [
+        1
+      ],
+      "explain": "Lookup → Master-Detail 변환은 **모든 자식 레코드에 부모 값이 있어야** 가능합니다. 빈 값을 먼저 채우세요.",
+      "notes": [
+        "Roll-Up이 있으면 반대 방향(Master-Detail → Lookup) 변환이 막힙니다.",
+        "Master-Detail은 부모 값이 필수라 빈 값이 있으면 변환할 수 없습니다.",
+        "Record Type은 관계 변환과 무관합니다.",
+        "표준 오브젝트도 Master는 될 수 있습니다."
+      ]
+    },
+    {
+      "id": "dm-05",
+      "section": "data-modeling",
+      "q": "커스텀 오브젝트 Project를 Account와 연결하려 합니다. 각 Project는 서로 다른 PM이 소유하고 공유 범위도 따로 관리해야 하며, Account가 정해지기 전에 Project를 먼저 만들 때도 있습니다. 어떤 관계가 맞나요?",
+      "options": [
+        "Master-Detail (Account가 Master)",
+        "Lookup",
+        "Hierarchical",
+        "Master-Detail (Project가 Master)"
+      ],
+      "answer": [
+        1
+      ],
+      "explain": "자기 Owner와 공유가 필요하고 부모 없이도 저장해야 하므로 Lookup입니다.",
+      "notes": [
+        "Detail은 Owner가 없고 부모 값이 필수라 두 조건을 모두 어깁니다.",
+        "독립적인 소유자·공유, 선택적 부모 값을 제공합니다.",
+        "User 전용입니다.",
+        "방향이 반대일 뿐 아니라 표준 오브젝트(Account)는 Detail이 될 수 없습니다."
+      ]
+    },
+    {
+      "id": "dm-06",
+      "section": "data-modeling",
+      "q": "마케팅팀이 전시회에서 받은 리드 30,000건을 CSV로 넘겼습니다. 관리자는 별도 프로그램을 설치하지 않고, 이메일 기준으로 기존 리드와 중복되지 않게 한 번만 가져오고 싶습니다. 어떤 도구가 알맞나요?",
+      "options": [
+        "Data Loader",
+        "Data Import Wizard",
+        "Schema Builder",
+        "Data Export Service"
+      ],
+      "answer": [
+        1
+      ],
+      "explain": "5만 건 이하, 설치 없이 브라우저에서, 중복 확인 기능이 필요한 일회성 작업이므로 Data Import Wizard입니다.",
+      "notes": [
+        "가능은 하지만 설치가 필요하고 중복 확인 기능이 마법사만큼 간단하지 않습니다.",
+        "50,000건 이하, Setup에서 실행, 중복 확인 지원.",
+        "오브젝트 구조를 설계하는 도구입니다.",
+        "데이터를 내보내는(백업) 기능입니다."
+      ]
+    },
+    {
+      "id": "dm-07",
+      "section": "data-modeling",
+      "q": "매일 밤 ERP에서 주문 200만 건을 Salesforce로 동기화해야 합니다. ERP 주문번호로 기존 레코드는 업데이트하고 없으면 새로 만들어야 합니다. 가장 알맞은 방법은?",
+      "options": [
+        "Data Import Wizard로 매일 수동 가져오기",
+        "ERP 주문번호를 External ID 필드로 만들고 Data Loader(CLI) upsert를 예약 실행",
+        "주문번호를 Auto Number 필드로 만들고 Data Import Wizard 사용",
+        "Schema Builder에서 ERP와 관계 생성"
+      ],
+      "answer": [
+        1
+      ],
+      "explain": "대량(5만 건 초과) + 정기 실행 + 외부 키로 매칭 = External ID + Data Loader upsert입니다.",
+      "notes": [
+        "50,000건 한도를 넘고 자동 예약도 안 됩니다.",
+        "External ID로 기존 레코드를 찾아 update/insert하고, CLI로 예약 실행할 수 있습니다.",
+        "Auto Number는 Salesforce가 번호를 새로 매기므로 ERP 번호와 맞출 수 없습니다.",
+        "Schema Builder는 외부 시스템과 연결하는 도구가 아닙니다."
+      ]
+    },
+    {
+      "id": "dm-08",
+      "section": "data-modeling",
+      "q": "주소 입력 시 Country를 고르면 그 나라의 State 값만 보이게 하고 싶습니다. 코드 없이 가장 간단한 방법은?",
+      "options": [
+        "Validation Rule로 잘못된 조합을 막는다",
+        "Country를 Controlling field로 하는 Dependent Picklist를 만든다",
+        "State를 Formula 필드로 만든다",
+        "Country마다 Record Type을 만든다"
+      ],
+      "answer": [
+        1
+      ],
+      "explain": "앞 필드 값에 따라 뒤 필드 값을 걸러 주는 기능이 Dependent Picklist입니다.",
+      "notes": [
+        "저장 후에 막을 뿐, 고를 때 목록을 걸러 주지는 않습니다.",
+        "Field Dependencies로 설정합니다.",
+        "Formula는 사용자가 고를 수 없는 읽기 전용입니다.",
+        "나라 수만큼 Record Type을 만드는 것은 지나치게 복잡합니다."
+      ]
+    },
+    {
+      "id": "dm-09",
+      "section": "data-modeling",
+      "q": "Opportunity를 쓰는 두 사업부가 있습니다. 사업부마다 Stage 값이 다르고 화면에 보이는 필드 배치도 달라야 합니다. 무엇을 써야 하나요?",
+      "options": [
+        "Opportunity를 복제한 커스텀 오브젝트를 하나 더 만든다",
+        "Record Type과 사업부별 Sales Process, Page Layout을 쓴다",
+        "Field-Level Security로 사업부별 Stage 값을 숨긴다",
+        "Global Value Set을 두 개 만든다"
+      ],
+      "answer": [
+        1
+      ],
+      "explain": "같은 오브젝트를 팀마다 다른 Picklist 값·Business Process·Page Layout으로 쓰게 하는 기능이 Record Type입니다.",
+      "notes": [
+        "리포트와 자동화가 두 갈래로 나뉘어 관리가 어려워집니다.",
+        "Opportunity의 Stage는 Sales Process로 묶어 Record Type에 연결합니다.",
+        "FLS는 필드 전체를 숨기거나 읽기 전용으로 만들 뿐, 값 일부를 숨기지 못합니다.",
+        "값 목록을 공유하는 기능이지 사업부별로 나누는 기능이 아닙니다."
+      ]
+    },
+    {
+      "id": "dm-10",
+      "section": "data-modeling",
+      "q": "Region이라는 같은 선택 값 목록을 5개 오브젝트에서 씁니다. 값을 추가할 때 한 곳에서만 고치고 싶습니다. 어떻게 하나요?",
+      "options": [
+        "오브젝트마다 Picklist를 만들고 같은 값을 입력한다",
+        "Global Value Set을 만들고 각 오브젝트의 Picklist가 이를 사용하게 한다",
+        "Text 필드로 만들고 Validation Rule로 값을 제한한다",
+        "Multi-Select Picklist를 쓴다"
+      ],
+      "answer": [
+        1
+      ],
+      "explain": "여러 오브젝트가 같은 값 목록을 공유하는 기능이 Global Value Set입니다.",
+      "notes": [
+        "값을 바꿀 때마다 5곳을 고쳐야 합니다.",
+        "한 곳에서 관리됩니다.",
+        "입력 실수가 쉽고 관리가 어렵습니다.",
+        "여러 값을 고르는 기능이지 공유 기능이 아닙니다."
+      ]
+    },
+    {
+      "id": "dm-11",
+      "section": "data-modeling",
+      "q": "감사팀이 Opportunity의 Amount를 누가, 언제, 어떤 값에서 어떤 값으로 바꿨는지 보고 싶어 합니다. 가장 간단한 방법은?",
+      "options": [
+        "Amount에 Field History Tracking을 켠다",
+        "Validation Rule로 Amount 변경을 막는다",
+        "Amount를 Formula 필드로 바꾼다",
+        "매일 Data Loader로 export해 비교한다"
+      ],
+      "answer": [
+        0
+      ],
+      "explain": "Field History Tracking은 이전 값, 새 값, 사용자, 시간을 기록하고 리포트로 볼 수 있습니다.",
+      "notes": [
+        "변경 이력을 기록하는 기능입니다.",
+        "변경을 막을 뿐 기록하지 않습니다.",
+        "수식으로 바꾸면 직접 입력이 안 됩니다.",
+        "가능은 하지만 번거롭고 누가 바꿨는지는 알 수 없습니다."
+      ]
+    },
+    {
+      "id": "dm-12",
+      "section": "data-modeling",
+      "q": "Junction Object에 대한 설명으로 옳은 것 2개를 고르세요.",
+      "options": [
+        "먼저 만든 Master-Detail 관계가 Primary가 되어 화면 모양과 레코드 소유자를 결정한다",
+        "두 Master 중 어느 한쪽 레코드를 삭제해도 Junction 레코드가 삭제된다",
+        "Junction Object는 표준 오브젝트로도 만들 수 있다",
+        "Junction Object는 두 개의 Lookup 관계로 만들어야 Roll-Up Summary를 쓸 수 있다"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explain": "Junction Object는 Master-Detail 두 개를 가진 커스텀 오브젝트이며, 첫 번째 관계가 Primary입니다.",
+      "notes": [
+        "Primary Master의 색·아이콘과 Owner를 따릅니다.",
+        "어느 Master든 삭제되면 함께 삭제됩니다.",
+        "Detail은 커스텀 오브젝트여야 하므로 표준 오브젝트는 불가능합니다.",
+        "Roll-Up Summary는 Master-Detail이어야 가능합니다."
+      ]
+    },
+    {
+      "id": "dm-13",
+      "section": "data-modeling",
+      "q": "새 앱의 오브젝트 10개와 그 관계를 다이어그램으로 보면서 끌어다 놓기로 필드와 관계를 바로 만들고 싶습니다. 어떤 도구를 쓰나요?",
+      "options": [
+        "Lightning App Builder",
+        "Schema Builder",
+        "Flow Builder",
+        "Data Import Wizard"
+      ],
+      "answer": [
+        1
+      ],
+      "explain": "데이터 모델을 시각적으로 보고 만드는 도구는 Schema Builder입니다.",
+      "notes": [
+        "화면(페이지)을 꾸미는 도구입니다.",
+        "오브젝트·필드·관계를 다이어그램으로 만듭니다.",
+        "자동화를 만드는 도구입니다.",
+        "데이터를 가져오는 도구입니다."
+      ]
+    },
+    {
+      "id": "dm-14",
+      "section": "data-modeling",
+      "q": "Dependent Picklist의 Controlling field로 쓸 수 **없는** 것은?",
+      "options": [
+        "표준 Picklist 필드",
+        "Checkbox 필드",
+        "Multi-Select Picklist 필드",
+        "커스텀 Picklist 필드"
+      ],
+      "answer": [
+        2
+      ],
+      "explain": "Controlling field는 Picklist 또는 Checkbox만 됩니다. Multi-Select Picklist는 Dependent는 될 수 있지만 Controlling은 될 수 없습니다.",
+      "notes": [
+        "표준 Picklist는 Controlling field가 될 수 있습니다.",
+        "Checkbox도 가능합니다.",
+        "Controlling field가 될 수 없습니다.",
+        "가능합니다."
+      ]
+    },
+    {
+      "id": "dm-15",
+      "section": "data-modeling",
+      "q": "Text 필드 Employee Count에는 \"120\", \"약 50명\", \"N/A\" 같은 값이 섞여 있습니다. 이 필드를 Number 타입으로 바꿀 때 가장 먼저 고려해야 할 것은?",
+      "options": [
+        "숫자가 아닌 값은 사라지므로 바꾸기 전에 데이터를 내보내 백업한다",
+        "Number로 바꾸면 Page Layout에서 필드가 빠진다",
+        "타입을 바꾸면 Record Type이 초기화된다",
+        "Number 필드는 리포트에서 쓸 수 없다"
+      ],
+      "answer": [
+        0
+      ],
+      "explain": "필드 타입 변경은 데이터 손실을 일으킬 수 있습니다. 변환할 수 없는 값은 지워지므로 백업과 정리가 먼저입니다.",
+      "notes": [
+        "숫자로 바꿀 수 없는 값은 지워집니다.",
+        "Page Layout 배치는 유지됩니다.",
+        "Record Type과 무관합니다.",
+        "Number 필드는 리포트에서 합계·평균까지 낼 수 있습니다."
+      ]
+    },
+    {
+      "id": "dm-16",
+      "section": "data-modeling",
+      "q": "영업 관리자가 Account 화면에서 Closed Won 상태인 Opportunity 개수를 바로 보고 싶어 합니다. 코드 없이 가장 알맞은 방법은?",
+      "options": [
+        "Account에 COUNT Roll-Up Summary를 만들고 Stage = Closed Won 조건을 건다",
+        "Account와 Opportunity가 Lookup이라 Roll-Up이 불가능하므로 Apex Trigger를 작성한다",
+        "Opportunity에 Formula 필드를 만든다",
+        "Account에 Validation Rule을 만든다"
+      ],
+      "answer": [
+        0
+      ],
+      "explain": "Account ← Opportunity는 Roll-Up Summary를 지원하는 표준 관계입니다. 조건(filter)을 걸어 Closed Won만 셉니다.",
+      "notes": [
+        "표준 관계 예외로 Roll-Up이 지원되고 필터도 가능합니다.",
+        "일부 표준 관계는 Roll-Up을 지원하므로 코드가 필요 없습니다. 시험은 선언형 해결책을 우선합니다.",
+        "Formula는 자식 여러 개를 셀 수 없습니다.",
+        "Validation Rule은 계산하지 않습니다."
+      ]
+    }
+  ]
+}

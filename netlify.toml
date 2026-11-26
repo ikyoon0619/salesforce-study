@@ -1,0 +1,17 @@
+# Netlify 설정: 빌드 없이 저장소 루트를 그대로 게시한다.
+# 배포 전에 콘텐츠 JSON을 검사해서, 오류가 있으면 배포를 멈춘다.
+[build]
+  publish = "."
+  command = "python3 tools/validate.py"
+
+# 콘텐츠(JSON)는 자주 바뀌므로 항상 새로 확인하게 한다.
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
