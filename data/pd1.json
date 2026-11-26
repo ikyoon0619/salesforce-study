@@ -374,51 +374,58 @@
     {
      "title": "Approve Records with Approval Processes",
      "url": "https://trailhead.salesforce.com/content/learn/modules/business_process_automation",
-     "minutes": 60,
+     "minutes": 30,
      "kind": "module",
-     "topics": "Approval Process 구성, 승인 단계와 동작"
+     "topics": "Approval Process 구성, 승인 단계와 동작",
+     "note": "approval_processes"
     },
     {
      "title": "Record-Triggered Flows",
      "url": "https://trailhead.salesforce.com/content/learn/modules/record-triggered-flows",
-     "minutes": 80,
+     "minutes": 65,
      "kind": "module",
-     "topics": "Before-save(Fast Field Updates)와 After-save, 진입 조건, 예약 경로"
+     "topics": "Before-save(Fast Field Updates)와 After-save, 진입 조건, 예약 경로",
+     "note": "record_triggered_flows"
     },
     {
      "title": "Apex Basics & Database",
      "url": "https://trailhead.salesforce.com/content/learn/modules/apex_database",
-     "minutes": 115,
+     "minutes": 165,
      "kind": "module",
-     "topics": "Apex 문법, sObject, DML, SOQL, SOSL"
+     "topics": "Apex 문법, sObject, DML, SOQL, SOSL",
+     "note": "apex_database"
     },
     {
      "title": "Database & .NET Basics",
      "url": "https://trailhead.salesforce.com/content/learn/modules/database_basics_dotnet",
-     "minutes": 40,
+     "minutes": 55,
      "kind": "module",
-     "topics": "관계형 DB와 비교한 Salesforce 데이터 모델, SOQL vs SQL"
+     "topics": "관계형 DB와 비교한 Salesforce 데이터 모델, SOQL vs SQL",
+     "note": "database_basics_dotnet"
     },
     {
      "title": "Search Solution Basics",
      "url": "https://trailhead.salesforce.com/content/learn/modules/search_solution_basics",
-     "minutes": 50,
+     "minutes": 35,
      "kind": "module",
-     "topics": "Salesforce 검색 구조, SOSL과 SOQL을 고르는 기준"
+     "topics": "Salesforce 검색 구조, SOSL과 SOQL을 고르는 기준",
+     "note": "search_solution_basics"
     },
     {
      "title": "Apex Triggers",
      "url": "https://trailhead.salesforce.com/content/learn/modules/apex_triggers",
-     "minutes": 60,
+     "minutes": 90,
      "kind": "module",
-     "topics": "트리거 문법, 컨텍스트 변수, Bulk 트리거 패턴"
+     "topics": "트리거 문법, 컨텍스트 변수, Bulk 트리거 패턴",
+     "note": "apex_triggers"
     },
     {
      "title": "Asynchronous Apex",
      "url": "https://trailhead.salesforce.com/content/learn/modules/asynchronous_apex",
-     "minutes": 160,
+     "minutes": 210,
      "kind": "module",
-     "topics": "Future, Batch, Queueable, Schedulable, 작업 모니터링"
+     "topics": "Future, Batch, Queueable, Schedulable, 작업 모니터링",
+     "note": "asynchronous_apex"
     }
    ],
    "summary": [
@@ -3098,6 +3105,6 @@
  "trail": {
   "title": "Study for the Platform Developer Exam + Prepare for Your Salesforce Platform Developer I Credential",
   "url": "https://trailhead.salesforce.com/content/learn/trails/platform-developer-i-certification-study-guide",
-  "hours": "약 33시간 50분"
+  "hours": "약 35시간 15분"
  }
 }
