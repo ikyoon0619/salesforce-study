@@ -1,0 +1,163 @@
+{
+  "intro": "**Package Development Model**은 메타데이터를 관련 있는 것끼리 **패키지**로 나눠 각자 버전을 붙이고 따로 릴리스하는 방식입니다. 진실의 원천은 Production이 아니라 **버전 관리 시스템**입니다.",
+  "units": [
+    {
+      "title": "Imagine a New Source of Truth",
+      "ko": "새로운 진실의 원천",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/sfdx_dev_model/sfdx_dev_model_neworganization",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 230\" role=\"img\" aria-label=\"Change Set vs Package 개발 모델\"><rect class=\"d-box\" x=\"20\" y=\"20\" width=\"320\" height=\"190\" rx=\"10\"/><text class=\"d-strong\" x=\"180.0\" y=\"87.5\" text-anchor=\"middle\">Org / Change Set 모델</text><text class=\"d-sub\" x=\"180.0\" y=\"106.5\" text-anchor=\"middle\">진실의 원천: Production 조직</text><text class=\"d-sub\" x=\"180.0\" y=\"122.5\" text-anchor=\"middle\">모든 변경이 한 덩어리 (&#x27;happy soup&#x27;)</text><text class=\"d-sub\" x=\"180.0\" y=\"138.5\" text-anchor=\"middle\">Outbound → Inbound Change Set</text><text class=\"d-sub\" x=\"180.0\" y=\"154.5\" text-anchor=\"middle\">릴리스 단위 = 조직 전체</text><rect class=\"d-accent\" x=\"380\" y=\"20\" width=\"320\" height=\"190\" rx=\"10\"/><text class=\"d-strong\" x=\"540.0\" y=\"87.5\" text-anchor=\"middle\">Package 모델</text><text class=\"d-sub\" x=\"540.0\" y=\"106.5\" text-anchor=\"middle\">진실의 원천: 버전 관리 시스템</text><text class=\"d-sub\" x=\"540.0\" y=\"122.5\" text-anchor=\"middle\">관련 메타데이터를 패키지로 묶음</text><text class=\"d-sub\" x=\"540.0\" y=\"138.5\" text-anchor=\"middle\">패키지마다 독립 버전·릴리스</text><text class=\"d-sub\" x=\"540.0\" y=\"154.5\" text-anchor=\"middle\">Unlocked(사내) / 2GP Managed(ISV)</text></svg>",
+          "caption": "조직 전체를 한 번에 옮기던 방식에서, 패키지 단위로 독립 릴리스하는 방식으로"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Org 모델: 모든 변경이 하나의 package.xml에 들어간 '**happy soup**'",
+            "Package 모델: 관련 코드·설정을 묶은 패키지가 각자 릴리스 주기를 가짐",
+            "장점: 협업, 의존성 있는 모듈 개발, 버전 관리, 자동 테스트·CI, 빠른 릴리스",
+            "**Unlocked Package**는 사내(엔터프라이즈) 앱용 패키지"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Increase Productivity with Integrated Tools",
+      "ko": "도구와 환경",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/sfdx_dev_model/sfdx_dev_model_integrated_tools",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "CLI는 Metadata API, Tooling API, Data API 기능을 묶어 스크립트로 자동화합니다.",
+            "IDE: Agentforce Vibes 또는 VS Code + Salesforce Extensions",
+            "시작은 패키지 1개, DX 프로젝트 1개, 저장소 1개"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "Scratch Org vs Sandbox",
+          "headers": [
+            "",
+            "Scratch Org",
+            "Sandbox"
+          ],
+          "rows": [
+            [
+              "성격",
+              "소스로 만드는 일회용 조직, 하루에 여러 번 생성",
+              "Production 사본, Developer는 하루 1회 새로 고침"
+            ],
+            [
+              "용도",
+              "개발, 기능 브랜치, 자동 테스트(CI)",
+              "패키지 설치 테스트, UAT, 스테이징, CD"
+            ],
+            [
+              "한계",
+              "Production 전체(happy soup)를 담지 못함",
+              ""
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "원칙: **개발은 Scratch Org, 릴리스 테스트는 Sandbox**."
+        }
+      ]
+    },
+    {
+      "title": "Understand Source-Driven Development",
+      "ko": "소스 기반 개발",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/sfdx_dev_model/sfdx_dev_model_sdd",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "DX 프로젝트 = 소스 형식 메타데이터, Scratch Org 정의 파일, 테스트 데이터, 테스트",
+            "한 프로젝트에 패키지 여러 개 가능 (sfdx-project.json의 package directory마다 하나)",
+            "설치된 조직에서 **한 컴포넌트는 한 패키지에만** 속함",
+            "소스 형식은 큰 오브젝트를 작은 파일로 쪼개 Merge 충돌을 줄임",
+            "커밋 전에 Scratch Org에서 테스트 → CI의 기본"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Learn How to Test, Build, and Release",
+      "ko": "테스트와 릴리스",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/sfdx_dev_model/sfdx_dev_model_release",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "단계",
+          "headers": [
+            "단계",
+            "환경"
+          ],
+          "rows": [
+            [
+              "Code",
+              "Scratch Org"
+            ],
+            [
+              "Continuous Integration",
+              "Scratch Org (CLI 스크립트로 생성)"
+            ],
+            [
+              "Continuous Delivery",
+              "Developer·Partial Sandbox"
+            ],
+            [
+              "Release",
+              "Full Sandbox → Production"
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Change Set 대신 **패키지 버전**을 테스트 환경 → Production 순서로 설치합니다. 패키지 밖 변경은 여전히 `sf project deploy start`로 배포할 수 있습니다."
+        }
+      ]
+    },
+    {
+      "title": "Plan Your Move to Packages",
+      "ko": "패키지로 옮기기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/sfdx_dev_model/sfdx_dev_model_evolve_to_dx",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "먼저 이해관계자를 모으고, 조직 안의 독립된 앱·팀·핵심 앱 확장을 찾습니다.",
+            "공통 메타데이터는 **기본(base) 패키지** 하나에 두고 다른 패키지가 의존합니다.",
+            "풀기 어려우면 **Org-Dependent Unlocked Package** (설치 조직의 패키지 밖 메타데이터에 의존)",
+            "Metadata API로 가져와 소스 형식으로 바꾸고, 패키지마다 저장소를 만들어 하나씩 옮깁니다."
+          ]
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Happy soup",
+      "조직에 뒤섞인 모든 메타데이터"
+    ],
+    [
+      "Unlocked Package",
+      "사내용 패키지"
+    ],
+    [
+      "Source-driven development",
+      "소스가 기준인 개발"
+    ],
+    [
+      "Continuous Integration (CI)",
+      "변경마다 자동 테스트"
+    ],
+    [
+      "Org-Dependent Unlocked Package",
+      "조직 메타데이터에 의존하는 패키지"
+    ]
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "intro": "**Unlocked Package**는 기업 고객이 사내 앱(경비, 추천 앱 등)을 패키지로 관리하는 방법입니다. Namespace 없이 만들 수 있고, 어느 조직에든 같은 방식으로 설치됩니다.",
+  "units": [
+    {
+      "title": "Break Up Your Metadata",
+      "ko": "메타데이터 나누기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/unlocked-packages-for-customers/break-up-your-metadata",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Change Set 개발은 Production이 진실의 원천, 패키지 개발은 **VCS**가 진실의 원천",
+            "Unlocked Package는 개발팀이 관리. 관리자가 Production에서 급히 직접 고칠 수는 있지만, 새 버전 설치 시 **덮어써지므로** 개발팀에 알려야 함",
+            "거의 모든 메타데이터 타입 포함 가능 (Metadata Coverage Report 참고)",
+            "흐름: Scratch Org 개발 → 패키지 버전 → CI → Sandbox UAT → Production"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Build Your First Unlocked Package",
+      "ko": "첫 Unlocked Package",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/unlocked-packages-for-customers/build-your-first-unlocked-package",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "주요 명령",
+          "items": [
+            "Dev Hub 켜기 (Unlocked Packages and Second-Generation Managed Packages)",
+            "`sf package create --package-type Unlocked --path force-app --no-namespace`",
+            "`sf package version create --installation-key …` → Beta 버전 (04t ID)",
+            "`sf package install --package dreamhouse@1.0.0-1 --target-org …`",
+            "`sf package version promote` (Apex 커버리지 75% 필요)"
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Beta 버전은 Scratch Org, Sandbox, Playground에만 설치. Released는 어디든",
+            "**Installation Key**로 아무나 설치하지 못하게 보호",
+            "`--no-namespace`면 기존 메타데이터를 옮겨도 API 이름이 그대로"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Organize Your Metadata",
+      "ko": "메타데이터 정리 전략",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/unlocked-packages-for-customers/organize-your-metadata",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "정리 모델 세 가지",
+          "headers": [
+            "모델",
+            "기준"
+          ],
+          "rows": [
+            [
+              "App-based",
+              "한 앱을 이루는 메타데이터끼리"
+            ],
+            [
+              "Customizations-based",
+              "표준 앱·AgentExchange 앱에 대한 변경끼리"
+            ],
+            [
+              "Shared library",
+              "공통 Apex·오브젝트를 기본 패키지로, 다른 패키지가 의존"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "기존 조직에서 시작",
+          "items": [
+            "작고 독립된 묶음 고르기",
+            "**Unmanaged Package**로 숨은 의존성 찾기",
+            "retrieve → DX 프로젝트·Git → Scratch Org에서 검증",
+            "`--no-namespace` Unlocked Package 생성 → 테스트 → Promote → Production 설치"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "패키지에 들어간 메타데이터는 그 패키지가 소유합니다. Unlocked Package는 AgentExchange 패키지나 다른 Unlocked Package에 의존할 수 있습니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Unlocked Package",
+      "사내용 소스 기반 패키지"
+    ],
+    [
+      "Installation Key",
+      "설치 비밀번호"
+    ],
+    [
+      "--no-namespace",
+      "Namespace 없는 패키지"
+    ],
+    [
+      "Metadata Coverage Report",
+      "패키지 가능한 메타데이터 목록"
+    ],
+    [
+      "Dependency",
+      "패키지 간 의존"
+    ]
+  ]
+}

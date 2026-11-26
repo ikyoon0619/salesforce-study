@@ -1,0 +1,234 @@
+{
+  "intro": "채용 앱의 화면을 다듬는 실습입니다. 탭과 앱 내비게이션, **Object-Specific Quick Action**, **Dynamic Forms**, Compact Layout, **Record Type**별 Lightning 페이지 할당까지 App Builder 시험 UI 범위를 고루 다룹니다.",
+  "units": [
+    {
+      "title": "Create a Tab for the Review Object",
+      "ko": "탭과 앱 내비게이션",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-the-ui-for-a-recruiting-app/create-tab-review-object",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "탭",
+          "items": [
+            "Setup > Tabs > Custom Object Tabs > New: Review, Tab Style Thermometer",
+            "Add to Custom Apps: Include Tab 해제, **Append tab to users' existing personal customizations**"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "앱 메뉴 순서",
+          "items": [
+            "Setup > App Manager > Recruiting > Edit > **Navigation Items**",
+            "Job Posting Sites, Reviews 추가 → 순서: Home, Positions, Candidates, Job Applications, Interviewers, Reviews, Job Posting Sites, Reports, Dashboards, Chatter"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Create an Object-Specific Quick Action",
+      "ko": "Quick Action",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-the-ui-for-a-recruiting-app/create-object-specific-quick-action",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 220\" role=\"img\" aria-label=\"Quick Action과 Predefined Value\"><rect class=\"d-box\" x=\"20\" y=\"60\" width=\"190\" height=\"90\" rx=\"10\"/><text class=\"d-strong\" x=\"115.0\" y=\"101.5\" text-anchor=\"middle\">Candidate 레코드</text><text class=\"d-sub\" x=\"115.0\" y=\"120.5\" text-anchor=\"middle\">New Job App 버튼</text><rect class=\"d-accent\" x=\"270\" y=\"40\" width=\"190\" height=\"130\" rx=\"10\"/><text class=\"d-strong\" x=\"365.0\" y=\"85.5\" text-anchor=\"middle\">Quick Action</text><text class=\"d-sub\" x=\"365.0\" y=\"104.5\" text-anchor=\"middle\">Create a Record</text><text class=\"d-sub\" x=\"365.0\" y=\"120.5\" text-anchor=\"middle\">대상: Job Application</text><text class=\"d-sub\" x=\"365.0\" y=\"136.5\" text-anchor=\"middle\">Action Layout: 필드 배치</text><rect class=\"d-warn\" x=\"520\" y=\"60\" width=\"180\" height=\"90\" rx=\"10\"/><text class=\"d-strong\" x=\"610.0\" y=\"93.5\" text-anchor=\"middle\">Job Application</text><text class=\"d-sub\" x=\"610.0\" y=\"112.5\" text-anchor=\"middle\">Candidate 자동 연결</text><text class=\"d-sub\" x=\"610.0\" y=\"128.5\" text-anchor=\"middle\">Stage = New (미리 채움)</text><line class=\"d-line\" x1=\"214\" y1=\"105\" x2=\"266\" y2=\"105\"/><polygon class=\"d-arrow\" points=\"266.0,105.0 257.9,108.9 257.9,101.1\"/><line class=\"d-line-accent\" x1=\"464\" y1=\"105\" x2=\"516\" y2=\"105\"/><polygon class=\"d-arrow-accent\" points=\"516.0,105.0 507.9,108.9 507.9,101.1\"/></svg>",
+          "caption": "후보자 레코드에서 바로 지원서를 만들고, 부모 연결과 기본값은 자동"
+        },
+        {
+          "type": "steps",
+          "title": "만들기",
+          "items": [
+            "Object Manager > Candidate > Buttons, Links, and Actions > **New Action**",
+            "Action Type: **Create a Record**, Target: Job Application, Label: New Job App",
+            "Action Layout에서 Status를 Candidate 옆으로",
+            "**Predefined Field Values** > New: Stage = New"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "페이지에 배치",
+          "items": [
+            "Candidate Layout > Salesforce Mobile and Lightning Experience Actions 섹션 재정의",
+            "New Job App을 Post 다음에 끌어 놓기 → Save"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Object-Specific Action은 레코드 페이지에서 **관련 레코드**를 만들 때 부모 Lookup을 자동으로 채웁니다. Global Action은 어디서나 쓰지만 관계를 자동으로 채우지 않습니다."
+        }
+      ]
+    },
+    {
+      "title": "Create a Custom Review Record Page",
+      "ko": "Dynamic Forms",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-the-ui-for-a-recruiting-app/customize-review-page-layout",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "Dynamic Forms로 전환",
+          "items": [
+            "Review 레코드 > Edit Page > Record Detail > **Upgrade Now** > Review Layout > Finish",
+            "Field Section 4개(1열): Core Competencies, Leadership Skills, Experience, Recommendation — 각 점수 + Comments",
+            "점수 필드 3개 UI Behavior: **Required** → Save",
+            "Activation > **Assign as Org Default**"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Dynamic Forms에서 Required로 한 필드는 **그 페이지에서만** 필수입니다. 모든 경로(API, 다른 화면)에서 필수로 하려면 필드 자체를 Required로 하거나 Validation Rule을 쓰세요."
+        }
+      ]
+    },
+    {
+      "title": "Create a Custom Candidate Record Page",
+      "ko": "컴포넌트와 Compact Layout",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-the-ui-for-a-recruiting-app/custom-candidate-record-page",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 230\" role=\"img\" aria-label=\"Lightning 페이지 활성화 우선순위\"><rect class=\"d-accent\" x=\"20\" y=\"30\" width=\"210\" height=\"90\" rx=\"10\"/><text class=\"d-strong\" x=\"125.0\" y=\"71.5\" text-anchor=\"middle\">App + Record Type + Profile</text><text class=\"d-sub\" x=\"125.0\" y=\"90.5\" text-anchor=\"middle\">가장 구체적</text><rect class=\"d-box\" x=\"255\" y=\"30\" width=\"210\" height=\"90\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"71.5\" text-anchor=\"middle\">App Default</text><text class=\"d-sub\" x=\"360.0\" y=\"90.5\" text-anchor=\"middle\">앱별 기본</text><rect class=\"d-box\" x=\"490\" y=\"30\" width=\"210\" height=\"90\" rx=\"10\"/><text class=\"d-strong\" x=\"595.0\" y=\"71.5\" text-anchor=\"middle\">Org Default</text><text class=\"d-sub\" x=\"595.0\" y=\"90.5\" text-anchor=\"middle\">조직 전체 기본</text><line class=\"d-line\" x1=\"234\" y1=\"75\" x2=\"251\" y2=\"75\"/><polygon class=\"d-arrow\" points=\"251.0,75.0 242.9,78.9 242.9,71.1\"/><line class=\"d-line\" x1=\"469\" y1=\"75\" x2=\"486\" y2=\"75\"/><polygon class=\"d-arrow\" points=\"486.0,75.0 477.9,78.9 477.9,71.1\"/><text class=\"d-strong\" x=\"360\" y=\"160\" text-anchor=\"middle\">← 더 구체적인 할당이 이긴다</text><text class=\"d-sub\" x=\"360\" y=\"190\" text-anchor=\"middle\">Activation 화면에서 Desktop / Phone 폼 팩터도 고름</text></svg>",
+          "caption": "같은 오브젝트에 여러 Lightning 페이지가 있으면 가장 구체적인 할당이 적용됩니다."
+        },
+        {
+          "type": "steps",
+          "title": "페이지",
+          "items": [
+            "Candidate 레코드 > Edit Page: **Recent Items** 컴포넌트를 맨 위에",
+            "Record Detail Upgrade Now (Dynamic Forms)",
+            "Activate > Org Default, **Desktop and phone**"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Compact Layout",
+          "items": [
+            "Object Manager > Candidate > Compact Layouts > New: Includes Candidate Name (Candidate Number, First Name, Last Name)",
+            "**Compact Layout Assignment** > 새 레이아웃을 Primary로"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Create Record Types on the Position Object",
+      "ko": "Record Type",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-the-ui-for-a-recruiting-app/record-types-on-position-object",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "프로필 준비",
+          "items": [
+            "Standard User를 Clone → Recruiter: Technical",
+            "Recruiter: Technical을 Clone → Recruiter: Nontechnical"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "Position Record Type",
+          "headers": [
+            "Record Type",
+            "프로필",
+            "Department 값"
+          ],
+          "rows": [
+            [
+              "Technical Position",
+              "Recruiter: Technical, System Administrator",
+              "IT, Engineering"
+            ],
+            [
+              "Nontechnical Position",
+              "Recruiter: Nontechnical, System Administrator",
+              "Finance, Support, Sales"
+            ]
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "만들기",
+          "items": [
+            "Object Manager > Position > Record Types > New (Master 기반), Active",
+            "Make Available에서 해당 프로필만 선택 → Save",
+            "Picklists Available for Editing > Department > Edit → 값 제한"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Record Type은 **Picklist 값**과 **레이아웃·Lightning 페이지 할당**을 그룹별로 다르게 합니다. 프로필에 Record Type을 열어 줘야 사용자가 고를 수 있습니다."
+        }
+      ]
+    },
+    {
+      "title": "Create a Custom Position Record Page",
+      "ko": "Record Type별 페이지",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-the-ui-for-a-recruiting-app/customize-position-page-layout",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "기술 필드",
+          "items": [
+            "Position에 Picklist Operating Systems (Windows, Unix, Mac), Programming Languages (COBOL … Python)",
+            "Field-Level Security: Recruiter: Technical, System Administrator만 Visible"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Technical Position Page",
+          "items": [
+            "Position 레코드 > Edit Page, Label: Technical Position Page",
+            "Upgrade Now (Position Layout) → Record Type 필드를 Information에, 'Technical Skills' 섹션에 두 필드",
+            "Activation > **App, Record Type, and Profiles** > Recruiting > Technical Position > Recruiter: Technical, System Administrator → Save"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "'기술 직무만 다른 화면' → Record Type + Lightning 페이지를 **App·Record Type·Profile** 조합으로 할당. 필드를 아예 못 보게 하려면 FLS."
+        }
+      ]
+    },
+    {
+      "title": "Enable Chatter on the Review Object",
+      "ko": "Review Feed Tracking",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-the-ui-for-a-recruiting-app/enable-chatter-on-review-object",
+      "blocks": [
+        {
+          "type": "steps",
+          "title": "설정",
+          "items": [
+            "Setup > Feed Tracking > Review > Enable Feed Tracking",
+            "Core Competencies, Experience, Interviewer, Job Application, Leadership Skills, Reason Recommended, Recommend for Hire 선택 → Save"
+          ]
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Navigation Items",
+      "앱 탭 메뉴"
+    ],
+    [
+      "Object-Specific Quick Action",
+      "레코드에서 관련 레코드 생성"
+    ],
+    [
+      "Predefined Field Values",
+      "액션 기본값"
+    ],
+    [
+      "Dynamic Forms",
+      "페이지에 필드 직접 배치"
+    ],
+    [
+      "Org Default / App Default",
+      "Lightning 페이지 기본 할당"
+    ],
+    [
+      "Compact Layout Assignment",
+      "Record Type별 Compact Layout"
+    ],
+    [
+      "Form factor",
+      "Desktop / Phone"
+    ]
+  ]
+}

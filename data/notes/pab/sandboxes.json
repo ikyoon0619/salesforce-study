@@ -1,0 +1,116 @@
+{
+  "intro": "**Sandbox**는 Production의 격리된 사본으로, 운영에 영향 없이 개발·테스트·교육을 합니다. 종류마다 복사되는 데이터와 새로 고침(refresh) 주기가 달라 시험에 자주 나옵니다.",
+  "units": [
+    {
+      "title": "Develop and Test Features Using Salesforce Sandboxes",
+      "ko": "Sandbox 종류와 쓰임",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/salesforce-sandboxes-quick-look/develop-and-test-features-using-salesforce-sandboxes",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "변경을 배포 전까지 Production과 분리",
+            "사용자 교육 환경",
+            "여러 변경을 모아 한 번에 Production에 배포"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "Sandbox 종류 (공식 문서 기준 보충)",
+          "headers": [
+            "종류",
+            "복사되는 것",
+            "새로 고침 주기",
+            "주 용도"
+          ],
+          "rows": [
+            [
+              "Developer",
+              "메타데이터만 (저장 약 200MB)",
+              "1일",
+              "개인 개발·단위 테스트"
+            ],
+            [
+              "Developer Pro",
+              "메타데이터만 (저장 약 1GB)",
+              "1일",
+              "통합, 더 큰 테스트 데이터"
+            ],
+            [
+              "Partial Copy",
+              "메타데이터 + **Sandbox Template**으로 고른 일부 데이터 (오브젝트당 최대 1만 건, 5GB)",
+              "5일",
+              "QA, UAT"
+            ],
+            [
+              "Full",
+              "메타데이터 + **전체 데이터**",
+              "29일",
+              "성능·부하 테스트, 스테이징, 교육"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "title": "함께 쓰는 기능",
+          "headers": [
+            "기능",
+            "설명"
+          ],
+          "rows": [
+            [
+              "Selective Sandbox Access",
+              "Public Group에 속한 사용자만 Sandbox에 접근"
+            ],
+            [
+              "Sandbox Template",
+              "Partial Copy·Full에 복사할 오브젝트 선택"
+            ],
+            [
+              "Data Mask & Seed",
+              "민감 데이터 가리기, 관계를 유지한 테스트 데이터 생성"
+            ],
+            [
+              "Scale Test",
+              "성능·부하 테스트"
+            ],
+            [
+              "Developer / Developer Pro 저장 업그레이드",
+              "용량 추가"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "text": "예: 개발은 Developer Pro + Data Mask & Seed, QA는 Partial Copy + Template + Selective Access, 최종 검증은 Full + Data Mask + Scale Test."
+        },
+        {
+          "type": "tip",
+          "text": "새로 고침 주기와 데이터 범위는 Trailhead 유닛의 인터랙티브 표에만 있어 여기선 Salesforce 도움말 기준 값으로 정리했습니다. '실제 데이터로 성능 테스트' → **Full**, '일부 실데이터로 UAT' → **Partial Copy**."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Sandbox",
+      "Production 사본 환경"
+    ],
+    [
+      "Refresh interval",
+      "새로 고침 가능 주기"
+    ],
+    [
+      "Sandbox Template",
+      "복사할 데이터 선택"
+    ],
+    [
+      "Data Mask",
+      "민감 데이터 가리기"
+    ],
+    [
+      "UAT",
+      "사용자 인수 테스트"
+    ]
+  ]
+}
