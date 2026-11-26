@@ -41,6 +41,12 @@ def check_cert(path: Path) -> list[str]:
             for key in REQUIRED_READY_KEYS:
                 if not s.get(key):
                     errors.append(f"{name}: 섹션 '{s['id']}' 이 ready인데 '{key}' 가 비어 있음")
+        for m in s.get("trail", []):
+            for key in ("title", "url", "minutes", "kind", "topics"):
+                if key not in m:
+                    errors.append(f"{name}: 섹션 '{s['id']}' 트레일 모듈 '{m.get('title', '?')}' 에 '{key}' 없음")
+            if not str(m.get("url", "")).startswith("https://trailhead.salesforce.com/"):
+                errors.append(f"{name}: 트레일 모듈 URL이 Trailhead가 아님: {m.get('url')}")
         for t in s.get("tables", []):
             width = len(t["headers"])
             for row in t["rows"]:
