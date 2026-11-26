@@ -1,7 +1,7 @@
 // 실전 모의고사: 섹션 비중대로 문제를 뽑고, 제한 시간 안에 채점 없이 끝까지 푼 뒤 한꺼번에 결과를 본다.
 // 진행 중인 시험은 localStorage에 저장해서 새로 고침하거나 다른 화면에 다녀와도 이어서 풀 수 있다.
 import { store } from './store.js';
-import { esc, inline } from './format.js';
+import { esc, inline, codeBlock } from './format.js';
 import { shuffle, isCorrect } from './quiz.js';
 
 const LETTERS = 'ABCDEFGH';
@@ -231,7 +231,7 @@ function runExam(root, cert, s) {
           <span class="eyebrow">${s.index + 1}번 · ${esc(sectionTitle[q.section] ?? '')}</span>
           <label class="flag-toggle"><input type="checkbox" id="flag" ${s.flags[it.id] ? 'checked' : ''}> 나중에 보기</label>
         </div>
-        <p class="stem">${inline(q.q)}</p>
+        <p class="stem">${inline(q.q)}</p>${codeBlock(q.code, q.lang)}
         ${multi ? `<p class="pick">${q.answer.length}개를 고르세요 (Choose ${q.answer.length})</p>` : ''}
         <fieldset class="options">
           ${it.order
@@ -361,7 +361,7 @@ function renderExamResult(root, cert, results, { timeUp, usedMs }) {
           <span class="sum-q">${inline(r.q.q)}</span>${r.flagged ? '<span class="tag">표시</span>' : ''}</summary>
         <div class="question answered">
           <p class="eyebrow">${esc(sectionTitle[r.q.section] ?? '')}</p>
-          <p class="stem">${inline(r.q.q)}</p>
+          <p class="stem">${inline(r.q.q)}</p>${codeBlock(r.q.code, r.q.lang)}
           <div class="options">${opts}</div>
           <div class="explain"><p>${inline(r.q.explain)}</p></div>
         </div>

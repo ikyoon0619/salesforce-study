@@ -1,6 +1,6 @@
 // 퀴즈 엔진: 문제 순서와 보기 순서를 섞고, 채점하고, 해설을 보여 준다.
 import { store } from './store.js';
-import { esc, inline } from './format.js';
+import { esc, inline, codeBlock } from './format.js';
 
 const LETTERS = 'ABCDEFGH';
 
@@ -46,7 +46,7 @@ export function runQuiz(root, { cert, questions, scope, title, backHref }) {
         </div>
         <form class="question" id="qform" novalidate>
           <p class="eyebrow">${esc(sectionTitle[q.section] ?? '')}</p>
-          <p class="stem">${inline(q.q)}</p>
+          <p class="stem">${inline(q.q)}</p>${codeBlock(q.code, q.lang)}
           ${multi ? `<p class="pick">${q.answer.length}개를 고르세요 (Choose ${q.answer.length})</p>` : ''}
           <fieldset class="options">
             <legend class="sr-only" hidden>보기</legend>

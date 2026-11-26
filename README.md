@@ -54,6 +54,12 @@ python3 tools/validate.py
 
 `answer`에 번호가 2개 이상이면 복수 정답 문제("2개를 고르세요")로 표시됩니다. 보기 순서는 화면에서 매번 섞입니다.
 
+코드 조각을 보여 주려면 `"code": "여러 줄 코드"`(필요하면 `"lang": "apex"`)를 추가합니다. 문제 본문 아래에 코드 블록으로 표시됩니다. 섹션의 `concepts` 항목과 모듈 노트의 `{"type": "code", "code": "...", "title": "선택"}` 블록도 같은 방식입니다.
+
+## 모듈 노트 재사용
+
+다른 자격증에서 이미 정리한 Trailhead 모듈은 트레일 항목에 `"note": "data_modeling", "noteFrom": "pab"` 처럼 적으면 `data/notes/pab/data_modeling.json`을 그대로 보여 줍니다.
+
 ## 새 자격증 추가
 
 1. `data/<id>.json`을 `pab.json`과 같은 형식으로 만든다.

@@ -56,7 +56,7 @@ def check_cert(path: Path) -> list[str]:
     for s in data["sections"]:
         for m in s.get("trail", []):
             if m.get("note"):
-                note_path = ROOT / "data" / "notes" / data["id"] / f"{m['note']}.json"
+                note_path = ROOT / "data" / "notes" / m.get("noteFrom", data["id"]) / f"{m['note']}.json"
                 if not note_path.exists():
                     errors.append(f"{name}: 노트 파일 없음 {note_path.relative_to(ROOT)}")
                     continue
@@ -92,7 +92,7 @@ def check_cert(path: Path) -> list[str]:
 
 
 NOTE_BLOCKS = {"p": ("text",), "list": ("items",), "steps": ("items",), "table": ("headers", "rows"),
-               "figure": ("svg",), "tip": ("text",), "path": ("text",)}
+               "figure": ("svg",), "tip": ("text",), "path": ("text",), "code": ("code",)}
 
 
 def check_note(path: Path) -> list[str]:

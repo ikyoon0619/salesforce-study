@@ -10,9 +10,9 @@
     {
       "id": "pd1",
       "name": "Platform Developer I",
-      "file": null,
-      "statusLabel": "다음 순서",
-      "note": "Apex, SOQL, 트리거, LWC, 테스트. App Builder를 마친 뒤 추가"
+      "file": "data/pd1.json",
+      "statusLabel": "학습 가능",
+      "note": "Apex, SOQL, 트리거, LWC, 테스트로 코드를 써서 앱을 만드는 자격증"
     },
     {
       "id": "next",
