@@ -1,6 +1,6 @@
 // 모듈 노트 화면: Trailhead 모듈의 유닛별 한국어 요약을 블록 단위로 그린다.
 // 노트 파일 형식은 README의 "모듈 노트 형식" 참고.
-import { esc, inline, crumb } from './format.js';
+import { esc, inline, crumb, codeBlock } from './format.js';
 import { store } from './store.js';
 
 function block(b) {
@@ -22,6 +22,8 @@ function block(b) {
       return `<figure class="diagram"><div class="diagram-art">${b.svg}</div>${b.caption ? `<figcaption>${inline(b.caption)}</figcaption>` : ''}</figure>`;
     case 'tip':
       return `<aside class="note-tip"><strong>시험 포인트</strong><p>${inline(b.text)}</p></aside>`;
+    case 'code':
+      return `${b.title ? `<p class="code-title">${inline(b.title)}</p>` : ''}${codeBlock(b.code, b.lang)}`;
     case 'path':
       return `<p class="note-path"><span class="crumb">${crumb(b.text)}</span></p>`;
     default:

@@ -11,7 +11,7 @@
 //   #/c/:cert/exam              실전 모의고사
 import { store } from './store.js';
 import { runQuiz } from './quiz.js';
-import { esc, inline, crumb } from './format.js';
+import { esc, inline, crumb, codeBlock } from './format.js';
 import { renderNote } from './notes.js';
 import { renderExamIntro, leaveExam } from './exam.js';
 
@@ -319,8 +319,9 @@ function renderSection(cert, sectionId) {
   blocks.push(`<section class="block"><h2>핵심 개념 <span class="en">KEY CONCEPTS</span></h2>
     <div class="concepts">${s.concepts
       .map(
-        (c) => `<article class="concept"><h3>${esc(c.term)}${c.ko ? `<span class="ko">${esc(c.ko)}</span>` : ''}</h3>
+        (c) => `<article class="concept${c.code ? ' has-code' : ''}"><h3>${esc(c.term)}${c.ko ? `<span class="ko">${esc(c.ko)}</span>` : ''}</h3>
           <p>${inline(c.body)}</p>
+          ${codeBlock(c.code, c.lang)}
           ${c.points?.length ? `<ul>${c.points.map((p) => `<li>${inline(p)}</li>`).join('')}</ul>` : ''}</article>`
       )
       .join('')}</div></section>`);
@@ -400,7 +401,8 @@ async function renderModuleNote(cert, noteId) {
     }
   }
   if (!module) return notFound();
-  const note = await getJSON(`data/notes/${cert.id}/${noteId}.json`);
+  // noteFrom: 다른 자격증에서 이미 쓴 같은 모듈 노트를 재사용 (예: PD1의 Data Modeling → pab 노트)
+  const note = await getJSON(`data/notes/${module.noteFrom ?? cert.id}/${noteId}.json`);
   setNav(cert, 'overview');
   setTitle(module.title);
   renderNote(app, { cert, section, module, note });

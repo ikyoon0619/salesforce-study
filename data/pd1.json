@@ -1,0 +1,3095 @@
+{
+ "id": "pd1",
+ "name": "Platform Developer I",
+ "fullName": "Salesforce Certified Platform Developer (Platform Developer I)",
+ "intro": "Apex, SOQL, 트리거, LWC, 테스트로 **코드(programmatic)** 를 써서 Salesforce 앱을 만드는 능력을 묻는 시험입니다. 대부분 \"이 상황에서 가장 알맞은 코드·설계는?\" 형식이고, 코드 조각을 보고 결과나 문제점을 고르는 문제가 많습니다. 공식 명칭은 **Salesforce Certified Platform Developer** 로 바뀌었지만 흔히 PD1이라고 부릅니다. 개발자 시험이어도 선언형으로 되는 일은 선언형이 정답입니다.",
+ "exam": {
+  "questions": 60,
+  "unscored": 5,
+  "minutes": 105,
+  "passPercent": 68,
+  "fee": "US$200",
+  "retake": "US$100",
+  "prerequisite": "없음",
+  "release": "Summer '25 가이드",
+  "verifiedAt": "2026-11-26",
+  "source": "https://help.salesforce.com/s/articleView?id=005298965&language=en_US&type=1"
+ },
+ "sections": [
+  {
+   "id": "fundamentals",
+   "title": "Developer Fundamentals",
+   "weight": 27,
+   "status": "ready",
+   "ko": "멀티테넌트와 MVC, 선언형과 코드의 경계(Governor Limit, Formula, Roll-Up Summary), 데이터 모델 설계와 접근, Agentforce for Developers.",
+   "objectives": [
+    "멀티테넌트(multi-tenant) 개념과 MVC, Lightning Component Framework 같은 설계 프레임워크를 이해한다.",
+    "주어진 상황에서 선언형(declarative)과 코드(programmatic) 커스터마이징 중 알맞은 것을 고른다. Governor Limit, Formula 필드, Roll-Up Summary를 고려한다.",
+    "주어진 상황에 맞는 데이터 모델(오브젝트, 필드, 관계, External ID)을 정하고 만들고 코드로 접근한다.",
+    "Agentforce for Developers의 쓰임새와 한계를 안다."
+   ],
+   "trail": [
+    {
+     "title": "Cert Prep: Platform Developer: Developer Fundamentals",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/platform-developer-i-certification-prep-fundamentals-and-database-modeling",
+     "minutes": 10,
+     "kind": "module",
+     "topics": "공식 시험 가이드, 섹션 비중, 시험 정책, 이 섹션의 학습 목표"
+    },
+    {
+     "title": "Data Modeling",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/data_modeling",
+     "minutes": 45,
+     "kind": "module",
+     "topics": "Standard/Custom Object, Lookup, Master-Detail, Junction Object, Schema Builder",
+     "note": "data_modeling",
+     "noteFrom": "pab"
+    },
+    {
+     "title": "Data Management",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/lex_implementation_data_management",
+     "minutes": 35,
+     "kind": "module",
+     "topics": "Data Import Wizard, Data Loader, External ID로 upsert",
+     "note": "lex_implementation_data_management",
+     "noteFrom": "pab"
+    },
+    {
+     "title": "Formulas and Validations",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/point_click_business_logic",
+     "minutes": 60,
+     "kind": "module",
+     "topics": "Formula 필드, Roll-Up Summary, Validation Rule",
+     "note": "formulas_validations",
+     "noteFrom": "pab"
+    },
+    {
+     "title": "Apex & .NET Basics",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/apex_basics_dotnet",
+     "minutes": 35,
+     "kind": "module",
+     "topics": "멀티테넌트와 Governor Limit, Apex 문법을 다른 언어와 비교, 실행 컨텍스트"
+    },
+    {
+     "title": "Platform Event Basics",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/platform_events_basics",
+     "minutes": 50,
+     "kind": "module",
+     "topics": "이벤트 기반 아키텍처, Platform Event 정의·발행·구독"
+    },
+    {
+     "title": "Agentforce for Developers",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/einstein-for-developers",
+     "minutes": 45,
+     "kind": "module",
+     "topics": "VS Code의 AI 코딩 도우미: Apex·LWC·테스트 생성, 한계와 검토 책임"
+    },
+    {
+     "title": "Create an Agent Using Agentforce DX",
+     "url": "https://trailhead.salesforce.com/content/learn/projects/create-an-agent-using-pro-code-tools",
+     "minutes": 40,
+     "kind": "project",
+     "topics": "Salesforce CLI와 VS Code로 에이전트 메타데이터를 만들고 배포"
+    }
+   ],
+   "summary": [
+    "Salesforce는 **멀티테넌트** 입니다. 여러 회사가 같은 서버 자원을 나눠 쓰므로, 한 회사의 코드가 자원을 독차지하지 못하게 **Governor Limit** 이 있습니다. PD1 문제의 상당수는 결국 \"이 코드가 한도에 걸리는가?\"를 묻습니다.",
+    "구조는 **MVC** 로 봅니다. Model = sObject와 데이터, View = Visualforce 페이지·Lightning 컴포넌트, Controller = Apex 컨트롤러와 컴포넌트의 JavaScript.",
+    "개발자 시험이지만 **선언형으로 되면 선언형** 이 정답입니다. 합계는 Roll-Up Summary(Master-Detail일 때), 계산 표시는 Formula, 단순 자동화는 Flow. Lookup 관계의 합계, 복잡한 트랜잭션 처리, 외부 호출 후 처리처럼 선언형이 못 하는 곳에서 Apex를 씁니다.",
+    "데이터 모델은 관계 종류(Lookup vs Master-Detail), 관계 이름(`__r`), **External ID**(외부 시스템 키로 `upsert`·관계 연결)를 코드에서 어떻게 쓰는지까지 알아야 합니다."
+   ],
+   "concepts": [
+    {
+     "term": "Multi-tenant",
+     "ko": "멀티테넌트",
+     "body": "모든 고객(org)이 같은 인프라와 같은 코드베이스를 공유하고, 각 org의 커스터마이징은 **메타데이터** 로 저장됩니다. 그래서 업그레이드가 자동으로 모두에게 적용되고, 대신 코드에는 실행 한도가 걸립니다.",
+     "points": [
+      "Governor Limit은 **트랜잭션 단위** 로 계산됩니다.",
+      "Limit을 넘으면 `System.LimitException` 이 나고 **catch로 잡을 수 없습니다**. 트랜잭션 전체가 롤백됩니다."
+     ]
+    },
+    {
+     "term": "MVC",
+     "ko": "Model-View-Controller",
+     "body": "**Model**: 오브젝트·필드·관계(데이터). **View**: Visualforce 페이지, Aura·LWC의 HTML 템플릿. **Controller**: Visualforce의 Standard/Custom Controller와 Extension, 컴포넌트의 JavaScript와 Apex 컨트롤러.",
+     "points": [
+      "\"MVC에서 Model에 해당하는 것\" → sObject(Standard/Custom Object)",
+      "Lightning Component Framework: 클라이언트(JavaScript)에서 돌아가는 컴포넌트 기반 UI 프레임워크. Aura와 LWC 두 모델이 있습니다."
+     ]
+    },
+    {
+     "term": "Governor Limits",
+     "ko": "실행 한도",
+     "body": "한 트랜잭션에서 쓸 수 있는 자원의 상한입니다. 숫자를 외우는 것보다 **루프 안에서 SOQL·DML을 하지 않기**(bulkify)가 핵심입니다.",
+     "points": [
+      "`Limits.getQueries()` / `Limits.getLimitQueries()` 로 현재 사용량 확인",
+      "비동기(Future, Queueable, Batch)는 일부 한도가 더 큽니다 (SOQL 200, Heap 12MB, CPU 60초)"
+     ],
+     "code": "// 나쁜 예: 레코드마다 SOQL 1번 → 101건이면 한도 초과\nfor (Contact c : contacts) {\n    Account a = [SELECT Name FROM Account WHERE Id = :c.AccountId];\n}\n\n// 좋은 예: 한 번에 조회해서 Map으로 찾기\nSet<Id> ids = new Set<Id>();\nfor (Contact c : contacts) ids.add(c.AccountId);\nMap<Id, Account> accs = new Map<Id, Account>(\n    [SELECT Name FROM Account WHERE Id IN :ids]);",
+     "lang": "apex"
+    },
+    {
+     "term": "Declarative vs Programmatic",
+     "ko": "선언형 먼저, 안 될 때 코드",
+     "body": "같은 결과를 낼 수 있으면 유지보수가 쉬운 선언형을 고릅니다. 코드가 필요한 대표 상황을 기억하세요.",
+     "points": [
+      "**Roll-Up Summary** 는 Master-Detail 관계에서만 가능 → Lookup의 합계는 Apex 트리거(또는 Flow)",
+      "**Formula** 는 저장되지 않고 볼 때 계산됨. 다른 레코드 여러 건을 합산할 수 없음",
+      "복잡한 조건의 여러 오브젝트 처리, 대량 데이터 처리, 외부 시스템 연동 → Apex"
+     ]
+    },
+    {
+     "term": "Relationships in code",
+     "ko": "코드에서 관계 쓰기",
+     "body": "자식 → 부모는 점(.)으로, 부모 → 자식은 서브쿼리로 조회합니다. 커스텀 관계는 필드 이름 `__c` 대신 관계 이름 `__r` 을 씁니다.",
+     "points": [
+      "표준: `Contact.Account.Name`, 서브쿼리 `(SELECT LastName FROM Contacts)`",
+      "커스텀: `Line_Item__c.Invoice__r.Status__c`, 서브쿼리 `(SELECT Name FROM Line_Items__r)`"
+     ],
+     "code": "SELECT Name, Account.Industry FROM Contact\n\nSELECT Name, (SELECT Name, Amount__c FROM Line_Items__r)\nFROM Invoice__c WHERE Status__c = 'Open'",
+     "lang": "soql"
+    },
+    {
+     "term": "External ID",
+     "ko": "외부 시스템 키",
+     "body": "외부 시스템의 고유 키를 담는 필드(Text, Number, Email, Auto Number)에 External ID 속성을 켜면 인덱스가 생기고, `upsert` 와 관계 연결의 기준으로 쓸 수 있습니다.",
+     "points": [
+      "`upsert records Account.Fields.ERP_Id__c;` → 같은 값이 있으면 update, 없으면 insert",
+      "부모 Id를 몰라도 External ID로 관계를 걸 수 있음"
+     ],
+     "code": "Contact c = new Contact(LastName = 'Kim');\nc.Account = new Account(ERP_Id__c = 'A-1001'); // 부모를 External ID로 지정\ninsert c;",
+     "lang": "apex"
+    },
+    {
+     "term": "Platform Events",
+     "ko": "이벤트 기반 연동",
+     "body": "`__e` 로 끝나는 이벤트 오브젝트를 정의하고 발행(publish)하면 구독자(Apex 트리거, Flow, LWC, 외부 시스템)가 받습니다. 시스템끼리 느슨하게 연결할 때 씁니다.",
+     "points": [
+      "Apex 발행: `EventBus.publish(event)`",
+      "구독 Apex 트리거는 **after insert** 만 지원",
+      "발행 시점: Publish After Commit(트랜잭션 성공 시) / Publish Immediately"
+     ]
+    },
+    {
+     "term": "Agentforce for Developers",
+     "ko": "개발자용 AI 도우미",
+     "body": "VS Code 확장(Salesforce Extension Pack)과 Code Builder에서 쓰는 AI 도우미입니다. 자연어로 Apex·LWC 코드 생성, 코드 설명, **Apex 테스트 클래스 생성**, 인라인 자동완성을 해 줍니다.",
+     "points": [
+      "한계: 생성한 코드는 **항상 개발자가 검토·테스트** 해야 함. 정확성을 보장하지 않음",
+      "org의 데이터가 아니라 코드와 메타데이터 맥락으로 동작",
+      "Einstein Trust Layer로 보호, 프롬프트를 모델 학습에 쓰지 않음"
+     ]
+    }
+   ],
+   "tables": [
+    {
+     "title": "자주 나오는 Governor Limit (트랜잭션당)",
+     "headers": [
+      "항목",
+      "동기",
+      "비동기"
+     ],
+     "rows": [
+      [
+       "SOQL 쿼리 수",
+       "100",
+       "200"
+      ],
+      [
+       "SOQL로 가져오는 레코드 수",
+       "50,000",
+       "50,000"
+      ],
+      [
+       "DML 문 수",
+       "150",
+       "150"
+      ],
+      [
+       "DML로 처리하는 레코드 수",
+       "10,000",
+       "10,000"
+      ],
+      [
+       "SOSL 쿼리 수",
+       "20",
+       "20"
+      ],
+      [
+       "CPU 시간",
+       "10초",
+       "60초"
+      ],
+      [
+       "Heap 크기",
+       "6MB",
+       "12MB"
+      ],
+      [
+       "Callout 수",
+       "100",
+       "100"
+      ],
+      [
+       "@future 호출 수",
+       "50",
+       "0 (future 안에서 future 불가)"
+      ]
+     ]
+    },
+    {
+     "title": "선언형 vs 코드 판단표",
+     "headers": [
+      "요구사항",
+      "먼저 볼 도구",
+      "코드가 필요한 경우"
+     ],
+     "rows": [
+      [
+       "자식 레코드 합계",
+       "Roll-Up Summary (Master-Detail)",
+       "Lookup 관계라서 Roll-Up Summary 불가"
+      ],
+      [
+       "화면에 계산 값 표시",
+       "Formula 필드",
+       "여러 자식 레코드를 집계해야 할 때"
+      ],
+      [
+       "저장 전 값 검사",
+       "Validation Rule",
+       "다른 레코드 여러 건을 조회해 판단할 때"
+      ],
+      [
+       "레코드 저장 시 다른 레코드 갱신",
+       "Record-Triggered Flow",
+       "대량·복잡한 로직, 세밀한 오류 처리"
+      ],
+      [
+       "외부 시스템 연동",
+       "External Services, Flow HTTP Callout",
+       "복잡한 인증·변환, 비동기 처리"
+      ]
+     ]
+    }
+   ],
+   "numbers": [
+    {
+     "value": "100 / 200",
+     "label": "SOQL 쿼리 수 한도 (동기 / 비동기)"
+    },
+    {
+     "value": "150",
+     "label": "트랜잭션당 DML 문 수"
+    },
+    {
+     "value": "10,000",
+     "label": "트랜잭션당 DML 처리 레코드 수"
+    },
+    {
+     "value": "50,000",
+     "label": "트랜잭션당 SOQL 조회 레코드 수"
+    },
+    {
+     "value": "40개",
+     "label": "오브젝트당 관계(Lookup + Master-Detail) 필드 수"
+    },
+    {
+     "value": "2개",
+     "label": "오브젝트당 Master-Detail 관계 수"
+    }
+   ],
+   "setupPaths": [
+    {
+     "label": "오브젝트·필드·관계",
+     "path": "Setup > Object Manager > (오브젝트) > Fields & Relationships"
+    },
+    {
+     "label": "Schema Builder",
+     "path": "Setup > Object Manager > Schema Builder"
+    },
+    {
+     "label": "Platform Event 정의",
+     "path": "Setup > Integrations > Platform Events"
+    },
+    {
+     "label": "Apex 클래스 목록",
+     "path": "Setup > Custom Code > Apex Classes"
+    }
+   ],
+   "traps": [
+    "**LimitException은 try-catch로 잡히지 않습니다.** \"catch해서 계속 진행\" 보기는 오답입니다.",
+    "Lookup 관계에는 Roll-Up Summary를 만들 수 없습니다. 이럴 때 Apex 트리거(또는 Flow)가 필요합니다.",
+    "Formula 필드는 저장되지 않으므로 트리거의 `Trigger.new` 안에서 **저장 전 값으로 다시 계산되지 않습니다**. 최신 값이 필요하면 다시 조회하세요.",
+    "커스텀 관계를 SOQL에서 따라갈 때는 `__c` 가 아니라 `__r` 입니다.",
+    "External ID로 `upsert` 할 때 같은 값의 레코드가 여러 건이면 오류(DUPLICATE_EXTERNAL_ID)가 납니다.",
+    "Agentforce for Developers가 만든 코드도 그대로 배포하면 안 됩니다. 검토와 테스트는 개발자 책임입니다."
+   ],
+   "links": [
+    {
+     "title": "공식 Exam Guide",
+     "url": "https://help.salesforce.com/s/articleView?id=005298965&language=en_US&type=1"
+    },
+    {
+     "title": "Apex Developer Guide: Execution Governors and Limits",
+     "url": "https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_gov_limits.htm"
+    },
+    {
+     "title": "Trailhead: Become an Agentblazer Champion (Cert Prep 추천 트레일)",
+     "url": "https://trailhead.salesforce.com/content/learn/trails/become-an-agentblazer-champion"
+    }
+   ]
+  },
+  {
+   "id": "automation-logic",
+   "title": "Process Automation and Logic",
+   "weight": 28,
+   "status": "ready",
+   "ko": "선언형 자동화, Apex 문법(변수·메서드·제어문·인터페이스), SOQL·SOSL·DML, 트리거와 저장 순서, Governor Limit, 예외 처리, 비동기 Apex.",
+   "objectives": [
+    "선언형 프로세스 자동화 기능(Flow, Approval Process)이 할 수 있는 일을 안다.",
+    "변수, 상수, 메서드, 접근 제한자(modifier), Apex 인터페이스를 선언하고 각각의 쓰임새를 안다.",
+    "Apex 제어문이 어떻게 실행되는지, 언제 무엇을 쓰는지 판단한다.",
+    "Apex에서 SOSL, SOQL, DML 문을 쓰고 결과가 무엇인지 판단한다.",
+    "모범 사례에 맞게 Apex 클래스와 트리거를 작성한다.",
+    "Governor Limit과 그것이 Apex 트랜잭션에 미치는 영향을 이해한다.",
+    "Apex 트랜잭션, 저장 순서(Order of Execution), 재귀(recursion)와 연쇄(cascading)의 관계를 설명한다.",
+    "커스텀 예외를 포함한 Apex 예외 처리를 구현한다.",
+    "선언형 기능과 Apex를 함께 써서 업무 로직을 자동화한다."
+   ],
+   "trail": [
+    {
+     "title": "Cert Prep: Platform Developer: Automation and Logic",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/platform-developer-i-certification-prep-logic-and-process-automation",
+     "minutes": 35,
+     "kind": "module",
+     "topics": "선언형 자동화와 Apex 기본, SOQL·SOSL·DML, 클래스와 트리거, 저장 순서"
+    },
+    {
+     "title": "Approve Records with Approval Processes",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/business_process_automation",
+     "minutes": 60,
+     "kind": "module",
+     "topics": "Approval Process 구성, 승인 단계와 동작"
+    },
+    {
+     "title": "Record-Triggered Flows",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/record-triggered-flows",
+     "minutes": 80,
+     "kind": "module",
+     "topics": "Before-save(Fast Field Updates)와 After-save, 진입 조건, 예약 경로"
+    },
+    {
+     "title": "Apex Basics & Database",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/apex_database",
+     "minutes": 115,
+     "kind": "module",
+     "topics": "Apex 문법, sObject, DML, SOQL, SOSL"
+    },
+    {
+     "title": "Database & .NET Basics",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/database_basics_dotnet",
+     "minutes": 40,
+     "kind": "module",
+     "topics": "관계형 DB와 비교한 Salesforce 데이터 모델, SOQL vs SQL"
+    },
+    {
+     "title": "Search Solution Basics",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/search_solution_basics",
+     "minutes": 50,
+     "kind": "module",
+     "topics": "Salesforce 검색 구조, SOSL과 SOQL을 고르는 기준"
+    },
+    {
+     "title": "Apex Triggers",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/apex_triggers",
+     "minutes": 60,
+     "kind": "module",
+     "topics": "트리거 문법, 컨텍스트 변수, Bulk 트리거 패턴"
+    },
+    {
+     "title": "Asynchronous Apex",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/asynchronous_apex",
+     "minutes": 160,
+     "kind": "module",
+     "topics": "Future, Batch, Queueable, Schedulable, 작업 모니터링"
+    }
+   ],
+   "summary": [
+    "트리거는 **Bulk** 로 생각하세요. `Trigger.new` 에는 최대 200건이 한 번에 들어옵니다. 루프 안 SOQL·DML은 거의 항상 오답입니다.",
+    "**before** 트리거는 같은 레코드 값을 바꿀 때(DML 없이 `Trigger.new` 를 수정), **after** 트리거는 Id나 시스템 필드가 필요하거나 **다른** 레코드를 바꿀 때 씁니다.",
+    "SOQL은 한 오브젝트(와 관계)를 조건으로 정확히 조회, SOSL은 **여러 오브젝트에서 텍스트 검색**. SOQL은 `List<sObject>`, SOSL은 `List<List<sObject>>` 를 돌려줍니다.",
+    "`insert list` 는 하나라도 실패하면 전체 롤백, `Database.insert(list, false)` 는 **부분 성공** 을 허용하고 `SaveResult` 로 결과를 알려 줍니다.",
+    "저장 순서: 시스템 검증 → before-save Flow → **before 트리거** → 커스텀 Validation Rule → 저장(커밋 전) → **after 트리거** → Assignment/Auto-response/Workflow → after-save Flow → Roll-Up Summary → **커밋** → 이메일 등 커밋 후 처리."
+   ],
+   "concepts": [
+    {
+     "term": "Apex 기본 문법",
+     "ko": "변수·상수·컬렉션",
+     "body": "강타입 객체지향 언어입니다. 기본형(Integer, Decimal, String, Boolean, Id, Date, Datetime), sObject, 컬렉션(List, Set, Map), enum이 있습니다. 상수는 `static final` 로 선언합니다.",
+     "points": [
+      "초기화하지 않은 변수는 기본형도 **null** 입니다.",
+      "Set은 중복 제거, Map은 Id로 찾기. `new Map<Id, Account>(accountList)` 로 바로 만들 수 있음"
+     ],
+     "code": "public class Discount {\n    public static final Decimal MAX_RATE = 0.3;   // 상수\n    private Map<Id, Account> cache = new Map<Id, Account>();\n\n    public Decimal apply(Decimal amount, Decimal rate) {\n        return amount * (1 - Math.min(rate, MAX_RATE));\n    }\n}",
+     "lang": "apex"
+    },
+    {
+     "term": "Access modifiers",
+     "ko": "접근 제한자",
+     "body": "`private`(기본값, 클래스 안), `protected`(하위 클래스까지), `public`(같은 네임스페이스), `global`(다른 네임스페이스·패키지, 웹 서비스). 상속은 `virtual`/`abstract` 클래스만 가능하고 재정의는 `override`.",
+     "points": [
+      "`interface`: 메서드 선언만, 구현 클래스는 `implements`. 예: `Database.Batchable`, `Queueable`, `Schedulable`",
+      "`with sharing` / `without sharing` / `inherited sharing`: 레코드 공유 규칙 적용 여부"
+     ]
+    },
+    {
+     "term": "Control flow",
+     "ko": "제어문",
+     "body": "if-else, `switch on`, for(전통형, List/Set 반복, **SOQL for 루프**), while, do-while. `break` 와 `continue` 지원.",
+     "points": [
+      "`switch on` 은 Integer, Long, String, sObject, enum에 사용",
+      "SOQL for 루프는 200건씩 나눠 가져와 Heap을 아낌"
+     ],
+     "code": "switch on opp.StageName {\n    when 'Closed Won' { won++; }\n    when 'Closed Lost', 'Withdrawn' { lost++; }\n    when else { open++; }\n}\n\nfor (List<Contact> batch : [SELECT Id FROM Contact]) {\n    // 200건 단위로 처리\n}",
+     "lang": "apex"
+    },
+    {
+     "term": "SOQL",
+     "ko": "조회",
+     "body": "한 오브젝트(와 관계)에서 조건에 맞는 레코드를 가져옵니다. Apex 변수는 `:변수` 로 **바인딩** 하면 SOQL Injection도 막습니다.",
+     "points": [
+      "결과 0건을 `Account a = [SELECT ...]` 처럼 sObject 하나에 넣으면 `QueryException`",
+      "집계: `SELECT COUNT(Id), StageName FROM Opportunity GROUP BY StageName` → `List<AggregateResult>`",
+      "`WITH USER_MODE` 로 사용자 권한(FLS·공유)을 강제"
+     ],
+     "code": "String stage = 'Prospecting';\nList<Opportunity> opps = [\n    SELECT Id, Name, Account.Name\n    FROM Opportunity\n    WHERE StageName = :stage AND Amount > 10000\n    ORDER BY CloseDate LIMIT 50];",
+     "lang": "apex"
+    },
+    {
+     "term": "SOSL",
+     "ko": "여러 오브젝트 텍스트 검색",
+     "body": "검색어로 여러 오브젝트를 한 번에 찾습니다. 결과는 `RETURNING` 에 적은 순서대로 담긴 `List<List<sObject>>` 입니다.",
+     "points": [
+      "\"이름이나 이메일에 'acme'가 들어간 Account·Contact·Lead를 모두\" → SOSL",
+      "정확한 필드 조건과 관계 조회 → SOQL"
+     ],
+     "code": "List<List<SObject>> found = [\n    FIND 'acme*' IN ALL FIELDS\n    RETURNING Account(Name), Contact(FirstName, LastName, Email)];\nList<Account> accs = (List<Account>) found[0];\nList<Contact> cons = (List<Contact>) found[1];",
+     "lang": "apex"
+    },
+    {
+     "term": "DML",
+     "ko": "저장·수정·삭제",
+     "body": "`insert`, `update`, `upsert`, `delete`, `undelete`, `merge`. 문(statement) 형태는 하나라도 실패하면 예외와 함께 전체 롤백, `Database` 메서드에 `allOrNone=false` 를 주면 부분 성공.",
+     "points": [
+      "항상 **리스트로 한 번에** DML (DML 150회 한도)",
+      "`Database.SaveResult.isSuccess()`, `getErrors()` 로 실패 건 확인",
+      "`Savepoint sp = Database.setSavepoint(); Database.rollback(sp);`"
+     ],
+     "code": "Database.SaveResult[] results = Database.insert(contacts, false);\nfor (Integer i = 0; i < results.size(); i++) {\n    if (!results[i].isSuccess()) {\n        System.debug(contacts[i].LastName + ': ' + results[i].getErrors()[0].getMessage());\n    }\n}",
+     "lang": "apex"
+    },
+    {
+     "term": "Apex Triggers",
+     "ko": "트리거",
+     "body": "before/after × insert, update, delete, (after) undelete 이벤트에서 실행됩니다. 컨텍스트 변수로 현재 상황을 알 수 있습니다.",
+     "points": [
+      "`Trigger.new` / `Trigger.newMap`: 새 값 (delete에는 없음)",
+      "`Trigger.old` / `Trigger.oldMap`: 이전 값 (insert에는 없음)",
+      "after 트리거의 `Trigger.new` 는 **읽기 전용**",
+      "`record.addError('메시지')` 로 저장을 막고 화면에 오류 표시",
+      "**오브젝트당 트리거 1개 + Handler 클래스** 가 모범 사례"
+     ],
+     "code": "trigger OpportunityTrigger on Opportunity (before update) {\n    for (Opportunity o : Trigger.new) {\n        Opportunity old = Trigger.oldMap.get(o.Id);\n        if (o.StageName != old.StageName && o.StageName == 'Closed Won'\n            && o.Amount == null) {\n            o.addError('Closed Won에는 Amount가 필요합니다.');\n        }\n    }\n}",
+     "lang": "apex"
+    },
+    {
+     "term": "Recursion & Cascading",
+     "ko": "재귀와 연쇄",
+     "body": "트리거가 DML을 하면 다른(또는 같은) 오브젝트의 트리거·Flow가 다시 돕니다. Workflow 필드 업데이트는 before/after update 트리거를 **한 번 더** 실행시킵니다. 같은 트랜잭션의 모든 처리가 Governor Limit을 함께 씁니다.",
+     "points": [
+      "재귀 방지: `static Boolean` 또는 처리한 Id를 담는 `static Set<Id>` 로 한 번만 실행",
+      "static 변수는 **트랜잭션 동안만** 유지됩니다"
+     ]
+    },
+    {
+     "term": "Exceptions",
+     "ko": "예외 처리",
+     "body": "try-catch-finally로 처리합니다. 커스텀 예외는 `Exception` 을 상속하고 **이름이 Exception으로 끝나야** 합니다.",
+     "points": [
+      "자주 나오는 예외: DmlException, QueryException, NullPointerException, ListException(인덱스 범위)",
+      "LimitException은 catch 불가",
+      "`throw new MyException('메시지');`"
+     ],
+     "code": "public class InsufficientStockException extends Exception {}\n\ntry {\n    if (stock < qty) throw new InsufficientStockException('재고 부족');\n    update items;\n} catch (DmlException e) {\n    System.debug(e.getDmlMessage(0));\n} finally {\n    // 항상 실행\n}",
+     "lang": "apex"
+    },
+    {
+     "term": "Asynchronous Apex",
+     "ko": "비동기 Apex",
+     "body": "오래 걸리거나 한도가 큰 작업, 외부 호출을 나중에 실행합니다.",
+     "points": [
+      "**@future**: 간단한 비동기, 인자는 기본형만(sObject 불가), `callout=true` 로 외부 호출",
+      "**Queueable**: sObject 인자 가능, Job Id 반환, 작업 체이닝",
+      "**Batch**: 수백만 건. start/execute/finish, 기본 200건씩",
+      "**Schedulable**: 정해진 시간에 실행 (`System.schedule` + cron)"
+     ]
+    },
+    {
+     "term": "Flow + Apex",
+     "ko": "선언형과 코드 함께 쓰기",
+     "body": "Flow에서 Apex를 부르려면 `@InvocableMethod`, Apex에서 Flow를 시작하려면 `Flow.Interview` 를 씁니다.",
+     "points": [
+      "@InvocableMethod: **static**, 클래스당 1개, 인자와 반환은 List",
+      "입출력 묶음은 `@InvocableVariable` 필드를 가진 클래스"
+     ],
+     "code": "public class LeadScorer {\n    @InvocableMethod(label='Score Leads')\n    public static List<Integer> score(List<Id> leadIds) {\n        List<Integer> scores = new List<Integer>();\n        for (Lead l : [SELECT Rating FROM Lead WHERE Id IN :leadIds]) {\n            scores.add(l.Rating == 'Hot' ? 90 : 40);\n        }\n        return scores;\n    }\n}",
+     "lang": "apex"
+    }
+   ],
+   "tables": [
+    {
+     "title": "before vs after 트리거",
+     "headers": [
+      "상황",
+      "before",
+      "after"
+     ],
+     "rows": [
+      [
+       "같은 레코드 필드 값 바꾸기",
+       "✓ Trigger.new 직접 수정 (DML 불필요)",
+       "✗ 읽기 전용, DML하면 재귀 위험"
+      ],
+      [
+       "레코드 Id 사용",
+       "insert 때는 아직 없음",
+       "✓"
+      ],
+      [
+       "관련 다른 레코드 생성·수정",
+       "가능하지만 Id가 없음",
+       "✓ 일반적인 위치"
+      ],
+      [
+       "저장 막기 (addError)",
+       "✓",
+       "✓ (롤백됨)"
+      ]
+     ]
+    },
+    {
+     "title": "비동기 Apex 비교",
+     "headers": [
+      "방식",
+      "언제",
+      "특징"
+     ],
+     "rows": [
+      [
+       "@future",
+       "간단한 비동기, Mixed DML 회피, 콜아웃",
+       "기본형 인자만, 모니터링 어려움, future에서 future 호출 불가"
+      ],
+      [
+       "Queueable",
+       "sObject를 넘기거나 작업을 이어서 실행",
+       "System.enqueueJob → Job Id, 체이닝 가능"
+      ],
+      [
+       "Batch Apex",
+       "대량 레코드 처리",
+       "start/execute/finish, executeBatch(job, 크기), 최대 2,000건씩"
+      ],
+      [
+       "Schedulable",
+       "매일·매주 정해진 시각",
+       "System.schedule(이름, cron, 인스턴스)"
+      ]
+     ]
+    },
+    {
+     "title": "Order of Execution (저장 순서 요약)",
+     "headers": [
+      "순서",
+      "단계"
+     ],
+     "rows": [
+      [
+       "1",
+       "레코드 로드, 시스템 검증(필수 필드, 형식)"
+      ],
+      [
+       "2",
+       "Before-save Record-Triggered Flow"
+      ],
+      [
+       "3",
+       "before 트리거"
+      ],
+      [
+       "4",
+       "시스템 검증 다시 + 커스텀 Validation Rule, Duplicate Rule"
+      ],
+      [
+       "5",
+       "레코드 저장 (아직 커밋 아님)"
+      ],
+      [
+       "6",
+       "after 트리거"
+      ],
+      [
+       "7",
+       "Assignment, Auto-response, Workflow Rule (필드 업데이트 시 update 트리거 한 번 더)"
+      ],
+      [
+       "8",
+       "After-save Record-Triggered Flow"
+      ],
+      [
+       "9",
+       "Roll-Up Summary 계산 → 부모 레코드 저장 과정 실행"
+      ],
+      [
+       "10",
+       "Criteria-based Sharing 평가 → 커밋"
+      ],
+      [
+       "11",
+       "커밋 후: 이메일 발송, 비동기 작업 시작"
+      ]
+     ]
+    }
+   ],
+   "numbers": [
+    {
+     "value": "200",
+     "label": "트리거 한 번에 들어오는 최대 레코드 수"
+    },
+    {
+     "value": "200 / 2,000",
+     "label": "Batch Apex 기본 / 최대 scope 크기"
+    },
+    {
+     "value": "50",
+     "label": "트랜잭션당 @future 호출 수, System.enqueueJob 수"
+    },
+    {
+     "value": "5",
+     "label": "동시에 실행·대기하는 Batch 작업 수 (Flex Queue는 100)"
+    },
+    {
+     "value": "100",
+     "label": "예약된 Apex 작업(Scheduled) 최대 수"
+    }
+   ],
+   "setupPaths": [
+    {
+     "label": "Apex 트리거 목록",
+     "path": "Setup > Custom Code > Apex Triggers"
+    },
+    {
+     "label": "오브젝트별 트리거",
+     "path": "Setup > Object Manager > (오브젝트) > Triggers"
+    },
+    {
+     "label": "비동기 작업 상태",
+     "path": "Setup > Environments > Jobs > Apex Jobs"
+    },
+    {
+     "label": "예약 작업",
+     "path": "Setup > Environments > Jobs > Scheduled Jobs"
+    },
+    {
+     "label": "Approval Process",
+     "path": "Setup > Process Automation > Approval Processes"
+    }
+   ],
+   "traps": [
+    "**루프 안 SOQL·DML** 이 보이면 그 코드는 대량 처리에서 실패합니다. \"200건을 Data Loader로 넣으면?\" 문제의 단골 정답입니다.",
+    "before 트리거에서 `Trigger.new` 를 바꿨다면 `update` 를 호출하지 마세요. 자동 저장됩니다. after 트리거에서 같은 레코드를 update하면 재귀가 됩니다.",
+    "`Account a = [SELECT ... LIMIT 1];` 은 결과가 0건이면 QueryException. 안전하게는 List로 받고 `isEmpty()` 확인.",
+    "SOSL 결과는 `List<List<sObject>>`, 순서는 RETURNING에 적은 순서입니다.",
+    "@future 메서드는 **static void** 이고 sObject를 인자로 받을 수 없습니다. Id 목록을 넘기고 안에서 다시 조회합니다.",
+    "Mixed DML: 같은 트랜잭션에서 Setup 오브젝트(User, Group 등)와 일반 오브젝트를 함께 DML하면 오류 → @future로 분리 (테스트에서는 `System.runAs`).",
+    "커스텀 예외 클래스 이름은 반드시 `Exception` 으로 끝나야 합니다."
+   ],
+   "links": [
+    {
+     "title": "Triggers and Order of Execution",
+     "url": "https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_triggers_order_of_execution.htm"
+    },
+    {
+     "title": "Apex Security and Sharing",
+     "url": "https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_security_sharing_chapter.htm"
+    },
+    {
+     "title": "공식 Exam Guide",
+     "url": "https://help.salesforce.com/s/articleView?id=005298965&language=en_US&type=1"
+    }
+   ]
+  },
+  {
+   "id": "user-interface",
+   "title": "User Interface",
+   "weight": 25,
+   "status": "ready",
+   "ko": "UI·데이터 접근 보안 취약점 방지, Lightning 컴포넌트·Flow·Visualforce로 화면 만들기, LWC 프레임워크와 이벤트, 화면 컴포넌트에서 Apex 쓰기.",
+   "objectives": [
+    "주어진 상황에서 UI와 데이터 접근의 보안 취약점(XSS, SOQL Injection, 권한 우회)을 막는다.",
+    "Lightning 컴포넌트, Flow, Visualforce 같은 커스텀 UI 컴포넌트를 표시하고 쓴다.",
+    "Lightning Web Components의 쓰임새와 모범 사례(프레임워크, 장점, 이벤트)를 설명한다.",
+    "Lightning 컴포넌트, Flow, Agentforce 같은 페이지 컴포넌트와 함께 동작하는 Apex를 구현한다."
+   ],
+   "trail": [
+    {
+     "title": "Cert Prep: Platform Developer: User Interface",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/platform-developer-i-certification-prep-user-interfaces",
+     "minutes": 10,
+     "kind": "module",
+     "topics": "Visualforce, Lightning Component Framework, UI 보안"
+    },
+    {
+     "title": "Visualforce Basics",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/visualforce_fundamentals",
+     "minutes": 245,
+     "kind": "module",
+     "topics": "Visualforce 페이지, Standard Controller, 표현식, 출력·입력 컴포넌트, Custom Controller"
+    },
+    {
+     "title": "Lightning Web Components Basics",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/lightning-web-components-basics",
+     "minutes": 70,
+     "kind": "module",
+     "topics": "LWC 파일 구조, 데코레이터, Lightning Data Service, 배포"
+    },
+    {
+     "title": "Best Practices in Lightning Web Components",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/best-practices-in-lightning-web-components",
+     "minutes": 60,
+     "kind": "module",
+     "topics": "데이터 접근 순서(LDS → UI API → Apex), 성능, 보안"
+    },
+    {
+     "title": "Visualforce & Lightning Experience",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/lex_dev_visualforce",
+     "minutes": 115,
+     "kind": "module",
+     "topics": "Lightning Experience에서 Visualforce 쓰기, 스타일, 내비게이션"
+    },
+    {
+     "title": "Quick Start: Aura Components",
+     "url": "https://trailhead.salesforce.com/content/learn/projects/quickstart-lightning-components",
+     "minutes": 40,
+     "kind": "project",
+     "topics": "Aura 컴포넌트를 만들어 레코드 페이지에 올리기"
+    },
+    {
+     "title": "Lightning Web Components for Aura Developers",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/lightning-web-components-for-aura-developers",
+     "minutes": 80,
+     "kind": "module",
+     "topics": "Aura와 LWC 비교, 이벤트·속성·Apex 호출 방식 차이"
+    },
+    {
+     "title": "Agent Customization with Apex",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/agent-customization-with-apex",
+     "minutes": 60,
+     "kind": "module",
+     "topics": "Apex 클래스를 Agentforce 에이전트 액션으로 쓰기"
+    }
+   ],
+   "summary": [
+    "새 UI는 **LWC** 가 기본입니다. 표준 웹 기술(ES 모듈, Custom Elements, Shadow DOM)이라 Aura보다 가볍고 빠릅니다. Aura와 LWC는 한 페이지에 같이 쓸 수 있고, **Aura 안에 LWC는 넣을 수 있지만 LWC 안에 Aura는 넣을 수 없습니다**.",
+    "데이터는 **Lightning Data Service**(`lightning-record-form`, `getRecord`) 를 먼저 쓰고, 안 되면 Apex를 호출합니다. LDS는 캐시·공유·FLS를 알아서 처리합니다.",
+    "LWC에서 Apex를 **@wire** 로 부르려면 메서드에 `@AuraEnabled(cacheable=true)` 가 필요하고, 이런 메서드는 DML을 할 수 없습니다. 저장은 **명령형(imperative)** 호출로 합니다.",
+    "보안: Apex는 기본적으로 **시스템 모드** 라 사용자 권한을 무시합니다. `with sharing`, `WITH USER_MODE`, `Security.stripInaccessible` 로 사용자 권한을 지키고, 동적 SOQL은 바인딩 변수 또는 `String.escapeSingleQuotes` 로 Injection을 막습니다.",
+    "Visualforce는 `standardController` + `extensions` 가 핵심입니다. 표준 동작(저장, 편집)은 그대로 쓰고 필요한 것만 Extension에 추가합니다."
+   ],
+   "concepts": [
+    {
+     "term": "LWC 파일 구조",
+     "ko": "HTML + JS + meta.xml",
+     "body": "컴포넌트 폴더에 같은 이름의 `.html`(템플릿), `.js`(클래스), `.js-meta.xml`(설정) 파일이 있습니다. 화면에 올리려면 meta.xml에 `isExposed` 와 `targets` 를 적습니다.",
+     "points": [
+      "targets 예: `lightning__RecordPage`, `lightning__AppPage`, `lightning__HomePage`, `lightning__FlowScreen`, `lightningCommunity__Page`",
+      "CSS 파일은 선택, 컴포넌트 안에만 적용(Shadow DOM)"
+     ],
+     "code": "<!-- accountCard.js-meta.xml -->\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>62.0</apiVersion>\n    <isExposed>true</isExposed>\n    <targets>\n        <target>lightning__RecordPage</target>\n        <target>lightning__FlowScreen</target>\n    </targets>\n</LightningComponentBundle>",
+     "lang": "xml"
+    },
+    {
+     "term": "Decorators",
+     "ko": "@api, @wire, @track",
+     "body": "`@api`: 부모가 값을 넣을 수 있는 공개 속성·메서드. `@wire`: 데이터를 반응형으로 받아 옴. `@track`: 객체·배열 **내부** 변경까지 감지 (일반 필드는 이미 반응형).",
+     "points": [
+      "레코드 페이지의 현재 레코드 Id: `@api recordId`",
+      "자식은 `@api` 속성 값을 직접 바꾸면 안 됨 → 이벤트로 부모에 알림"
+     ],
+     "code": "import { LightningElement, api, wire } from 'lwc';\nimport { getRecord, getFieldValue } from 'lightning/uiRecordApi';\nimport NAME from '@salesforce/schema/Account.Name';\n\nexport default class AccountCard extends LightningElement {\n    @api recordId;\n    @wire(getRecord, { recordId: '$recordId', fields: [NAME] }) account;\n    get name() { return getFieldValue(this.account.data, NAME); }\n}",
+     "lang": "javascript"
+    },
+    {
+     "term": "Calling Apex from LWC",
+     "ko": "LWC에서 Apex 호출",
+     "body": "Apex 메서드는 `static` 이고 `@AuraEnabled` 여야 합니다. @wire로 쓰려면 `cacheable=true` (읽기 전용), 버튼 클릭 등 원할 때 실행하거나 DML이 있으면 명령형 호출.",
+     "points": [
+      "wire의 `$변수` 는 값이 바뀌면 다시 호출됨",
+      "캐시된 wire 결과를 새로 고치려면 `refreshApex`"
+     ],
+     "code": "// Apex\npublic with sharing class ContactController {\n    @AuraEnabled(cacheable=true)\n    public static List<Contact> getContacts(Id accountId) {\n        return [SELECT Name, Email FROM Contact\n                WHERE AccountId = :accountId WITH USER_MODE];\n    }\n}\n\n// LWC JS\nimport getContacts from '@salesforce/apex/ContactController.getContacts';\n@wire(getContacts, { accountId: '$recordId' }) contacts;",
+     "lang": "apex"
+    },
+    {
+     "term": "Events",
+     "ko": "컴포넌트 간 통신",
+     "body": "부모 → 자식: `@api` 속성이나 메서드. 자식 → 부모: `CustomEvent` 를 `dispatchEvent`. 관계없는 컴포넌트끼리: **Lightning Message Service**(LMS).",
+     "points": [
+      "이벤트 이름은 소문자, 부모는 `on` + 이름으로 받음 (`onselect`)",
+      "`bubbles`, `composed` 로 전파 범위 결정 (기본은 둘 다 false)",
+      "데이터는 `detail` 에 담기"
+     ],
+     "code": "// 자식\nthis.dispatchEvent(new CustomEvent('select', { detail: this.contact.Id }));\n\n<!-- 부모 템플릿 -->\n<c-contact-tile onselect={handleSelect}></c-contact-tile>",
+     "lang": "javascript"
+    },
+    {
+     "term": "Lifecycle hooks",
+     "ko": "생명주기",
+     "body": "`constructor()` → `connectedCallback()`(DOM에 붙을 때) → `render` → `renderedCallback()`(렌더링 후, 여러 번 가능) → `disconnectedCallback()`(제거될 때). 오류는 `errorCallback()`.",
+     "points": [
+      "초기 데이터 로드는 connectedCallback",
+      "constructor에서는 속성·자식 요소에 접근하지 말 것 (super() 먼저)"
+     ]
+    },
+    {
+     "term": "Lightning Data Service",
+     "ko": "코드 없이 레코드 읽기·쓰기",
+     "body": "`lightning-record-form`(가장 간단, 레이아웃 자동), `lightning-record-view-form`/`lightning-record-edit-form`(필드 배치 직접), wire 어댑터 `getRecord`, `createRecord`, `updateRecord`.",
+     "points": [
+      "공유 규칙과 FLS를 자동 적용",
+      "여러 컴포넌트가 같은 레코드를 보면 캐시를 공유해 자동 갱신"
+     ]
+    },
+    {
+     "term": "Visualforce",
+     "ko": "서버 렌더링 페이지",
+     "body": "`<apex:page>` 에 컨트롤러를 지정합니다. Standard Controller는 표준 동작(save, edit, delete)을 주고, **Extension** 은 기능을 더하며, **Custom Controller** 는 모든 로직을 직접 씁니다. 목록은 `recordSetVar` 로 StandardSetController를 씁니다.",
+     "points": [
+      "표현식 `{!Account.Name}`",
+      "Extension 생성자는 `ApexPages.StandardController` 를 인자로 받음",
+      "Standard Controller는 사용자 권한을 지키고, Custom Controller는 기본 시스템 모드"
+     ],
+     "code": "<apex:page standardController=\"Account\" extensions=\"AccountExt\">\n    <apex:form>\n        <apex:inputField value=\"{!Account.Name}\"/>\n        <apex:commandButton action=\"{!save}\" value=\"저장\"/>\n    </apex:form>\n</apex:page>\n\npublic with sharing class AccountExt {\n    private final Account acc;\n    public AccountExt(ApexPages.StandardController ctrl) {\n        acc = (Account) ctrl.getRecord();\n    }\n}",
+     "lang": "html"
+    },
+    {
+     "term": "Security in UI code",
+     "ko": "보안 취약점 막기",
+     "body": "XSS(스크립트 삽입), SOQL Injection, 권한 우회(CRUD/FLS·공유 무시)가 시험의 3대 주제입니다.",
+     "points": [
+      "SOQL Injection: 동적 SOQL에 사용자 입력을 그대로 붙이지 말고 **바인딩 변수** 또는 `String.escapeSingleQuotes()`",
+      "XSS: Visualforce의 `escape=\"false\"` 주의, 출력 시 `HTMLENCODE`, `JSENCODE`",
+      "CRUD/FLS: `WITH USER_MODE`, `Security.stripInaccessible()`, `Schema.sObjectType.Account.isAccessible()`",
+      "공유: 클래스에 `with sharing`"
+     ],
+     "code": "// 위험\nString q = 'SELECT Id FROM Account WHERE Name = \\'' + userInput + '\\'';\n// 안전 (바인딩)\nList<Account> r = [SELECT Id FROM Account WHERE Name = :userInput];\n// 동적 SOQL이 꼭 필요하면\nString safe = String.escapeSingleQuotes(userInput);",
+     "lang": "apex"
+    },
+    {
+     "term": "Apex for Flow & Agentforce",
+     "ko": "페이지 컴포넌트와 Apex",
+     "body": "Flow 화면에는 `lightning__FlowScreen` 타깃의 LWC를 넣고, Flow 동작에는 `@InvocableMethod` Apex를 씁니다. Agentforce 에이전트의 **Apex 액션** 도 같은 `@InvocableMethod` 를 씁니다.",
+     "points": [
+      "에이전트 액션은 label·description이 에이전트가 언제 쓸지 판단하는 근거",
+      "입력과 출력에 `@InvocableVariable(description=...)` 을 달아 의미를 알려 줌"
+     ]
+    }
+   ],
+   "tables": [
+    {
+     "title": "Aura vs LWC",
+     "headers": [
+      "항목",
+      "Aura",
+      "LWC"
+     ],
+     "rows": [
+      [
+       "기술",
+       "Salesforce 자체 프레임워크",
+       "웹 표준 (Custom Elements, ES 모듈)"
+      ],
+      [
+       "성능",
+       "상대적으로 무거움",
+       "가볍고 빠름"
+      ],
+      [
+       "포함 관계",
+       "LWC를 안에 넣을 수 있음",
+       "Aura를 안에 넣을 수 없음"
+      ],
+      [
+       "이벤트",
+       "Component Event, Application Event",
+       "DOM CustomEvent, Lightning Message Service"
+      ],
+      [
+       "새 개발",
+       "유지보수용",
+       "권장"
+      ]
+     ]
+    },
+    {
+     "title": "LWC에서 데이터 가져오는 방법 (먼저 볼 순서)",
+     "headers": [
+      "방법",
+      "언제",
+      "특징"
+     ],
+     "rows": [
+      [
+       "Base Components (lightning-record-form 등)",
+       "레코드 하나 보기·편집",
+       "코드 거의 없음, 레이아웃·FLS 자동"
+      ],
+      [
+       "LDS wire 어댑터 (getRecord 등)",
+       "필드 값을 JS에서 쓰기",
+       "캐시 공유, 자동 갱신"
+      ],
+      [
+       "Apex @wire (cacheable=true)",
+       "여러 레코드 조회, 복잡한 쿼리",
+       "읽기 전용, 캐시"
+      ],
+      [
+       "Apex 명령형 호출",
+       "버튼 클릭 시, DML 필요",
+       "Promise 반환, cacheable 아니어도 됨"
+      ]
+     ]
+    },
+    {
+     "title": "Visualforce 컨트롤러 종류",
+     "headers": [
+      "종류",
+      "쓰는 법",
+      "언제"
+     ],
+     "rows": [
+      [
+       "Standard Controller",
+       "standardController=\"Account\"",
+       "레코드 한 건의 표준 동작"
+      ],
+      [
+       "Standard List Controller",
+       "standardController + recordSetVar",
+       "목록, 페이지 넘김"
+      ],
+      [
+       "Controller Extension",
+       "extensions=\"MyExt\"",
+       "표준 동작 + 추가 기능"
+      ],
+      [
+       "Custom Controller",
+       "controller=\"MyCtrl\"",
+       "모든 로직을 직접, 표준 동작 불필요"
+      ]
+     ]
+    }
+   ],
+   "numbers": [
+    {
+     "value": "3개",
+     "label": "LWC 기본 파일: html, js, js-meta.xml"
+    },
+    {
+     "value": "cacheable=true",
+     "label": "@wire로 Apex를 부르는 조건 (DML 불가)"
+    },
+    {
+     "value": "1개",
+     "label": "클래스당 @InvocableMethod 수"
+    }
+   ],
+   "setupPaths": [
+    {
+     "label": "Visualforce 페이지",
+     "path": "Setup > Custom Code > Visualforce Pages"
+    },
+    {
+     "label": "Lightning 컴포넌트 목록",
+     "path": "Setup > Custom Code > Lightning Components"
+    },
+    {
+     "label": "레코드 페이지에 컴포넌트 추가",
+     "path": "레코드 화면 > 톱니바퀴 > Edit Page (Lightning App Builder)"
+    },
+    {
+     "label": "Agentforce 에이전트 액션",
+     "path": "Setup > Agentforce Assets > Actions"
+    }
+   ],
+   "traps": [
+    "`@AuraEnabled(cacheable=true)` 메서드 안에서 DML을 하면 실행 시 오류입니다. 저장은 cacheable 없이 명령형으로.",
+    "LWC 자식이 `@api` 속성을 직접 바꾸면 안 됩니다. 이벤트로 부모에게 알리고 부모가 값을 바꿉니다.",
+    "LWC 안에 Aura 컴포넌트는 넣을 수 없습니다 (반대는 가능).",
+    "\"관련 없는 컴포넌트(다른 영역, Visualforce·Aura 포함) 사이 통신\" → Lightning Message Service.",
+    "Apex 클래스는 기본이 시스템 모드입니다. Custom Controller와 @AuraEnabled 클래스에 `with sharing` 을 붙이는 것이 모범 사례입니다.",
+    "SOQL Injection 해결책은 **바인딩 변수** 가 1순위, `escapeSingleQuotes` 가 2순위입니다. \"입력을 대문자로 변환\" 같은 보기는 오답.",
+    "Visualforce의 `escape=\"false\"` 는 XSS를 여는 설정입니다."
+   ],
+   "links": [
+    {
+     "title": "Security Guidelines for Apex and Visualforce Development",
+     "url": "https://help.salesforce.com/s/articleView?id=platform.review_and_certification.htm&type=5"
+    },
+    {
+     "title": "LWC Developer Guide: Flow Screen target",
+     "url": "https://developer.salesforce.com/docs/platform/lwc/guide/targets-lightning-flow-screen.html"
+    },
+    {
+     "title": "Launch a Flow from Apex",
+     "url": "https://help.salesforce.com/s/articleView?id=platform.flow_distribute_system_apex_invoke_a_flow_from_apex.htm&type=5"
+    }
+   ]
+  },
+  {
+   "id": "testing-deployment",
+   "title": "Testing, Debugging, and Deployment",
+   "weight": 20,
+   "status": "ready",
+   "ko": "트리거·컨트롤러·클래스·Flow 테스트와 테스트 데이터, Salesforce DX·CLI·Developer Console, 디버그 로그와 작업 모니터링, 환경과 배포 절차.",
+   "objectives": [
+    "여러 테스트 데이터 소스를 써서 트리거, 컨트롤러, 클래스, Flow의 테스트를 작성하고 실행한다.",
+    "Salesforce DX, Salesforce CLI, Developer Console 같은 개발 도구를 언제 어떻게 쓰는지 안다.",
+    "시스템 문제 디버깅, Flow·성능·비동기 작업·Batch 작업 모니터링 방법을 설명한다.",
+    "코드와 관련 설정을 배포하는 환경, 요구사항, 절차를 설명한다."
+   ],
+   "trail": [
+    {
+     "title": "Cert Prep: Platform Developer: Testing, Debugging, and Deployment",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/platform-developer-i-certification-prep-testing-debugging-and-deployment",
+     "minutes": 20,
+     "kind": "module",
+     "topics": "테스트 요구사항, 디버깅 도구, 배포"
+    },
+    {
+     "title": "Apex Testing",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/apex_testing",
+     "minutes": 85,
+     "kind": "module",
+     "topics": "단위 테스트 작성, 트리거 테스트, 테스트 데이터 생성, 코드 커버리지"
+    },
+    {
+     "title": "Developer Console Basics",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/developer_console",
+     "minutes": 155,
+     "kind": "module",
+     "topics": "Developer Console로 코드 작성, 로그 보기, 쿼리, 체크포인트"
+    },
+    {
+     "title": "Command-Line Interface",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/cli-basics",
+     "minutes": 40,
+     "kind": "module",
+     "topics": "명령줄 기본과 Salesforce CLI가 하는 일"
+    },
+    {
+     "title": "Quick Start: Salesforce DX",
+     "url": "https://trailhead.salesforce.com/content/learn/projects/quick-start-salesforce-dx",
+     "minutes": 40,
+     "kind": "project",
+     "topics": "Salesforce CLI 설치, Scratch Org 만들고 소스 push/pull"
+    },
+    {
+     "title": "Org Development Model",
+     "url": "https://trailhead.salesforce.com/content/learn/modules/org-development-model",
+     "minutes": 30,
+     "kind": "module",
+     "topics": "Sandbox, 소스 관리, 배포 흐름",
+     "note": "org_development_model",
+     "noteFrom": "pab"
+    },
+    {
+     "title": "Find and Fix Bugs with Apex Replay Debugger",
+     "url": "https://trailhead.salesforce.com/content/learn/projects/find-and-fix-bugs-with-apex-replay-debugger",
+     "minutes": 60,
+     "kind": "project",
+     "topics": "VS Code에서 디버그 로그를 재생하며 중단점·변수 확인"
+    }
+   ],
+   "summary": [
+    "프로덕션 배포 조건: **모든 테스트 통과**, org 전체 Apex 코드 커버리지 **75% 이상**, **모든 트리거는 1% 이상** 커버. 테스트 코드 자체와 `System.debug` 줄은 커버리지 계산에서 빠집니다.",
+    "테스트는 기본적으로 org 데이터를 **볼 수 없습니다**(`SeeAllData=false`). 테스트 안에서 데이터를 만들고, 테스트가 끝나면 자동으로 롤백됩니다.",
+    "`Test.startTest()` 와 `Test.stopTest()` 사이는 **새 Governor Limit** 을 받고, `stopTest()` 에서 비동기 작업(future, queueable, batch)이 **동기적으로 끝납니다**. 결과는 그 뒤에 검증하세요.",
+    "디버깅은 **Debug Log**(Trace Flag와 Log Level 설정) → Developer Console이나 VS Code **Apex Replay Debugger** 로 분석합니다. 비동기 작업은 Apex Jobs 화면이나 `AsyncApexJob` 조회로 모니터링합니다.",
+    "배포: 같은 프로덕션에 연결된 org끼리는 **Change Set**, 소스 기반이면 **Salesforce CLI**(`sf project deploy start`)나 DevOps Center, 패키지 방식은 Unlocked Package. 프로덕션에서는 Apex를 직접 작성할 수 없습니다."
+   ],
+   "concepts": [
+    {
+     "term": "Test class",
+     "ko": "테스트 클래스 기본",
+     "body": "`@isTest` 클래스와 `@isTest` 메서드(static void)로 만듭니다. 준비(Arrange) → 실행(Act, startTest/stopTest 사이) → 검증(Assert) 순서로 씁니다.",
+     "points": [
+      "검증: `Assert.areEqual(기대, 실제)`, `System.assertEquals`",
+      "테스트 메서드는 이메일을 실제로 보내지 않고, 콜아웃은 Mock 필요",
+      "`@testSetup` 메서드: 클래스의 모든 테스트 전에 공통 데이터 생성 (각 테스트마다 롤백 후 다시 사용)"
+     ],
+     "code": "@isTest\nprivate class OpportunityTriggerTest {\n    @testSetup static void setup() {\n        insert new Account(Name = 'Test');\n    }\n\n    @isTest static void closedWonNeedsAmount() {\n        Account a = [SELECT Id FROM Account LIMIT 1];\n        Opportunity o = new Opportunity(Name='O', AccountId=a.Id,\n            StageName='Prospecting', CloseDate=Date.today());\n        insert o;\n        o.StageName = 'Closed Won';\n        Test.startTest();\n        Database.SaveResult r = Database.update(o, false);\n        Test.stopTest();\n        Assert.isFalse(r.isSuccess());\n    }\n}",
+     "lang": "apex"
+    },
+    {
+     "term": "Test data sources",
+     "ko": "테스트 데이터 만드는 방법",
+     "body": "직접 insert, **Test Data Factory**(공용 `@isTest` 유틸 클래스), `@testSetup`, `Test.loadData()`(Static Resource의 CSV), 꼭 필요할 때만 `@isTest(SeeAllData=true)`.",
+     "points": [
+      "Bulk 테스트: 200건 이상 넣어서 트리거가 한도에 걸리지 않는지 확인",
+      "사용자별 동작 확인: `System.runAs(user)` (공유 규칙 적용, Mixed DML 회피)",
+      "Pricebook처럼 표준 데이터는 `Test.getStandardPricebookId()`"
+     ],
+     "code": "List<Account> accs = Test.loadData(Account.sObjectType, 'TestAccounts');\n\nUser u = [SELECT Id FROM User WHERE Profile.Name = 'Standard User' AND IsActive = true LIMIT 1];\nSystem.runAs(u) {\n    // 이 사용자 권한으로 실행\n}",
+     "lang": "apex"
+    },
+    {
+     "term": "Testing async & callouts",
+     "ko": "비동기와 외부 호출 테스트",
+     "body": "비동기 작업은 `Test.stopTest()` 시점에 끝나므로 그 뒤에 검증합니다. 콜아웃은 실제로 나갈 수 없어서 `HttpCalloutMock` 을 구현하고 `Test.setMock()` 으로 지정합니다.",
+     "points": [
+      "Batch 테스트는 execute가 **한 번** 만 실행되도록 scope 크기 안에서 데이터 생성",
+      "Flow도 테스트 대상: Flow Builder의 **Flow Test** 또는 Apex로 레코드를 저장해 Record-Triggered Flow 결과 확인"
+     ],
+     "code": "Test.setMock(HttpCalloutMock.class, new WeatherMock());\nTest.startTest();\nSystem.enqueueJob(new WeatherSync());\nTest.stopTest();   // 여기서 Queueable 실행 완료\nAssert.areEqual(1, [SELECT COUNT() FROM Weather__c]);",
+     "lang": "apex"
+    },
+    {
+     "term": "Debug logs",
+     "ko": "디버그 로그",
+     "body": "Setup의 Debug Logs에서 **Trace Flag**(누구를, 언제까지)와 **Debug Level**(카테고리별 상세도)을 정하면 로그가 쌓입니다. 카테고리: Apex Code, Apex Profiling, Callout, Database, System, Validation, Visualforce, Workflow 등. 수준: NONE < ERROR < WARN < INFO < DEBUG < FINE < FINER < FINEST.",
+     "points": [
+      "`System.debug(LoggingLevel.ERROR, msg)` 처럼 수준 지정 가능",
+      "로그가 너무 크면 잘림 → 필요한 카테고리만 높이기",
+      "Apex Replay Debugger는 Apex Code를 FINEST로 둔 로그가 필요"
+     ]
+    },
+    {
+     "term": "Developer Console",
+     "ko": "브라우저 개발 도구",
+     "body": "Apex·Visualforce·Lightning 코드 편집, **Execute Anonymous**, Query Editor(SOQL/SOSL), 로그 보기(Log Inspector), **Checkpoint**(Heap 상태 확인), 테스트 실행과 커버리지 확인을 한 화면에서 합니다.",
+     "points": [
+      "Execute Anonymous: 코드 조각을 한 번 실행 (DML 결과는 실제로 저장됨)",
+      "Log Inspector의 Execution Overview, Timeline으로 느린 곳 찾기"
+     ]
+    },
+    {
+     "term": "Salesforce DX & CLI",
+     "ko": "소스 기반 개발",
+     "body": "Salesforce DX는 소스 관리(Git)를 기준으로 하는 개발 방식, **Salesforce CLI**(`sf`)는 그 도구입니다. Scratch Org를 만들고, 소스를 배포·가져오고, 테스트를 실행합니다.",
+     "points": [
+      "`sf org create scratch`, `sf project deploy start`, `sf project retrieve start`, `sf apex run test`",
+      "Scratch Org: 기본 7일, 최대 30일. 설정은 project-scratch-def.json",
+      "VS Code + Salesforce Extension Pack이 CLI를 감싸 줌"
+     ]
+    },
+    {
+     "term": "Environments & deployment",
+     "ko": "환경과 배포",
+     "body": "개발은 Developer/Scratch Org나 Sandbox에서 하고, 테스트용 Sandbox를 거쳐 프로덕션에 배포합니다.",
+     "points": [
+      "Change Set: 같은 프로덕션에 연결된 org 사이, Deployment Connection 필요, 삭제는 못 함",
+      "Metadata API 기반 도구(CLI, DevOps Center)는 소스 관리와 자동화에 적합",
+      "배포 시 테스트 수준: 기본, RunLocalTests, RunSpecifiedTests, RunAllTestsInOrg"
+     ]
+    },
+    {
+     "term": "Monitoring",
+     "ko": "Flow·비동기 작업 모니터링",
+     "body": "Batch·Queueable·Future 작업은 **Apex Jobs** 화면 또는 `AsyncApexJob` 조회로 상태를 봅니다. Flow 오류는 오류 이메일과 **Paused and Failed Flow Interviews** 화면, Flow의 Debug 실행으로 찾습니다.",
+     "points": [
+      "`Database.executeBatch` 와 `System.enqueueJob` 이 돌려준 Job Id로 `AsyncApexJob` 조회",
+      "예약 작업은 Scheduled Jobs 화면"
+     ]
+    }
+   ],
+   "tables": [
+    {
+     "title": "Sandbox 종류",
+     "headers": [
+      "종류",
+      "데이터",
+      "새로 고침 주기",
+      "용도"
+     ],
+     "rows": [
+      [
+       "Developer",
+       "메타데이터만 (200MB)",
+       "1일",
+       "개인 개발·단위 테스트"
+      ],
+      [
+       "Developer Pro",
+       "메타데이터만 (1GB)",
+       "1일",
+       "더 큰 개발·테스트"
+      ],
+      [
+       "Partial Copy",
+       "메타데이터 + 템플릿으로 고른 일부 데이터 (5GB)",
+       "5일",
+       "QA, 통합 테스트"
+      ],
+      [
+       "Full",
+       "프로덕션 전체 복사",
+       "29일",
+       "성능·부하 테스트, UAT, 스테이징"
+      ]
+     ]
+    },
+    {
+     "title": "배포 요구사항",
+     "headers": [
+      "항목",
+      "기준"
+     ],
+     "rows": [
+      [
+       "org 전체 Apex 커버리지",
+       "75% 이상"
+      ],
+      [
+       "각 트리거",
+       "1% 이상 (최소 한 줄)"
+      ],
+      [
+       "테스트 결과",
+       "모두 통과"
+      ],
+      [
+       "커버리지 계산 제외",
+       "테스트 클래스, 주석, 빈 줄, System.debug"
+      ]
+     ]
+    },
+    {
+     "title": "개발 도구 고르기",
+     "headers": [
+      "도구",
+      "잘하는 일"
+     ],
+     "rows": [
+      [
+       "Developer Console",
+       "브라우저에서 바로 코드 수정, 로그 분석, 쿼리, 익명 실행"
+      ],
+      [
+       "VS Code + Salesforce Extensions",
+       "소스 기반 개발, Replay Debugger, Agentforce for Developers"
+      ],
+      [
+       "Salesforce CLI",
+       "Scratch Org, 배포·조회, 테스트 실행 자동화(CI)"
+      ],
+      [
+       "Change Set",
+       "UI로 org 간 메타데이터 이동 (연결된 org끼리)"
+      ]
+     ]
+    }
+   ],
+   "numbers": [
+    {
+     "value": "75%",
+     "label": "프로덕션 배포에 필요한 org 전체 Apex 커버리지"
+    },
+    {
+     "value": "1%",
+     "label": "각 트리거의 최소 커버리지"
+    },
+    {
+     "value": "7일 / 30일",
+     "label": "Scratch Org 기본 / 최대 유지 기간"
+    },
+    {
+     "value": "8단계",
+     "label": "로그 수준: NONE부터 FINEST까지"
+    },
+    {
+     "value": "24시간",
+     "label": "Trace Flag 최대 설정 기간"
+    }
+   ],
+   "setupPaths": [
+    {
+     "label": "디버그 로그와 Trace Flag",
+     "path": "Setup > Environments > Logs > Debug Logs"
+    },
+    {
+     "label": "Apex 테스트 실행",
+     "path": "Setup > Custom Code > Apex Test Execution"
+    },
+    {
+     "label": "비동기 작업",
+     "path": "Setup > Environments > Jobs > Apex Jobs"
+    },
+    {
+     "label": "실패한 Flow",
+     "path": "Setup > Process Automation > Paused and Failed Flow Interviews"
+    },
+    {
+     "label": "Change Set",
+     "path": "Setup > Environments > Change Sets > Outbound Change Sets"
+    },
+    {
+     "label": "Sandbox",
+     "path": "Setup > Environments > Sandboxes"
+    }
+   ],
+   "traps": [
+    "테스트에서 org의 기존 데이터를 조회하면 **0건** 입니다(`SeeAllData=false`). 테스트 데이터를 직접 만드세요.",
+    "비동기 작업 결과를 `Test.stopTest()` **전에** 검증하면 아직 실행되지 않은 상태입니다.",
+    "75%는 org 전체 기준이고, 각 클래스가 75%일 필요는 없습니다. 대신 **트리거는 하나도 빠짐없이** 커버되어야 합니다.",
+    "테스트 메서드에서 실제 콜아웃은 불가능합니다. `Test.setMock` 이 정답입니다.",
+    "Change Set은 연결되지 않은 org(예: 다른 회사 org)로는 못 보냅니다. 그때는 패키지나 CLI.",
+    "프로덕션 org에서는 Apex 클래스를 직접 만들거나 수정할 수 없습니다. Sandbox나 개발 org에서 만든 뒤 배포합니다.",
+    "Execute Anonymous로 실행한 DML은 실제로 저장됩니다 (테스트처럼 롤백되지 않음)."
+   ],
+   "links": [
+    {
+     "title": "Apex Developer Guide: Testing Apex",
+     "url": "https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_testing.htm"
+    },
+    {
+     "title": "Salesforce CLI Command Reference",
+     "url": "https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_top.htm"
+    },
+    {
+     "title": "공식 Exam Guide",
+     "url": "https://help.salesforce.com/s/articleView?id=005298965&language=en_US&type=1"
+    }
+   ]
+  }
+ ],
+ "questions": [
+  {
+   "id": "df-01",
+   "section": "fundamentals",
+   "q": "Salesforce에 Governor Limit이 있는 가장 근본적인 이유는?",
+   "options": [
+    "Apex 코드를 더 빨리 컴파일하기 위해",
+    "멀티테넌트 환경에서 한 org가 공유 자원을 독점하지 못하게 하기 위해",
+    "개발자가 테스트 클래스를 쓰도록 강제하기 위해",
+    "라이선스 종류에 따라 기능을 나누기 위해"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "여러 고객이 같은 인프라를 나눠 쓰는 **멀티테넌트** 구조라서 트랜잭션마다 자원 상한을 둡니다.",
+   "notes": [
+    "컴파일 속도와는 관계가 없습니다.",
+    "정답. 공유 자원 보호가 목적입니다.",
+    "테스트 요구사항은 배포 규칙이지 Governor Limit의 목적이 아닙니다.",
+    "라이선스는 기능 접근을 나누지만 Governor Limit은 모든 org에 같습니다."
+   ]
+  },
+  {
+   "id": "df-02",
+   "section": "fundamentals",
+   "q": "MVC 패턴에서 **Model** 에 해당하는 것은?",
+   "options": [
+    "Visualforce 페이지",
+    "Apex Controller Extension",
+    "Standard Object와 Custom Object",
+    "LWC의 HTML 템플릿"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": "Model은 데이터 구조, 즉 sObject(오브젝트·필드·관계)입니다.",
+   "notes": [
+    "View입니다.",
+    "Controller입니다.",
+    "정답. 데이터 = Model.",
+    "View입니다."
+   ]
+  },
+  {
+   "id": "df-03",
+   "section": "fundamentals",
+   "q": "Invoice__c와 Payment__c가 **Lookup** 관계입니다. Invoice에 결제 금액 합계를 실시간으로 보여 주려면 가장 알맞은 방법은?",
+   "options": [
+    "Invoice에 Roll-Up Summary 필드를 만든다",
+    "Invoice에 Formula 필드로 Payment 금액을 더한다",
+    "Payment에 Apex 트리거(또는 Record-Triggered Flow)를 만들어 Invoice 합계 필드를 갱신한다",
+    "Payment에 Validation Rule을 만든다"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": "Roll-Up Summary는 Master-Detail에서만 가능합니다. Lookup이면 자식 쪽 자동화(트리거나 Flow)로 부모 값을 갱신합니다. 관계를 Master-Detail로 바꿀 수 있다면 그게 더 간단한 답이 되지만 보기에 없습니다.",
+   "notes": [
+    "Lookup 관계에서는 Roll-Up Summary를 만들 수 없습니다.",
+    "Formula는 자식 여러 건을 합칠 수 없습니다.",
+    "정답.",
+    "Validation Rule은 저장을 막을 뿐 값을 계산하지 않습니다."
+   ]
+  },
+  {
+   "id": "df-04",
+   "section": "fundamentals",
+   "q": "다음 중 선언형(declarative) 기능으로 충분해서 Apex를 쓰지 않는 것이 좋은 요구사항은?",
+   "options": [
+    "Opportunity 금액과 할인율로 순매출을 계산해 화면에 표시",
+    "외부 ERP의 REST API를 복잡한 OAuth 흐름으로 호출하고 응답을 여러 오브젝트에 나눠 저장",
+    "100만 건의 레코드를 매일 밤 재계산",
+    "Lookup으로 연결된 자식 레코드 개수를 부모에 저장"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": "같은 레코드 값으로 계산해 보여 주기만 하면 **Formula 필드** 로 충분합니다.",
+   "notes": [
+    "정답. Formula 필드.",
+    "복잡한 인증과 변환, 다중 오브젝트 저장은 Apex가 적합합니다.",
+    "대량 정기 처리는 Batch Apex 영역입니다.",
+    "Lookup 집계는 Roll-Up Summary가 안 되므로 자동화가 필요합니다."
+   ]
+  },
+  {
+   "id": "df-05",
+   "section": "fundamentals",
+   "q": "다음 코드가 대량 데이터에서 실패할 가능성이 가장 큰 이유는?",
+   "options": [
+    "Contact에는 AccountId 필드가 없어서",
+    "루프 안에서 SOQL을 실행해 SOQL 100회 한도를 넘을 수 있어서",
+    "SOQL에 바인딩 변수를 쓸 수 없어서",
+    "List를 for 루프로 반복할 수 없어서"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "레코드마다 쿼리를 하므로 101건 이상이면 `System.LimitException: Too many SOQL queries: 101`.",
+   "notes": [
+    "AccountId는 표준 필드입니다.",
+    "정답.",
+    "`:c.AccountId` 바인딩은 정상 문법입니다.",
+    "List 반복은 정상입니다."
+   ],
+   "code": "for (Contact c : Trigger.new) {\n    Account a = [SELECT Id, Name FROM Account WHERE Id = :c.AccountId];\n    c.Description = a.Name;\n}",
+   "lang": "apex"
+  },
+  {
+   "id": "df-06",
+   "section": "fundamentals",
+   "q": "Governor Limit을 넘었을 때 발생하는 `System.LimitException` 에 대한 설명으로 옳은 것은?",
+   "options": [
+    "try-catch로 잡아서 나머지 처리를 계속할 수 있다",
+    "잡을 수 없고, 트랜잭션이 중단되며 변경 사항이 롤백된다",
+    "경고만 기록되고 처리는 계속된다",
+    "비동기 Apex에서는 발생하지 않는다"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "LimitException은 catch 불가입니다. 미리 `Limits` 클래스로 사용량을 확인하거나 코드를 bulkify해야 합니다.",
+   "notes": [
+    "catch 블록이 있어도 잡히지 않습니다.",
+    "정답.",
+    "경고가 아니라 실행 중단입니다.",
+    "비동기도 한도(더 클 뿐)가 있습니다."
+   ]
+  },
+  {
+   "id": "df-07",
+   "section": "fundamentals",
+   "q": "커스텀 오브젝트 Shipment__c에 Order__c를 가리키는 커스텀 Lookup 필드 Order__c가 있습니다. Shipment를 조회하면서 연결된 Order의 Status__c 를 함께 가져오는 SOQL은?",
+   "options": [
+    "SELECT Name, Order__c.Status__c FROM Shipment__c",
+    "SELECT Name, Order__r.Status__c FROM Shipment__c",
+    "SELECT Name, (SELECT Status__c FROM Order__c) FROM Shipment__c",
+    "SELECT Name, Order.Status__c FROM Shipment__c"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "자식 → 부모 조회는 **관계 이름** `__r` 과 점 표기입니다.",
+   "notes": [
+    "`__c` 는 Id 값을 담은 필드 자체라 따라갈 수 없습니다.",
+    "정답.",
+    "서브쿼리는 부모 → 자식 방향입니다.",
+    "커스텀 관계에는 `__r` 이 필요합니다."
+   ]
+  },
+  {
+   "id": "df-08",
+   "section": "fundamentals",
+   "q": "Account와 그 Contact 목록을 한 번의 쿼리로 가져오려고 합니다. 올바른 SOQL은?",
+   "options": [
+    "SELECT Name, (SELECT LastName FROM Contacts) FROM Account",
+    "SELECT Name, (SELECT LastName FROM Contact) FROM Account",
+    "SELECT Name, Contacts.LastName FROM Account",
+    "SELECT Account.Name, LastName FROM Contact GROUP BY Account.Name"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": "부모 → 자식은 서브쿼리이고, 관계 이름은 복수형 **Contacts** 입니다.",
+   "notes": [
+    "정답.",
+    "서브쿼리에는 오브젝트 이름이 아니라 자식 관계 이름(Contacts)을 씁니다.",
+    "부모에서 자식 필드를 점으로 따라갈 수 없습니다.",
+    "GROUP BY는 집계용이며 목록을 묶어 주지 않습니다."
+   ]
+  },
+  {
+   "id": "df-09",
+   "section": "fundamentals",
+   "q": "외부 ERP의 고객 번호를 Account에 저장하고, 매일 ERP 데이터를 받아 **있으면 수정, 없으면 생성** 하려고 합니다. 고객 번호 필드에 꼭 설정해야 할 것은?",
+   "options": [
+    "Unique 속성만",
+    "External ID 속성",
+    "Required 속성",
+    "Encrypted 속성"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "`upsert` 의 기준 필드가 되려면 **External ID** 여야 합니다. 보통 Unique도 함께 켭니다.",
+   "notes": [
+    "Unique만으로는 upsert 기준 필드로 지정할 수 없습니다.",
+    "정답.",
+    "필수 여부는 upsert와 무관합니다.",
+    "암호화는 보안 기능입니다."
+   ]
+  },
+  {
+   "id": "df-10",
+   "section": "fundamentals",
+   "q": "다음 중 External ID로 지정할 수 있는 필드 유형 2개를 고르세요.",
+   "options": [
+    "Text",
+    "Picklist",
+    "Number",
+    "Formula",
+    "Checkbox"
+   ],
+   "answer": [
+    0,
+    2
+   ],
+   "explain": "External ID는 Text, Number, Email, Auto Number 필드에 설정할 수 있습니다.",
+   "notes": [
+    "정답.",
+    "Picklist는 불가합니다.",
+    "정답.",
+    "Formula는 불가합니다.",
+    "Checkbox는 불가합니다."
+   ]
+  },
+  {
+   "id": "df-11",
+   "section": "fundamentals",
+   "q": "다음 코드는 무엇을 하나요?",
+   "options": [
+    "ERP_Id__c가 'C-77'인 Account를 새로 만들고 Contact를 연결한다",
+    "ERP_Id__c가 'C-77'인 기존 Account를 찾아 Contact의 부모로 연결한다 (없으면 오류)",
+    "Contact의 ERP_Id__c를 'C-77'로 저장한다",
+    "컴파일 오류가 난다"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "관계 필드에 External ID만 채운 sObject를 넣으면 그 값으로 부모를 찾아 연결합니다. 부모 Id를 몰라도 됩니다.",
+   "notes": [
+    "부모를 새로 만들지 않습니다.",
+    "정답.",
+    "Contact가 아니라 부모 Account의 External ID입니다.",
+    "정상 문법입니다."
+   ],
+   "code": "Contact c = new Contact(LastName = 'Lee');\nc.Account = new Account(ERP_Id__c = 'C-77');\ninsert c;",
+   "lang": "apex"
+  },
+  {
+   "id": "df-12",
+   "section": "fundamentals",
+   "q": "Lightning Component Framework에 대한 설명으로 옳은 것은?",
+   "options": [
+    "서버에서 HTML을 만들어 보내는 페이지 프레임워크다",
+    "클라이언트(브라우저)에서 동작하는 컴포넌트 기반 UI 프레임워크로, Aura와 LWC 두 프로그래밍 모델을 지원한다",
+    "Apex로만 작성한다",
+    "Salesforce Classic에서만 동작한다"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "Lightning Component Framework는 JavaScript 클라이언트 측 프레임워크이며 Aura와 LWC가 공존합니다.",
+   "notes": [
+    "서버 렌더링은 Visualforce의 특징입니다.",
+    "정답.",
+    "컴포넌트는 HTML·JavaScript로 만들고 Apex는 서버 로직에만 씁니다.",
+    "Lightning Experience와 모바일 앱이 주 무대입니다."
+   ]
+  },
+  {
+   "id": "df-13",
+   "section": "fundamentals",
+   "q": "Agentforce for Developers로 할 수 **없는** 것은?",
+   "options": [
+    "자연어 설명으로 Apex 메서드 초안 생성",
+    "기존 Apex 클래스의 테스트 클래스 초안 생성",
+    "생성한 코드가 항상 올바르다고 보장하고 자동으로 프로덕션에 배포",
+    "선택한 코드가 무엇을 하는지 설명"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": "AI가 만든 코드는 정확성이 보장되지 않으므로 **개발자가 검토·테스트** 해야 하고, 배포도 개발자의 절차를 거칩니다.",
+   "notes": [
+    "가능합니다.",
+    "가능합니다 (테스트 생성 기능).",
+    "정답. 보장도 자동 배포도 하지 않습니다.",
+    "가능합니다 (Explain 기능)."
+   ]
+  },
+  {
+   "id": "df-14",
+   "section": "fundamentals",
+   "q": "Agentforce for Developers는 주로 어디에서 사용하나요?",
+   "options": [
+    "Setup의 Object Manager",
+    "VS Code(Salesforce Extensions)와 Code Builder",
+    "Data Loader",
+    "Developer Console의 Query Editor"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "Salesforce Extension Pack에 포함된 확장으로 VS Code와 Code Builder에서 씁니다.",
+   "notes": [
+    "Object Manager에는 없습니다.",
+    "정답.",
+    "Data Loader는 데이터 도구입니다.",
+    "Developer Console에는 이 기능이 없습니다."
+   ]
+  },
+  {
+   "id": "df-15",
+   "section": "fundamentals",
+   "q": "주문 시스템이 Salesforce 밖의 여러 시스템에 \"주문 확정\" 사실을 알리고, 받는 쪽이 늘어나도 Salesforce 코드를 바꾸지 않으려고 합니다. 가장 알맞은 방법은?",
+   "options": [
+    "주문 트리거에서 각 시스템에 HTTP 콜아웃을 순서대로 보낸다",
+    "Platform Event를 발행하고 각 시스템이 구독하게 한다",
+    "매시간 Batch Apex로 CSV를 이메일 발송한다",
+    "Workflow 이메일 알림을 보낸다"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "발행-구독 모델인 **Platform Event** 는 발행자와 구독자를 느슨하게 연결합니다.",
+   "notes": [
+    "받는 쪽이 늘 때마다 코드를 고쳐야 합니다.",
+    "정답.",
+    "실시간도 아니고 확장성도 떨어집니다.",
+    "시스템 간 연동 방법으로 적합하지 않습니다."
+   ]
+  },
+  {
+   "id": "df-16",
+   "section": "fundamentals",
+   "q": "Platform Event를 구독하는 Apex 트리거가 지원하는 이벤트는?",
+   "options": [
+    "before insert",
+    "after insert",
+    "after update",
+    "before delete"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "Platform Event 트리거는 **after insert** 만 지원합니다.",
+   "notes": [
+    "지원하지 않습니다.",
+    "정답.",
+    "이벤트는 수정되지 않습니다.",
+    "이벤트는 삭제되지 않습니다."
+   ]
+  },
+  {
+   "id": "df-17",
+   "section": "fundamentals",
+   "q": "Formula 필드에 대한 설명으로 옳은 것 2개를 고르세요.",
+   "options": [
+    "값이 데이터베이스에 저장되지 않고 조회할 때 계산된다",
+    "자식 레코드 여러 건의 합계를 계산할 수 있다",
+    "Cross-Object Formula로 부모 레코드의 필드를 참조할 수 있다",
+    "Apex 트리거 안에서 직접 값을 바꿀 수 있다"
+   ],
+   "answer": [
+    0,
+    2
+   ],
+   "explain": "Formula는 읽기 전용 계산 필드이고, 부모 방향(최대 10단계) 필드를 참조할 수 있습니다.",
+   "notes": [
+    "정답.",
+    "자식 집계는 Roll-Up Summary 몫입니다.",
+    "정답.",
+    "Formula는 읽기 전용입니다."
+   ]
+  },
+  {
+   "id": "df-18",
+   "section": "fundamentals",
+   "q": "한 오브젝트에 만들 수 있는 Master-Detail 관계의 최대 수는?",
+   "options": [
+    "1개",
+    "2개",
+    "5개",
+    "40개"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "Master-Detail은 오브젝트당 2개까지(Junction Object가 이 경우), 관계 필드 전체는 40개까지입니다.",
+   "notes": [
+    "2개까지 가능합니다.",
+    "정답.",
+    "그렇게 많지 않습니다.",
+    "40은 관계 필드 전체 한도입니다."
+   ]
+  },
+  {
+   "id": "df-19",
+   "section": "fundamentals",
+   "q": "다음 중 **비동기** 트랜잭션에서 동기보다 한도가 더 큰 것은?",
+   "options": [
+    "DML 문 수",
+    "SOQL 쿼리 수",
+    "DML 처리 레코드 수",
+    "SOSL 쿼리 수"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "SOQL 쿼리 수는 동기 100, 비동기 200입니다. Heap(6→12MB), CPU(10→60초)도 늘어납니다.",
+   "notes": [
+    "150으로 같습니다.",
+    "정답.",
+    "10,000으로 같습니다.",
+    "20으로 같습니다."
+   ]
+  },
+  {
+   "id": "df-20",
+   "section": "fundamentals",
+   "q": "Opportunity의 Stage가 바뀔 때마다 이전 값과 날짜를 기록하려 합니다. 코드 없이 가장 쉽게 이 요구를 만족하는 방법은?",
+   "options": [
+    "Apex 트리거로 History 오브젝트에 기록",
+    "Field History Tracking을 켠다",
+    "Formula 필드로 이전 값을 표시",
+    "Validation Rule에서 PRIORVALUE를 저장"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "필드 변경 이력은 **Field History Tracking** 으로 코드 없이 됩니다 (Opportunity는 Stage History도 기본 제공).",
+   "notes": [
+    "가능하지만 선언형 기능이 이미 있습니다.",
+    "정답.",
+    "Formula는 이전 값을 저장하지 못합니다.",
+    "Validation Rule은 값을 저장하지 않습니다."
+   ]
+  },
+  {
+   "id": "al-01",
+   "section": "automation-logic",
+   "q": "같은 레코드의 필드 값을 저장 전에 바꾸려 합니다. 가장 효율적인 방법은?",
+   "options": [
+    "after update 트리거에서 레코드를 다시 조회해 update",
+    "before 트리거에서 Trigger.new의 필드를 직접 수정",
+    "after insert 트리거에서 Trigger.new를 수정",
+    "@future 메서드에서 update"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "before 트리거에서 `Trigger.new` 를 바꾸면 DML 없이 함께 저장됩니다. (선언형이라면 before-save Flow)",
+   "notes": [
+    "DML이 추가로 들고 재귀 위험이 있습니다.",
+    "정답.",
+    "after 트리거의 Trigger.new는 읽기 전용입니다.",
+    "비동기로 할 이유가 없고 DML도 더 씁니다."
+   ]
+  },
+  {
+   "id": "al-02",
+   "section": "automation-logic",
+   "q": "다음 트리거 컨텍스트 변수 중 **insert** 트리거에서 사용할 수 없는 것은?",
+   "options": [
+    "Trigger.new",
+    "Trigger.isInsert",
+    "Trigger.oldMap",
+    "Trigger.size"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": "insert에는 이전 값이 없으므로 `Trigger.old`, `Trigger.oldMap` 은 null입니다. 또 before insert에서는 Id가 없어 `Trigger.newMap` 도 쓸 수 없습니다.",
+   "notes": [
+    "사용 가능합니다.",
+    "사용 가능합니다.",
+    "정답.",
+    "사용 가능합니다."
+   ]
+  },
+  {
+   "id": "al-03",
+   "section": "automation-logic",
+   "q": "다음 코드 실행 결과는? (Account 'Acme' 는 org에 없음)",
+   "options": [
+    "acc가 null이 된다",
+    "System.QueryException이 발생한다",
+    "빈 Account 객체가 생성된다",
+    "컴파일 오류"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "결과가 0건인 쿼리를 sObject 하나에 할당하면 `List has no rows for assignment to SObject` QueryException입니다.",
+   "notes": [
+    "null이 아니라 예외입니다.",
+    "정답.",
+    "객체를 만들지 않습니다.",
+    "문법은 정상입니다."
+   ],
+   "code": "Account acc = [SELECT Id FROM Account WHERE Name = 'Acme' LIMIT 1];",
+   "lang": "apex"
+  },
+  {
+   "id": "al-04",
+   "section": "automation-logic",
+   "q": "SOSL 쿼리의 반환 타입은?",
+   "options": [
+    "List<sObject>",
+    "Map<Id, sObject>",
+    "List<List<sObject>>",
+    "Database.QueryLocator"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": "SOSL은 RETURNING에 적은 오브젝트마다 하나의 리스트를 담은 **리스트의 리스트** 를 돌려줍니다.",
+   "notes": [
+    "SOQL의 반환 타입입니다.",
+    "Map 생성자로 바꿀 수 있지만 반환 타입은 아닙니다.",
+    "정답.",
+    "Batch Apex의 start에서 쓰는 타입입니다."
+   ]
+  },
+  {
+   "id": "al-05",
+   "section": "automation-logic",
+   "q": "고객 상담원이 이름의 일부만 입력해 Account, Contact, Lead에서 동시에 검색하려 합니다. 어떤 기능을 쓰나요?",
+   "options": [
+    "SOQL의 LIKE 조건으로 세 번 쿼리",
+    "SOSL",
+    "Aggregate SOQL",
+    "Database.query 하나로 세 오브젝트 조회"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "여러 오브젝트의 텍스트 검색은 **SOSL** 이 효율적입니다 (검색 인덱스 사용).",
+   "notes": [
+    "가능은 하지만 비효율적이고 쿼리 3번이 듭니다.",
+    "정답.",
+    "집계용입니다.",
+    "SOQL은 한 번에 한 오브젝트(FROM)만 조회합니다."
+   ]
+  },
+  {
+   "id": "al-06",
+   "section": "automation-logic",
+   "q": "Contact 500건을 넣을 때, 일부가 필수 값 누락으로 실패해도 나머지는 저장되게 하려면?",
+   "options": [
+    "insert contacts;",
+    "Database.insert(contacts, false);",
+    "Database.insert(contacts, true);",
+    "try { insert contacts; } catch (Exception e) {}"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "`allOrNone=false` 로 부분 성공을 허용하고 `SaveResult` 로 실패 건을 확인합니다.",
+   "notes": [
+    "하나라도 실패하면 전체 롤백됩니다.",
+    "정답.",
+    "true는 insert 문과 같은 동작(전체 롤백)입니다.",
+    "예외를 삼켜도 이미 전체가 롤백된 상태입니다."
+   ]
+  },
+  {
+   "id": "al-07",
+   "section": "automation-logic",
+   "q": "Apex에서 상수를 선언하는 올바른 방법은?",
+   "options": [
+    "public const Integer MAX = 10;",
+    "public static final Integer MAX = 10;",
+    "public readonly Integer MAX = 10;",
+    "final static var MAX = 10;"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "Apex 상수는 `static final` 입니다. const, readonly, var 키워드는 Apex에 없습니다.",
+   "notes": [
+    "Apex에 const는 없습니다.",
+    "정답.",
+    "readonly는 C# 키워드입니다.",
+    "var는 Apex에 없습니다."
+   ]
+  },
+  {
+   "id": "al-08",
+   "section": "automation-logic",
+   "q": "접근 제한자에 대한 설명으로 옳은 것은?",
+   "options": [
+    "접근 제한자를 생략하면 public이다",
+    "global은 다른 네임스페이스(예: 패키지 밖)에서도 접근할 수 있다",
+    "protected는 같은 패키지 안 모든 클래스에서 접근할 수 있다",
+    "private 메서드는 테스트 클래스에서 절대 호출할 수 없다"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "global이 가장 넓습니다. 생략 시 기본값은 private이고, 테스트에서 private 멤버는 `@TestVisible` 로 열 수 있습니다.",
+   "notes": [
+    "기본값은 private입니다.",
+    "정답.",
+    "protected는 내부 클래스와 하위 클래스까지입니다.",
+    "@TestVisible을 붙이면 호출할 수 있습니다."
+   ]
+  },
+  {
+   "id": "al-09",
+   "section": "automation-logic",
+   "q": "다른 클래스가 상속할 수 있도록 하려면 부모 클래스에 무엇을 붙여야 하나요? 2개를 고르세요.",
+   "options": [
+    "virtual",
+    "abstract",
+    "global",
+    "override",
+    "static"
+   ],
+   "answer": [
+    0,
+    1
+   ],
+   "explain": "Apex 클래스는 기본적으로 final입니다. `virtual` 또는 `abstract` 여야 상속할 수 있고, 자식은 메서드에 `override` 를 붙입니다.",
+   "notes": [
+    "정답.",
+    "정답.",
+    "접근 범위일 뿐 상속 가능 여부와 다릅니다.",
+    "자식 메서드 쪽 키워드입니다.",
+    "상속과 무관합니다."
+   ]
+  },
+  {
+   "id": "al-10",
+   "section": "automation-logic",
+   "q": "다음 코드에서 마지막 System.debug의 출력은?",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "0"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "i=0 → continue (count 증가 없음), i=1 → count=1, i=2 → count=2, i=3 → break.",
+   "notes": [
+    "i=2까지 증가합니다.",
+    "정답.",
+    "i=3에서 break되어 증가하지 않습니다.",
+    "i=1, 2에서 증가합니다."
+   ],
+   "code": "Integer count = 0;\nfor (Integer i = 0; i < 5; i++) {\n    if (i == 0) continue;\n    if (i == 3) break;\n    count++;\n}\nSystem.debug(count);",
+   "lang": "apex"
+  },
+  {
+   "id": "al-11",
+   "section": "automation-logic",
+   "q": "트리거 모범 사례로 옳은 것 2개를 고르세요.",
+   "options": [
+    "오브젝트당 트리거 하나를 두고 로직은 Handler 클래스로 옮긴다",
+    "기능마다 트리거를 따로 만들어 실행 순서를 정한다",
+    "Trigger.new 전체를 한 번에 처리하도록 컬렉션을 쓴다",
+    "레코드 한 건씩 DML을 실행해 오류를 정확히 찾는다"
+   ],
+   "answer": [
+    0,
+    2
+   ],
+   "explain": "한 오브젝트의 여러 트리거는 **실행 순서가 보장되지 않습니다**. 하나의 트리거 + Handler, 그리고 bulkify가 원칙입니다.",
+   "notes": [
+    "정답.",
+    "같은 이벤트의 트리거 여러 개는 순서를 보장받지 못합니다.",
+    "정답.",
+    "DML 150회 한도에 걸립니다."
+   ]
+  },
+  {
+   "id": "al-12",
+   "section": "automation-logic",
+   "q": "Account after update 트리거가 관련 Contact를 update하고, Contact 트리거가 다시 Account를 update해서 무한 반복이 생깁니다. 가장 흔한 해결책은?",
+   "options": [
+    "트리거를 before로 바꾼다",
+    "static 변수(또는 처리한 Id를 담는 static Set)로 이미 실행했는지 확인한다",
+    "Contact 트리거를 삭제한다",
+    "update 대신 upsert를 쓴다"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "static 변수는 한 트랜잭션 동안 유지되므로 **재귀 방지 플래그** 로 씁니다.",
+   "notes": [
+    "before로 바꿔도 다른 오브젝트를 수정하면 연쇄가 생깁니다.",
+    "정답.",
+    "기능을 없애는 것은 해결이 아닙니다.",
+    "DML 종류는 재귀와 관계없습니다."
+   ]
+  },
+  {
+   "id": "al-13",
+   "section": "automation-logic",
+   "q": "저장 순서(Order of Execution)에서 다음 중 가장 **먼저** 실행되는 것은?",
+   "options": [
+    "after 트리거",
+    "커스텀 Validation Rule",
+    "before 트리거",
+    "After-save Record-Triggered Flow"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": "before-save Flow → before 트리거 → (시스템 검증) 커스텀 Validation Rule → 저장 → after 트리거 → … → after-save Flow 순서입니다.",
+   "notes": [
+    "저장 뒤에 실행됩니다.",
+    "before 트리거 다음입니다.",
+    "정답.",
+    "after 트리거보다도 뒤입니다."
+   ]
+  },
+  {
+   "id": "al-14",
+   "section": "automation-logic",
+   "q": "Workflow Rule의 필드 업데이트가 레코드를 수정하면 어떤 일이 일어나나요?",
+   "options": [
+    "아무 트리거도 다시 실행되지 않는다",
+    "before update와 after update 트리거가 한 번 더 실행된다",
+    "insert 트리거가 다시 실행된다",
+    "Validation Rule만 다시 실행된다"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "필드 업데이트 후 before/after update 트리거가 **한 번 더** 실행되고, 이때 커스텀 Validation Rule은 다시 돌지 않습니다.",
+   "notes": [
+    "트리거가 다시 실행됩니다.",
+    "정답.",
+    "update 트리거입니다.",
+    "커스텀 Validation Rule은 이 단계에서 다시 실행되지 않습니다."
+   ]
+  },
+  {
+   "id": "al-15",
+   "section": "automation-logic",
+   "q": "트리거에서 조건에 맞지 않는 레코드의 저장을 막고 사용자에게 메시지를 보여 주려면?",
+   "options": [
+    "throw new Exception('...')",
+    "record.addError('...')",
+    "System.debug('...')",
+    "Database.rollback()"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "`addError` 는 해당 레코드 저장을 막고 화면에 메시지를 표시합니다 (Database 메서드의 allOrNone=false면 그 레코드만 실패).",
+   "notes": [
+    "Exception은 직접 생성할 수 없고, 커스텀 예외도 사용자 친화적 메시지 방식이 아닙니다.",
+    "정답.",
+    "로그만 남깁니다.",
+    "Savepoint가 필요하고 메시지를 보여 주지 않습니다."
+   ]
+  },
+  {
+   "id": "al-16",
+   "section": "automation-logic",
+   "q": "커스텀 예외 클래스 선언으로 올바른 것은?",
+   "options": [
+    "public class StockError extends Exception {}",
+    "public class StockException extends Exception {}",
+    "public class StockException implements Exception {}",
+    "public exception StockException {}"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "Exception을 **상속(extends)** 하고 이름이 **Exception으로 끝나야** 합니다.",
+   "notes": [
+    "이름이 Exception으로 끝나지 않아 컴파일 오류입니다.",
+    "정답.",
+    "Exception은 인터페이스가 아닙니다.",
+    "그런 키워드는 없습니다."
+   ]
+  },
+  {
+   "id": "al-17",
+   "section": "automation-logic",
+   "q": "@future 메서드에 대한 설명으로 옳은 것은?",
+   "options": [
+    "sObject 리스트를 인자로 받을 수 있다",
+    "반환 타입이 void이고 static이어야 한다",
+    "다른 @future 메서드를 호출할 수 있다",
+    "실행 순서가 호출 순서대로 보장된다"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "@future는 `static void`, 인자는 기본형·기본형 컬렉션만, future 안에서 future 호출 불가, 실행 순서 보장 없음.",
+   "notes": [
+    "sObject는 넘길 수 없습니다 (Id를 넘기고 다시 조회).",
+    "정답.",
+    "불가능합니다.",
+    "순서는 보장되지 않습니다."
+   ]
+  },
+  {
+   "id": "al-18",
+   "section": "automation-logic",
+   "q": "비동기 작업이 끝난 뒤 다른 비동기 작업을 이어서 실행하고, 작업 Id로 상태를 추적해야 합니다. 가장 알맞은 것은?",
+   "options": [
+    "@future",
+    "Queueable Apex",
+    "Schedulable Apex",
+    "Execute Anonymous"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "Queueable은 `System.enqueueJob` 이 Job Id를 돌려주고, execute 안에서 다음 작업을 enqueue(체이닝)할 수 있습니다.",
+   "notes": [
+    "Job Id를 주지 않고 체이닝도 불가합니다.",
+    "정답.",
+    "정해진 시각 실행용입니다.",
+    "수동 실행 도구입니다."
+   ]
+  },
+  {
+   "id": "al-19",
+   "section": "automation-logic",
+   "q": "Batch Apex 클래스가 구현해야 하는 메서드 3개로 옳은 조합은?",
+   "options": [
+    "start, execute, finish",
+    "init, run, end",
+    "before, during, after",
+    "start, process, stop"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": "`Database.Batchable<sObject>` 의 start(대상 조회), execute(scope 단위 처리), finish(마무리)입니다.",
+   "notes": [
+    "정답.",
+    "없는 메서드입니다.",
+    "없는 메서드입니다.",
+    "없는 메서드입니다."
+   ]
+  },
+  {
+   "id": "al-20",
+   "section": "automation-logic",
+   "q": "Flow에서 호출할 Apex 메서드를 만들 때 맞는 것은?",
+   "options": [
+    "@AuraEnabled public List<String> run(String s)",
+    "@InvocableMethod public static List<String> run(List<String> inputs)",
+    "@InvocableMethod public String run(String s)",
+    "@future public static void run(List<String> inputs)"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "@InvocableMethod는 **static**, 인자와 반환이 **List**, 클래스당 하나입니다.",
+   "notes": [
+    "@AuraEnabled는 Lightning 컴포넌트용입니다.",
+    "정답.",
+    "static이 아니고 List가 아닙니다.",
+    "Flow 액션으로 노출되지 않습니다."
+   ]
+  },
+  {
+   "id": "al-21",
+   "section": "automation-logic",
+   "q": "다음 코드 실행 결과 `names.size()` 는? (org에 Account 3건: 'A', 'B', 'A')",
+   "options": [
+    "2",
+    "3",
+    "1",
+    "0"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": "Set은 중복을 저장하지 않으므로 'A', 'B' 두 개입니다.",
+   "notes": [
+    "정답.",
+    "Set이라 중복 'A'가 하나로 합쳐집니다.",
+    "서로 다른 이름이 두 개입니다.",
+    "조회 결과가 있습니다."
+   ],
+   "code": "Set<String> names = new Set<String>();\nfor (Account a : [SELECT Name FROM Account]) {\n    names.add(a.Name);\n}",
+   "lang": "apex"
+  },
+  {
+   "id": "al-22",
+   "section": "automation-logic",
+   "q": "할인 승인 요청이 금액에 따라 팀장 → 본부장 순서로 승인되어야 하고, 승인 중에는 레코드를 잠가야 합니다. 가장 알맞은 기능은?",
+   "options": [
+    "Apex 트리거로 상태 필드 관리",
+    "Approval Process",
+    "Validation Rule",
+    "Formula 필드"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "여러 단계 승인, 레코드 잠금, 승인·거절 시 동작은 **Approval Process**(또는 Flow 기반 승인)의 기본 기능입니다.",
+   "notes": [
+    "선언형 기능이 이미 있습니다.",
+    "정답.",
+    "승인 흐름을 만들 수 없습니다.",
+    "계산 필드입니다."
+   ]
+  },
+  {
+   "id": "al-23",
+   "section": "automation-logic",
+   "q": "Record-Triggered Flow를 **before-save(Fast Field Updates)** 로 만들 때 할 수 있는 것은?",
+   "options": [
+    "관련 레코드 생성",
+    "트리거한 레코드의 필드 값 변경",
+    "이메일 알림 보내기",
+    "Apex 액션 호출"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "before-save Flow는 트리거한 레코드의 필드 업데이트만 가능하고 매우 빠릅니다. 다른 레코드 작업·액션은 after-save에서 합니다.",
+   "notes": [
+    "after-save가 필요합니다.",
+    "정답.",
+    "after-save가 필요합니다.",
+    "after-save가 필요합니다."
+   ]
+  },
+  {
+   "id": "al-24",
+   "section": "automation-logic",
+   "q": "다음 코드의 문제점은?",
+   "options": [
+    "Trigger.new를 반복할 수 없다",
+    "after 트리거에서 Trigger.new 레코드를 직접 수정하려 해서 실행 시 오류가 난다",
+    "Description은 Account 필드가 아니다",
+    "문제없다"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "after 트리거의 `Trigger.new` 는 읽기 전용입니다 (`FinalException: Record is read-only`). before 트리거로 바꿔야 합니다.",
+   "notes": [
+    "반복은 가능합니다.",
+    "정답.",
+    "Description은 표준 필드입니다.",
+    "실행 시 오류가 납니다."
+   ],
+   "code": "trigger AccountTrigger on Account (after insert) {\n    for (Account a : Trigger.new) {\n        a.Description = 'New customer';\n    }\n}",
+   "lang": "apex"
+  },
+  {
+   "id": "ui-01",
+   "section": "user-interface",
+   "q": "LWC에서 Apex 메서드를 `@wire` 로 호출하려면 Apex 메서드에 무엇이 필요한가요?",
+   "options": [
+    "@AuraEnabled",
+    "@AuraEnabled(cacheable=true)",
+    "@InvocableMethod",
+    "@RemoteAction"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "@wire는 캐시를 쓰므로 `cacheable=true` 가 필요하고, 그래서 그 메서드는 DML을 할 수 없습니다.",
+   "notes": [
+    "명령형 호출은 이것으로 충분하지만 @wire는 cacheable이 필요합니다.",
+    "정답.",
+    "Flow용입니다.",
+    "Visualforce JavaScript Remoting용입니다."
+   ]
+  },
+  {
+   "id": "ui-02",
+   "section": "user-interface",
+   "q": "LWC 버튼을 누르면 Apex로 레코드를 저장해야 합니다. 어떻게 호출해야 하나요?",
+   "options": [
+    "@wire로 호출하고 cacheable=true를 붙인다",
+    "Apex 메서드를 import해서 명령형(imperative)으로 호출하고 Promise를 처리한다",
+    "connectedCallback에서 @wire를 다시 선언한다",
+    "Visualforce 페이지를 iframe으로 넣는다"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "DML이 있거나 사용자 동작 시점에 실행해야 하면 **명령형 호출** 입니다.",
+   "notes": [
+    "cacheable 메서드는 DML 불가입니다.",
+    "정답.",
+    "@wire는 클래스 필드에 선언하는 것이고 원하는 시점 호출용이 아닙니다.",
+    "불필요하게 복잡합니다."
+   ],
+   "code": "import saveOrder from '@salesforce/apex/OrderController.saveOrder';\n\nhandleSave() {\n    saveOrder({ order: this.order })\n        .then(() => { /* 성공 */ })\n        .catch(error => { this.error = error; });\n}",
+   "lang": "javascript"
+  },
+  {
+   "id": "ui-03",
+   "section": "user-interface",
+   "q": "자식 LWC가 사용자가 고른 값을 부모 LWC에 알리는 권장 방법은?",
+   "options": [
+    "자식이 부모의 @api 속성을 직접 바꾼다",
+    "자식이 CustomEvent를 dispatchEvent하고 부모가 on<이벤트이름>으로 받는다",
+    "Application Event를 발생시킨다",
+    "window 전역 변수에 저장한다"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "자식 → 부모는 **DOM 이벤트(CustomEvent)** 입니다. 부모 → 자식은 @api 속성·메서드입니다.",
+   "notes": [
+    "자식은 부모에 접근하지 않습니다.",
+    "정답.",
+    "Aura의 방식입니다.",
+    "캡슐화를 깨는 나쁜 방법입니다."
+   ]
+  },
+  {
+   "id": "ui-04",
+   "section": "user-interface",
+   "q": "같은 Lightning 페이지에 있지만 DOM 계층으로 연결되지 않은 LWC, Aura 컴포넌트, Visualforce 페이지가 서로 메시지를 주고받아야 합니다. 무엇을 쓰나요?",
+   "options": [
+    "CustomEvent with bubbles:true",
+    "Lightning Message Service",
+    "@api 메서드",
+    "Platform Event"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "**Lightning Message Service(LMS)** 는 Message Channel로 LWC·Aura·Visualforce 간 통신을 지원합니다.",
+   "notes": [
+    "DOM 계층 밖으로는 전달되지 않습니다.",
+    "정답.",
+    "부모가 자식을 직접 참조할 때만 가능합니다.",
+    "서버 측 이벤트 버스로, 같은 화면 컴포넌트 간 통신용이 아닙니다."
+   ]
+  },
+  {
+   "id": "ui-05",
+   "section": "user-interface",
+   "q": "레코드 페이지에 올린 LWC가 현재 레코드의 Id를 받으려면?",
+   "options": [
+    "@track recordId;",
+    "@api recordId;",
+    "@wire recordId;",
+    "this.getRecordId()"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "레코드 페이지는 `@api recordId` 공개 속성에 현재 레코드 Id를 자동으로 넣어 줍니다 (`objectApiName` 도 같은 방식).",
+   "notes": [
+    "@track은 내부 반응성용입니다.",
+    "정답.",
+    "@wire는 데이터 서비스 연결용입니다.",
+    "그런 메서드는 없습니다."
+   ]
+  },
+  {
+   "id": "ui-06",
+   "section": "user-interface",
+   "q": "LWC를 Lightning App Builder의 **레코드 페이지** 와 **Flow 화면** 에서 쓰려면 meta.xml에 무엇을 설정해야 하나요?",
+   "options": [
+    "isExposed=false, target lightning__AppPage",
+    "isExposed=true, targets lightning__RecordPage와 lightning__FlowScreen",
+    "apiVersion만 올리면 된다",
+    "CSS 파일을 추가한다"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "노출하려면 `isExposed` 가 true이고 쓸 곳을 `targets` 에 나열해야 합니다.",
+   "notes": [
+    "노출되지 않고 대상도 다릅니다.",
+    "정답.",
+    "노출 설정과 별개입니다.",
+    "노출과 무관합니다."
+   ]
+  },
+  {
+   "id": "ui-07",
+   "section": "user-interface",
+   "q": "LWC 생명주기 훅 중 컴포넌트가 DOM에 삽입될 때 실행되어 초기 데이터 로드에 자주 쓰는 것은?",
+   "options": [
+    "constructor",
+    "connectedCallback",
+    "renderedCallback",
+    "disconnectedCallback"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "connectedCallback은 컴포넌트가 문서에 붙을 때 실행됩니다. renderedCallback은 렌더링마다 실행되어 무한 루프 주의가 필요합니다.",
+   "notes": [
+    "속성 값이 아직 설정되지 않았을 수 있고 DOM 접근 불가입니다.",
+    "정답.",
+    "렌더링할 때마다 여러 번 실행됩니다.",
+    "제거될 때 정리 작업용입니다."
+   ]
+  },
+  {
+   "id": "ui-08",
+   "section": "user-interface",
+   "q": "Aura 컴포넌트와 LWC의 관계로 옳은 것은?",
+   "options": [
+    "LWC 안에 Aura 컴포넌트를 넣을 수 있다",
+    "Aura 컴포넌트 안에 LWC를 넣을 수 있다",
+    "둘은 같은 페이지에 함께 있을 수 없다",
+    "LWC는 Aura로 컴파일된다"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "Aura는 LWC를 포함할 수 있지만 LWC는 Aura를 포함할 수 없습니다. 둘은 같은 페이지에 공존합니다.",
+   "notes": [
+    "불가능합니다.",
+    "정답.",
+    "공존할 수 있습니다.",
+    "LWC는 웹 표준 기반의 별도 모델입니다."
+   ]
+  },
+  {
+   "id": "ui-09",
+   "section": "user-interface",
+   "q": "다음 Apex 코드의 보안 문제와 해결책으로 가장 알맞은 것은?",
+   "options": [
+    "XSS. 출력 시 HTMLENCODE를 쓴다",
+    "SOQL Injection. 바인딩 변수 `:name` 을 쓴다",
+    "문제없다",
+    "CSRF. 요청에 토큰을 추가한다"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "사용자 입력을 쿼리 문자열에 그대로 붙여 SOQL Injection이 가능합니다. 정적 SOQL과 바인딩 변수가 1순위 해결책입니다.",
+   "notes": [
+    "XSS는 출력 문제입니다.",
+    "정답.",
+    "입력에 `' OR Name != '` 같은 값을 넣으면 조건이 바뀝니다.",
+    "CSRF와는 관련 없습니다."
+   ],
+   "code": "public static List<Account> find(String name) {\n    String q = 'SELECT Id FROM Account WHERE Name = \\'' + name + '\\'';\n    return Database.query(q);\n}",
+   "lang": "apex"
+  },
+  {
+   "id": "ui-10",
+   "section": "user-interface",
+   "q": "Apex로 쿼리할 때 실행 사용자의 오브젝트·필드 권한(CRUD/FLS)을 강제하는 방법 2개를 고르세요.",
+   "options": [
+    "SOQL에 WITH USER_MODE를 추가",
+    "Security.stripInaccessible()로 결과를 정리",
+    "클래스에 without sharing을 붙인다",
+    "System.runAs()를 프로덕션 코드에서 사용"
+   ],
+   "answer": [
+    0,
+    1
+   ],
+   "explain": "WITH USER_MODE(또는 WITH SECURITY_ENFORCED), stripInaccessible이 FLS를 지킵니다. `with sharing` 은 레코드 공유만 다룹니다.",
+   "notes": [
+    "정답.",
+    "정답.",
+    "공유 규칙을 무시하게 만드는 키워드입니다.",
+    "runAs는 테스트 전용입니다."
+   ]
+  },
+  {
+   "id": "ui-11",
+   "section": "user-interface",
+   "q": "`with sharing` 키워드가 적용하는 것은?",
+   "options": [
+    "필드 수준 보안(FLS)",
+    "오브젝트 권한(CRUD)",
+    "레코드 공유 규칙(OWD, Role, Sharing Rule)",
+    "로그인 IP 제한"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": "sharing 키워드는 **레코드 단위 접근** 만 다룹니다. CRUD/FLS는 별도로 강제해야 합니다.",
+   "notes": [
+    "별도로 강제해야 합니다.",
+    "별도로 강제해야 합니다.",
+    "정답.",
+    "관계없습니다."
+   ]
+  },
+  {
+   "id": "ui-12",
+   "section": "user-interface",
+   "q": "Visualforce 페이지에서 Account의 표준 저장 동작은 그대로 쓰면서 버튼 하나의 기능만 추가하려 합니다. 가장 알맞은 구성은?",
+   "options": [
+    "Custom Controller로 모든 로직을 새로 작성",
+    "standardController=\"Account\" + Controller Extension",
+    "Standard List Controller만 사용",
+    "JavaScript Remoting만 사용"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "표준 동작 + 추가 기능 = **Extension**. 생성자는 `ApexPages.StandardController` 를 받습니다.",
+   "notes": [
+    "표준 저장 동작을 다시 만들어야 합니다.",
+    "정답.",
+    "목록용입니다.",
+    "표준 동작을 쓰지 못합니다."
+   ]
+  },
+  {
+   "id": "ui-13",
+   "section": "user-interface",
+   "q": "Visualforce Controller Extension의 생성자 시그니처로 올바른 것은?",
+   "options": [
+    "public MyExt()",
+    "public MyExt(ApexPages.StandardController ctrl)",
+    "public MyExt(Account acc)",
+    "public static MyExt(Id recordId)"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "Standard Controller와 함께 쓰는 Extension은 `ApexPages.StandardController` (목록이면 StandardSetController) 하나를 인자로 받습니다.",
+   "notes": [
+    "Custom Controller의 형태입니다.",
+    "정답.",
+    "sObject를 직접 받지 않습니다.",
+    "생성자는 static이 아닙니다."
+   ]
+  },
+  {
+   "id": "ui-14",
+   "section": "user-interface",
+   "q": "Visualforce에서 여러 레코드 목록을 보여 주고 페이지 넘김을 하려면?",
+   "options": [
+    "<apex:page standardController=\"Account\" recordSetVar=\"accounts\">",
+    "<apex:page controller=\"Account\">",
+    "<apex:page standardController=\"Account\" list=\"true\">",
+    "<apex:page recordId=\"accounts\">"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": "`recordSetVar` 를 지정하면 **Standard List Controller**(StandardSetController)가 되어 목록과 페이징을 지원합니다.",
+   "notes": [
+    "정답.",
+    "Account는 Apex 클래스가 아닙니다.",
+    "그런 속성은 없습니다.",
+    "그런 속성은 없습니다."
+   ]
+  },
+  {
+   "id": "ui-15",
+   "section": "user-interface",
+   "q": "Visualforce에서 XSS 위험이 가장 큰 코드는?",
+   "options": [
+    "<apex:outputText value=\"{!userInput}\"/>",
+    "<apex:outputText value=\"{!userInput}\" escape=\"false\"/>",
+    "<apex:outputField value=\"{!Account.Name}\"/>",
+    "{!HTMLENCODE(userInput)}"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "`escape=\"false\"` 는 HTML 이스케이프를 끄므로 사용자 입력의 스크립트가 실행될 수 있습니다.",
+   "notes": [
+    "기본적으로 이스케이프됩니다.",
+    "정답.",
+    "표준 출력 컴포넌트로 이스케이프됩니다.",
+    "인코딩하는 안전한 방법입니다."
+   ]
+  },
+  {
+   "id": "ui-16",
+   "section": "user-interface",
+   "q": "레코드 하나를 보여 주고 편집하는 화면을 LWC로 가장 적은 코드로 만들려면?",
+   "options": [
+    "Apex Controller로 조회·저장 메서드를 만든다",
+    "lightning-record-form 기본 컴포넌트를 쓴다",
+    "fetch로 REST API를 호출한다",
+    "Visualforce를 iframe으로 넣는다"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "`lightning-record-form` 은 Lightning Data Service를 써서 조회·편집·저장, FLS·공유를 자동으로 처리합니다.",
+   "notes": [
+    "코드가 더 많고 LDS 이점을 잃습니다.",
+    "정답.",
+    "불필요하게 복잡하고 권장되지 않습니다.",
+    "오래된 방식입니다."
+   ]
+  },
+  {
+   "id": "ui-17",
+   "section": "user-interface",
+   "q": "Agentforce 에이전트가 Apex 로직을 **액션** 으로 사용하게 하려면 Apex를 어떻게 작성하나요?",
+   "options": [
+    "@AuraEnabled 메서드로 작성",
+    "@InvocableMethod 메서드로 작성하고 label·description을 명확히 단다",
+    "@future 메서드로 작성",
+    "Trigger로 작성"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "에이전트 액션은 Flow와 같은 **Invocable Action** 을 씁니다. description이 에이전트가 언제 쓸지 판단하는 근거가 됩니다.",
+   "notes": [
+    "Lightning 컴포넌트용입니다.",
+    "정답.",
+    "에이전트가 호출할 수 없습니다.",
+    "트리거는 직접 호출할 수 없습니다."
+   ]
+  },
+  {
+   "id": "ui-18",
+   "section": "user-interface",
+   "q": "Screen Flow 안에 커스텀 LWC를 넣어 Flow 변수와 값을 주고받으려면? 2개를 고르세요.",
+   "options": [
+    "meta.xml targets에 lightning__FlowScreen 추가",
+    "Flow와 주고받을 속성을 @api로 선언하고 targetConfig에 property로 정의",
+    "컴포넌트를 Aura로 다시 작성",
+    "Apex @InvocableMethod를 만든다"
+   ],
+   "answer": [
+    0,
+    1
+   ],
+   "explain": "Flow 화면 컴포넌트는 `lightning__FlowScreen` 타깃과 `@api` 속성(그리고 targetConfig property)으로 Flow 변수와 연결합니다.",
+   "notes": [
+    "정답.",
+    "정답.",
+    "LWC로 가능합니다.",
+    "Flow 동작(Action)용이지 화면 컴포넌트용이 아닙니다."
+   ]
+  },
+  {
+   "id": "ui-19",
+   "section": "user-interface",
+   "q": "LWC의 `@track` 데코레이터가 필요한 경우는?",
+   "options": [
+    "기본형(String, Number) 필드를 반응형으로 만들 때",
+    "객체나 배열 **내부** 속성의 변경을 감지해 다시 렌더링하고 싶을 때",
+    "부모가 값을 넣을 수 있게 할 때",
+    "Apex를 호출할 때"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "LWC의 모든 필드는 이미 반응형이지만, 객체 속성·배열 요소를 직접 바꾸는 변경까지 감지하려면 `@track` 이 필요합니다.",
+   "notes": [
+    "이미 반응형입니다.",
+    "정답.",
+    "@api의 역할입니다.",
+    "@wire 또는 import의 역할입니다."
+   ]
+  },
+  {
+   "id": "ui-20",
+   "section": "user-interface",
+   "q": "@wire로 받은 Apex 데이터가, 같은 컴포넌트에서 레코드를 수정한 뒤 화면에 갱신되지 않습니다. 무엇을 호출해야 하나요?",
+   "options": [
+    "location.reload()",
+    "refreshApex(this.wiredResult)",
+    "this.render()",
+    "connectedCallback()"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "캐시된 wire 결과를 새로 가져오려면 `refreshApex` 에 wire로 받은 값을 넘깁니다.",
+   "notes": [
+    "페이지 전체를 새로 고치는 것은 좋지 않습니다.",
+    "정답.",
+    "그런 공개 메서드는 없습니다.",
+    "직접 호출하는 훅이 아닙니다."
+   ]
+  },
+  {
+   "id": "td-01",
+   "section": "testing-deployment",
+   "q": "프로덕션에 Apex를 배포하기 위한 조건으로 옳은 것 2개를 고르세요.",
+   "options": [
+    "org 전체 Apex 코드 커버리지 75% 이상",
+    "모든 클래스가 각각 75% 이상",
+    "모든 트리거가 최소한 일부(1% 이상) 커버",
+    "테스트 실패는 5개까지 허용"
+   ],
+   "answer": [
+    0,
+    2
+   ],
+   "explain": "org 전체 75% 이상, 각 트리거는 커버리지가 있어야 하고, 모든 테스트가 통과해야 합니다.",
+   "notes": [
+    "정답.",
+    "개별 클래스 기준은 없습니다 (전체 기준).",
+    "정답.",
+    "모두 통과해야 합니다."
+   ]
+  },
+  {
+   "id": "td-02",
+   "section": "testing-deployment",
+   "q": "테스트 메서드에서 org에 이미 있는 Account를 조회하면 기본적으로 어떻게 되나요?",
+   "options": [
+    "모든 Account가 조회된다",
+    "조회 결과가 없다 (테스트는 기본적으로 org 데이터를 보지 못함)",
+    "컴파일 오류",
+    "읽기는 되지만 수정은 안 된다"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "기본값 `SeeAllData=false` 라서 테스트가 만든 데이터만 보입니다 (User, Profile 같은 설정 데이터는 예외).",
+   "notes": [
+    "SeeAllData=true일 때만 그렇습니다.",
+    "정답.",
+    "정상 컴파일됩니다.",
+    "아예 보이지 않습니다."
+   ]
+  },
+  {
+   "id": "td-03",
+   "section": "testing-deployment",
+   "q": "Queueable 작업을 테스트할 때, 작업 결과를 검증하는 올바른 위치는?",
+   "options": [
+    "System.enqueueJob 바로 다음 줄",
+    "Test.stopTest() 다음 줄",
+    "Test.startTest() 이전",
+    "@testSetup 메서드 안"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "`Test.stopTest()` 가 호출될 때 그 사이에 등록된 비동기 작업이 동기적으로 실행됩니다.",
+   "notes": [
+    "아직 실행되지 않았습니다.",
+    "정답.",
+    "작업 등록 전입니다.",
+    "데이터 준비용 메서드입니다."
+   ]
+  },
+  {
+   "id": "td-04",
+   "section": "testing-deployment",
+   "q": "외부 REST API를 호출하는 클래스를 테스트하려고 합니다. 올바른 방법은?",
+   "options": [
+    "테스트에서도 실제 API를 호출한다",
+    "HttpCalloutMock을 구현하고 Test.setMock()으로 등록한다",
+    "@isTest(SeeAllData=true)를 붙인다",
+    "콜아웃 코드는 테스트할 수 없으므로 커버리지에서 제외한다"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "테스트에서는 실제 콜아웃이 불가하므로 **Mock** 으로 응답을 흉내 냅니다.",
+   "notes": [
+    "테스트에서 실제 콜아웃은 실패합니다.",
+    "정답.",
+    "콜아웃과 무관합니다.",
+    "Mock으로 테스트할 수 있고 커버리지 제외 기능은 없습니다."
+   ]
+  },
+  {
+   "id": "td-05",
+   "section": "testing-deployment",
+   "q": "한 테스트 클래스의 여러 테스트 메서드가 같은 기본 데이터를 써야 합니다. 가장 효율적인 방법은?",
+   "options": [
+    "각 메서드에서 같은 insert 코드를 반복",
+    "@testSetup 메서드에서 한 번 만든다",
+    "SeeAllData=true로 실제 데이터를 쓴다",
+    "static 변수에 레코드를 저장해 메서드 간 공유"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "`@testSetup` 데이터는 클래스에서 한 번 만들어지고 각 테스트 메서드는 롤백된 깨끗한 상태로 그 데이터를 받습니다.",
+   "notes": [
+    "동작은 하지만 비효율적입니다.",
+    "정답.",
+    "org 데이터에 의존하게 되어 권장되지 않습니다.",
+    "테스트 메서드 간 static 값은 공유되지 않습니다."
+   ]
+  },
+  {
+   "id": "td-06",
+   "section": "testing-deployment",
+   "q": "Static Resource에 올린 CSV 파일로 테스트 데이터를 만드는 메서드는?",
+   "options": [
+    "Test.loadData()",
+    "Test.createData()",
+    "Database.import()",
+    "StaticResource.parse()"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": "`Test.loadData(Account.sObjectType, 'ResourceName')` 은 CSV를 읽어 레코드를 insert하고 리스트를 돌려줍니다.",
+   "notes": [
+    "정답.",
+    "없는 메서드입니다.",
+    "없는 메서드입니다.",
+    "없는 메서드입니다."
+   ]
+  },
+  {
+   "id": "td-07",
+   "section": "testing-deployment",
+   "q": "트리거가 대량 데이터에서도 Governor Limit에 걸리지 않는지 확인하는 테스트로 가장 알맞은 것은?",
+   "options": [
+    "레코드 1건을 insert하는 테스트",
+    "레코드 200건 이상을 리스트로 한 번에 insert하는 테스트",
+    "SeeAllData=true로 실제 데이터 사용",
+    "System.debug로 Limits 값을 출력만 함"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "트리거는 200건 단위로 호출되므로 **Bulk 테스트** 로 루프 안 SOQL·DML 문제를 잡습니다.",
+   "notes": [
+    "단건 테스트로는 bulk 문제를 찾지 못합니다.",
+    "정답.",
+    "데이터 의존적이고 대량 보장이 없습니다.",
+    "검증(assert)이 없습니다."
+   ]
+  },
+  {
+   "id": "td-08",
+   "section": "testing-deployment",
+   "q": "특정 사용자의 공유 권한으로 코드가 어떻게 동작하는지 테스트하려면?",
+   "options": [
+    "System.runAs(user) 블록 안에서 실행",
+    "with sharing을 테스트 클래스에 붙인다",
+    "Test.setCurrentPage 사용",
+    "UserInfo.setUser(user)"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": "`System.runAs` 는 테스트에서 사용자 컨텍스트(공유 규칙)를 바꿉니다. Mixed DML을 피하는 데도 씁니다.",
+   "notes": [
+    "정답.",
+    "테스트 클래스 자체의 공유 설정일 뿐 사용자를 바꾸지 않습니다.",
+    "Visualforce 페이지 테스트용입니다.",
+    "없는 메서드입니다."
+   ]
+  },
+  {
+   "id": "td-09",
+   "section": "testing-deployment",
+   "q": "Apex Replay Debugger에 대한 설명으로 옳은 것은?",
+   "options": [
+    "프로덕션 코드 실행을 실시간으로 멈춘다",
+    "VS Code에서 디버그 로그를 재생하며 중단점과 변수 값을 확인한다",
+    "Developer Console에서만 동작한다",
+    "디버그 로그 없이 동작한다"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "Replay Debugger는 **기록된 디버그 로그** 를 바탕으로 VS Code에서 단계별 실행을 재현합니다.",
+   "notes": [
+    "실시간 중단이 아니라 로그 재생입니다.",
+    "정답.",
+    "VS Code 확장 기능입니다.",
+    "디버그 로그(Apex Code FINEST)가 필요합니다."
+   ]
+  },
+  {
+   "id": "td-10",
+   "section": "testing-deployment",
+   "q": "특정 사용자에게서만 오류가 납니다. 그 사용자의 디버그 로그를 수집하려면 무엇을 설정하나요?",
+   "options": [
+    "Field History Tracking",
+    "그 사용자에 대한 Trace Flag와 Debug Level",
+    "Login IP Range",
+    "Apex Exception Email만"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "**Trace Flag**(대상·기간) + **Debug Level**(카테고리별 상세도)를 설정하면 로그가 쌓입니다.",
+   "notes": [
+    "필드 변경 이력입니다.",
+    "정답.",
+    "보안 설정입니다.",
+    "오류 메일은 알림일 뿐 상세 로그가 아닙니다."
+   ]
+  },
+  {
+   "id": "td-11",
+   "section": "testing-deployment",
+   "q": "Developer Console의 **Execute Anonymous** 에 대한 설명으로 옳은 것은?",
+   "options": [
+    "실행한 DML은 테스트처럼 자동 롤백된다",
+    "코드 조각을 바로 실행하며 DML은 실제로 저장된다",
+    "프로덕션에서는 사용할 수 없다",
+    "실행 결과 로그를 볼 수 없다"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": "익명 실행은 실제 트랜잭션입니다. 데이터 변경이 남으니 주의해야 합니다.",
+   "notes": [
+    "롤백되지 않습니다.",
+    "정답.",
+    "권한이 있으면 가능합니다.",
+    "로그가 남고 바로 열어 볼 수 있습니다."
+   ]
+  },
+  {
+   "id": "td-12",
+   "section": "testing-deployment",
+   "q": "Batch Apex 작업의 진행 상태(처리한 배치 수, 오류 수)를 확인하는 방법 2개를 고르세요.",
+   "options": [
+    "Setup의 Apex Jobs 화면",
+    "AsyncApexJob 오브젝트 SOQL 조회",
+    "Field History Tracking",
+    "Debug Level을 NONE으로 설정"
+   ],
+   "answer": [
+    0,
+    1
+   ],
+   "explain": "Apex Jobs 화면과 `AsyncApexJob`(JobItemsProcessed, NumberOfErrors, Status)으로 모니터링합니다.",
+   "notes": [
+    "정답.",
+    "정답.",
+    "관련 없습니다.",
+    "로그를 끄는 설정입니다."
+   ]
+  },
+  {
+   "id": "td-13",
+   "section": "testing-deployment",
+   "q": "같은 프로덕션 org에서 만든 Sandbox 간에 Apex 클래스와 커스텀 필드를 UI로 옮기려 합니다. 가장 알맞은 것은?",
+   "options": [
+    "Change Set (Deployment Connection 필요)",
+    "Data Loader",
+    "Data Import Wizard",
+    "AppExchange에 공개 패키지로 등록"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": "연결된 org 사이 메타데이터 이동은 **Change Set** 이 UI 기반 방법입니다.",
+   "notes": [
+    "정답.",
+    "데이터 도구입니다.",
+    "데이터 도구입니다.",
+    "과합니다."
+   ]
+  },
+  {
+   "id": "td-14",
+   "section": "testing-deployment",
+   "q": "UAT와 성능 테스트를 위해 프로덕션의 **모든 데이터** 를 복사한 환경이 필요합니다. 어떤 Sandbox인가요?",
+   "options": [
+    "Developer",
+    "Developer Pro",
+    "Partial Copy",
+    "Full"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": "Full Sandbox만 전체 데이터를 복사합니다 (새로 고침 29일).",
+   "notes": [
+    "메타데이터만입니다.",
+    "메타데이터만입니다.",
+    "템플릿으로 고른 일부 데이터만입니다.",
+    "정답."
+   ]
+  },
+  {
+   "id": "td-15",
+   "section": "testing-deployment",
+   "q": "Salesforce CLI로 할 수 있는 일로 옳은 것 2개를 고르세요.",
+   "options": [
+    "Scratch Org 생성",
+    "로컬 소스를 org에 배포하고 Apex 테스트 실행",
+    "프로덕션 org에서 Apex 클래스를 직접 편집",
+    "Field-Level Security를 우회한 데이터 조회"
+   ],
+   "answer": [
+    0,
+    1
+   ],
+   "explain": "`sf org create scratch`, `sf project deploy start`, `sf apex run test` 등이 대표 명령입니다.",
+   "notes": [
+    "정답.",
+    "정답.",
+    "프로덕션에서는 직접 편집할 수 없고 배포로만 변경합니다.",
+    "CLI도 사용자 권한을 따릅니다."
+   ]
+  },
+  {
+   "id": "td-16",
+   "section": "testing-deployment",
+   "q": "Record-Triggered Flow가 의도대로 동작하는지 배포 전에 자동으로 확인하는 방법으로 가장 알맞은 것은?",
+   "options": [
+    "Flow Builder에서 Flow Test를 만들어 실행",
+    "Flow를 프로덕션에서 바로 활성화하고 관찰",
+    "Validation Rule로 확인",
+    "Flow 버전 기록을 확인"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": "Flow Builder의 **Flow Test** 는 초기 레코드 조건과 기대 결과(Assertion)를 정의해 반복 실행할 수 있습니다. Apex 테스트로 레코드를 저장해 결과를 검증하는 방법도 있습니다.",
+   "notes": [
+    "정답.",
+    "위험합니다.",
+    "테스트 도구가 아닙니다.",
+    "변경 기록일 뿐 동작 검증이 아닙니다."
+   ]
+  }
+ ],
+ "trail": {
+  "title": "Study for the Platform Developer Exam + Prepare for Your Salesforce Platform Developer I Credential",
+  "url": "https://trailhead.salesforce.com/content/learn/trails/platform-developer-i-certification-study-guide",
+  "hours": "약 33시간 50분"
+ }
+}

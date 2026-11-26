@@ -24,3 +24,9 @@ export function crumb(path) {
     .map((p) => esc(p.trim()))
     .join('<span class="sep">›</span>');
 }
+
+/** 여러 줄 코드 예시 (Apex, SOQL, HTML, JS). 내용은 escape만 하고 그대로 보여 준다. */
+export function codeBlock(code, lang = '') {
+  if (!code) return '';
+  return `<pre class="code-block"${lang ? ` data-lang="${esc(lang)}"` : ''}><code>${esc(code)}</code></pre>`;
+}
