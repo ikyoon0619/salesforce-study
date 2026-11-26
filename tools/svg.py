@@ -39,7 +39,10 @@ class Diagram:
         if both:
             self.parts.append(self._head(x2, y2, x1, y1, head))
         if label:
-            self.text((x1 + x2) / 2, (y1 + y2) / 2 + label_dy, label, "sub")
+            if x1 == x2:  # 세로 화살표는 선과 겹치지 않게 오른쪽에 표시
+                self.text(x1 + 8 + 6 * len(label), (y1 + y2) / 2 + 4, label, "sub")
+            else:
+                self.text((x1 + x2) / 2, (y1 + y2) / 2 + label_dy, label, "sub")
         return self
 
     @staticmethod

@@ -1,0 +1,71 @@
+{
+  "intro": "**Testing, Debugging, and Deployment(20%)** 섹션의 목표를 정리한 공식 Cert Prep 모듈입니다. 테스트 작성과 데이터, 개발 도구, 디버깅·모니터링, 배포 절차를 다룹니다.",
+  "units": [
+    {
+      "title": "Get a Refresh on Testing",
+      "ko": "테스트 다시 보기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/platform-developer-i-certification-prep-testing-debugging-and-deployment/pd1-4-testing",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "트리거, 컨트롤러, 클래스, **Flow** 의 테스트를 작성하고 실행",
+            "테스트 데이터: 직접 생성, Test Data Factory, `@testSetup`, `Test.loadData`(CSV)",
+            "고려 사항: 커버리지 75%, 트리거 커버, 비동기는 `Test.stopTest()` 후 검증, 콜아웃은 Mock"
+          ]
+        },
+        {
+          "type": "code",
+          "code": "@isTest\nprivate class InvoiceServiceTest {\n    @isTest static void totalsLineItems() {\n        Invoice__c inv = TestDataFactory.invoiceWithLines(3, 100);\n        Test.startTest();\n        InvoiceService.recalc(new Set<Id>{ inv.Id });\n        Test.stopTest();\n        Assert.areEqual(300, [SELECT Total__c FROM Invoice__c].Total__c);\n    }\n}",
+          "lang": "apex"
+        },
+        {
+          "type": "list",
+          "items": [
+            "추천 모듈: Apex Testing, Asynchronous Apex"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Review Debugging and Deployment",
+      "ko": "디버깅과 배포",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/platform-developer-i-certification-prep-testing-debugging-and-deployment/pd1-4-debug-deploy-tools",
+      "blocks": [
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 220\" role=\"img\" aria-label=\"코드가 프로덕션까지 가는 길\"><rect class=\"d-box\" x=\"20\" y=\"70\" width=\"150\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"95.0\" y=\"98.5\" text-anchor=\"middle\">개발</text><text class=\"d-sub\" x=\"95.0\" y=\"117.5\" text-anchor=\"middle\">Developer Sandbox</text><text class=\"d-sub\" x=\"95.0\" y=\"133.5\" text-anchor=\"middle\">Scratch Org</text><rect class=\"d-accent\" x=\"200\" y=\"70\" width=\"150\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"275.0\" y=\"98.5\" text-anchor=\"middle\">테스트</text><text class=\"d-sub\" x=\"275.0\" y=\"117.5\" text-anchor=\"middle\">Apex 테스트</text><text class=\"d-sub\" x=\"275.0\" y=\"133.5\" text-anchor=\"middle\">Flow Test</text><rect class=\"d-box\" x=\"380\" y=\"70\" width=\"150\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"455.0\" y=\"98.5\" text-anchor=\"middle\">통합·UAT</text><text class=\"d-sub\" x=\"455.0\" y=\"117.5\" text-anchor=\"middle\">Partial / Full</text><text class=\"d-sub\" x=\"455.0\" y=\"133.5\" text-anchor=\"middle\">Sandbox</text><rect class=\"d-warn\" x=\"560\" y=\"70\" width=\"140\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"630.0\" y=\"98.5\" text-anchor=\"middle\">프로덕션</text><text class=\"d-sub\" x=\"630.0\" y=\"117.5\" text-anchor=\"middle\">커버리지 75%</text><text class=\"d-sub\" x=\"630.0\" y=\"133.5\" text-anchor=\"middle\">트리거 1%+</text><line class=\"d-line\" x1=\"174\" y1=\"110\" x2=\"196\" y2=\"110\"/><polygon class=\"d-arrow\" points=\"196.0,110.0 187.9,113.9 187.9,106.1\"/><line class=\"d-line\" x1=\"354\" y1=\"110\" x2=\"376\" y2=\"110\"/><polygon class=\"d-arrow\" points=\"376.0,110.0 367.9,113.9 367.9,106.1\"/><line class=\"d-line-accent\" x1=\"534\" y1=\"110\" x2=\"556\" y2=\"110\"/><polygon class=\"d-arrow-accent\" points=\"556.0,110.0 547.9,113.9 547.9,106.1\"/><text class=\"d-sub\" x=\"360\" y=\"40\" text-anchor=\"middle\">Change Set · Salesforce CLI · DevOps Center로 배포</text></svg>",
+          "caption": "개발 → 테스트 → 통합·UAT → 프로덕션. 마지막 관문에서 커버리지 규칙을 확인합니다."
+        },
+        {
+          "type": "list",
+          "items": [
+            "도구: Salesforce DX(소스 기반 개발), Salesforce CLI(`sf`), Developer Console(브라우저), VS Code + Apex Replay Debugger",
+            "디버깅·모니터링: 디버그 로그(Trace Flag, Debug Level), Flow 디버그와 실패한 Flow 인터뷰, Apex Jobs(비동기·Batch)",
+            "배포: 환경(Sandbox, Scratch Org), 요구사항(테스트 통과, 커버리지), 방법(Change Set, CLI, DevOps Center, 패키지)"
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "추천 모듈·프로젝트: Developer Console Basics, Command-Line Interface, Quick Start: Salesforce DX, Org Development Model, Find and Fix Bugs with Apex Replay Debugger"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "프로덕션에서는 Apex를 직접 고칠 수 없습니다. 항상 다른 org에서 만들고 테스트와 함께 배포합니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Trace Flag",
+      "누구의 로그를 언제까지 남길지 정하는 설정"
+    ],
+    [
+      "Code Coverage",
+      "테스트가 실행한 코드 줄의 비율"
+    ]
+  ]
+}

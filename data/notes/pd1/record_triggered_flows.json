@@ -1,0 +1,161 @@
+{
+  "intro": "레코드가 생성·수정·삭제될 때 자동으로 도는 **Record-Triggered Flow** 를 만듭니다. PD1에서는 \"이 요구는 트리거 대신 Flow로 되는가\"와 **before-save / after-save** 구분이 중요합니다.",
+  "units": [
+    {
+      "title": "Get Started with Triggered Flows",
+      "ko": "Triggered Flow 시작하기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/record-triggered-flows/get-started-with-triggered-flows",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "Flow 종류",
+          "headers": [
+            "종류",
+            "시작 방법",
+            "특징"
+          ],
+          "rows": [
+            [
+              "Screen Flow",
+              "Quick Action, Lightning 페이지, Experience 사이트",
+              "화면으로 사용자를 안내"
+            ],
+            [
+              "Autolaunched Flow",
+              "다른 Flow, Apex, REST API",
+              "화면 없이 백그라운드"
+            ],
+            [
+              "Triggered Flow",
+              "시간, 레코드 변경, Platform Event",
+              "지정한 트리거로 자동 실행"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Workflow Rule과 Process Builder는 이전 도구입니다. 지금은 **Flow Builder** 가 둘의 기능을 모두 합친 권장 도구입니다.",
+            "트리거 종류: **Schedule**(정해진 시각, 야간 일괄 작업), **Platform Event**(이벤트 수신), **Record**(생성·수정·삭제)",
+            "Record 트리거 조건: 생성될 때만 / 수정될 때마다 / 생성 또는 수정 / 삭제될 때만"
+          ]
+        },
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 250\" role=\"img\" aria-label=\"Record-Triggered Flow 실행 시점 네 가지\"><rect class=\"d-accent\" x=\"20\" y=\"40\" width=\"160\" height=\"150\" rx=\"10\"/><text class=\"d-strong\" x=\"100.0\" y=\"95.5\" text-anchor=\"middle\">Fast Field Updates</text><text class=\"d-sub\" x=\"100.0\" y=\"114.5\" text-anchor=\"middle\">저장 전 (before-save)</text><text class=\"d-sub\" x=\"100.0\" y=\"130.5\" text-anchor=\"middle\">트리거한 레코드만 수정</text><text class=\"d-sub\" x=\"100.0\" y=\"146.5\" text-anchor=\"middle\">가장 빠름</text><rect class=\"d-box\" x=\"195\" y=\"40\" width=\"160\" height=\"150\" rx=\"10\"/><text class=\"d-strong\" x=\"275.0\" y=\"95.5\" text-anchor=\"middle\">Actions and Related Records</text><text class=\"d-sub\" x=\"275.0\" y=\"114.5\" text-anchor=\"middle\">저장 후 (after-save)</text><text class=\"d-sub\" x=\"275.0\" y=\"130.5\" text-anchor=\"middle\">다른 레코드, 액션,</text><text class=\"d-sub\" x=\"275.0\" y=\"146.5\" text-anchor=\"middle\">Subflow</text><rect class=\"d-box\" x=\"370\" y=\"40\" width=\"160\" height=\"150\" rx=\"10\"/><text class=\"d-strong\" x=\"450.0\" y=\"95.5\" text-anchor=\"middle\">Run Asynchronously</text><text class=\"d-sub\" x=\"450.0\" y=\"114.5\" text-anchor=\"middle\">트랜잭션 직후</text><text class=\"d-sub\" x=\"450.0\" y=\"130.5\" text-anchor=\"middle\">외부 시스템 호출,</text><text class=\"d-sub\" x=\"450.0\" y=\"146.5\" text-anchor=\"middle\">오래 걸리는 일</text><rect class=\"d-warn\" x=\"545\" y=\"40\" width=\"155\" height=\"150\" rx=\"10\"/><text class=\"d-strong\" x=\"622.5\" y=\"95.5\" text-anchor=\"middle\">Scheduled Paths</text><text class=\"d-sub\" x=\"622.5\" y=\"114.5\" text-anchor=\"middle\">날짜 기준 나중에</text><text class=\"d-sub\" x=\"622.5\" y=\"130.5\" text-anchor=\"middle\">예: 마감 5일 후</text><text class=\"d-sub\" x=\"622.5\" y=\"146.5\" text-anchor=\"middle\">알림·후속 작업</text><line class=\"d-line-accent\" x1=\"20\" y1=\"220\" x2=\"700\" y2=\"220\"/><polygon class=\"d-arrow-accent\" points=\"700.0,220.0 691.9,223.9 691.9,216.1\"/><text class=\"d-sub\" x=\"360.0\" y=\"214.0\" text-anchor=\"middle\">시간 →</text></svg>",
+          "caption": "같은 레코드 저장이라도 언제 실행할지 네 가지 중 고릅니다."
+        },
+        {
+          "type": "tip",
+          "text": "\"트리거한 레코드의 필드만 바꾸면 된다\" → Fast Field Updates(before-save). 다른 레코드를 만들거나 이메일을 보내면 Actions and Related Records(after-save)."
+        }
+      ]
+    },
+    {
+      "title": "Build a Record-Triggered Flow",
+      "ko": "Record-Triggered Flow 만들기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/record-triggered-flows/build-a-record-triggered-flow",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "요구: 금액이 25,000을 넘는 Opportunity가 Closed Won이 되면 초안 Contract를 자동으로 만든다. 트리거(생성·수정) + 조건(Closed Won, Amount > 25000) + 동작(Contract 생성)으로 나눠 생각합니다."
+        },
+        {
+          "type": "steps",
+          "title": "Start 요소 설정",
+          "items": [
+            "Automation 앱 > Flows > New > Record-Triggered Flow",
+            "Object: Opportunity, Trigger: A record is created or updated",
+            "조건(AND): Stage = Closed Won, Amount > 25000",
+            "**Only when a record is updated to meet the condition requirements** 선택 (조건을 처음 만족할 때 한 번만)",
+            "Optimize for: Actions and Related Records"
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "Contract 만들기",
+          "items": [
+            "Create Records 요소: 'Create Draft Contract'",
+            "필드 값 직접 설정: Account ID = Triggering Opportunity > Account ID, Status = Draft",
+            "Save (Label: Closed Won Opportunities)"
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Debug: 'Skip start condition requirements'를 고르고 Updated로 실행할 레코드를 골라 실행합니다. 경로가 여러 개면 한 번에 하나만 디버그합니다.",
+            "저장을 자주 하고, **활성화 전에 Debug** 로 데이터에 영향 없이 확인합니다."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "\"조건을 만족할 때마다\"를 고르면 이미 조건을 만족한 레코드를 수정할 때마다 Contract가 또 생깁니다. 중복 방지는 '조건을 만족하게 바뀔 때만'."
+        }
+      ]
+    },
+    {
+      "title": "Add a Scheduled Task to Your Flow",
+      "ko": "Scheduled Path 추가",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/record-triggered-flows/add-a-scheduled-task-to-your-flow",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Scheduled Path: 레코드 변경이나 날짜 필드 기준으로 **나중에** 실행 (분, 시간, 일, 월 단위). 예: Case 생성 6시간 후, 갱신일 2일 후, 보증 만료 1달 전",
+            "조건: Flow가 **Actions and Related Records** 로 최적화돼 있어야 하고, Process Automation Settings의 **Default Workflow User** 가 설정돼 있어야 합니다."
+          ]
+        },
+        {
+          "type": "steps",
+          "title": "마감 5일 후 Task 만들기",
+          "items": [
+            "Start 요소 > Add Scheduled Paths",
+            "Label '5 Days After Close', Time Source: Opportunity Close Date, Offset 5 Days After",
+            "그 경로에 Create Records(Task): Subject, Related To ID = Opportunity ID, Assigned To ID = Opportunity Owner ID",
+            "Save As New Version"
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Related To ID(WhatId)는 Account·Opportunity 같은 사물, Name ID(WhoId)는 Contact·Lead 같은 사람에 씁니다."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Meet Flow Trigger Explorer",
+      "ko": "Flow Trigger Explorer",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/record-triggered-flows/meet-flow-trigger-explorer",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "한 오브젝트에서 생성·수정·삭제 시 도는 Flow를 **실행 시점별(저장 전, 저장 후, 비동기, Scheduled)** 로 모아 보고 순서를 바꾸는 화면입니다.",
+            "여는 곳: Flow의 Start 요소, Object Manager > Flow Triggers, Setup > Flows",
+            "Edit Order로 끌어서 순서 변경 → Update. 비동기 그룹은 순서가 보장되지 않습니다.",
+            "대기 중인 Scheduled Path 작업은 Setup > **Time-Based Automations** 에서 보고 삭제할 수 있습니다."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "같은 오브젝트의 Flow 실행 순서는 Flow Trigger Explorer에서 정합니다. (Apex 트리거 여러 개는 순서를 보장할 수 없는 것과 대비)"
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Fast Field Updates",
+      "before-save Flow, 트리거한 레코드만 빠르게 수정"
+    ],
+    [
+      "Scheduled Path",
+      "날짜 기준으로 나중에 실행하는 Flow 경로"
+    ],
+    [
+      "Default Workflow User",
+      "Scheduled Path를 실행하는 사용자"
+    ]
+  ]
+}

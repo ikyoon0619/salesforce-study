@@ -1,0 +1,169 @@
+{
+  "intro": "Salesforce 검색이 **인덱스** 로 어떻게 동작하는지, 커스텀 검색이 필요할 때 **SOSL과 SOQL 중 무엇** 을 고를지, 검색 결과를 빠르고 정확하게 만드는 방법을 배웁니다.",
+  "units": [
+    {
+      "title": "Choose the Right Search Solution",
+      "ko": "알맞은 검색 방식 고르기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/search_solution_basics/search_solution_basics_choosing",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "레코드가 저장되면 검색 엔진이 내용을 **토큰** 으로 나눠 인덱스에 넣습니다. 검색어도 토큰으로 나눠 인덱스와 맞추고, 관련도 순으로 정렬해 **사용자가 볼 수 있는 결과만** 돌려줍니다."
+        },
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 230\" role=\"img\" aria-label=\"SOQL과 SOSL은 보는 곳이 다르다\"><rect class=\"d-box\" x=\"20\" y=\"60\" width=\"200\" height=\"110\" rx=\"10\"/><text class=\"d-strong\" x=\"120.0\" y=\"103.5\" text-anchor=\"middle\">SOQL</text><text class=\"d-sub\" x=\"120.0\" y=\"122.5\" text-anchor=\"middle\">SELECT … FROM …</text><text class=\"d-sub\" x=\"120.0\" y=\"138.5\" text-anchor=\"middle\">정확한 조건, 관계, 집계</text><rect class=\"d-box\" x=\"260\" y=\"20\" width=\"200\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"56.5\" text-anchor=\"middle\">데이터베이스</text><text class=\"d-sub\" x=\"360.0\" y=\"75.5\" text-anchor=\"middle\">필드 값 그대로</text><rect class=\"d-accent\" x=\"260\" y=\"130\" width=\"200\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"158.5\" text-anchor=\"middle\">검색 인덱스</text><text class=\"d-sub\" x=\"360.0\" y=\"177.5\" text-anchor=\"middle\">토큰, 동의어,</text><text class=\"d-sub\" x=\"360.0\" y=\"193.5\" text-anchor=\"middle\">철자 교정, 관련도</text><rect class=\"d-accent\" x=\"500\" y=\"60\" width=\"200\" height=\"110\" rx=\"10\"/><text class=\"d-strong\" x=\"600.0\" y=\"103.5\" text-anchor=\"middle\">SOSL</text><text class=\"d-sub\" x=\"600.0\" y=\"122.5\" text-anchor=\"middle\">FIND … RETURNING …</text><text class=\"d-sub\" x=\"600.0\" y=\"138.5\" text-anchor=\"middle\">여러 오브젝트 텍스트 검색</text><line class=\"d-line\" x1=\"224\" y1=\"100\" x2=\"256\" y2=\"64\"/><polygon class=\"d-arrow\" points=\"256.0,64.0 253.5,72.7 247.7,67.5\"/><line class=\"d-line-accent\" x1=\"496\" y1=\"120\" x2=\"464\" y2=\"168\"/><polygon class=\"d-arrow-accent\" points=\"464.0,168.0 465.2,159.1 471.8,163.4\"/></svg>",
+          "caption": "SOQL은 DB의 필드 값, SOSL은 검색 인덱스를 봅니다."
+        },
+        {
+          "type": "list",
+          "items": [
+            "인덱스 기능: 철자 교정, 닉네임, 어형 변화(add/adding/added), 동의어 그룹. 'bunny slippers'로 'rabbit slippers', 순서 바뀐 검색어, 오타도 찾음",
+            "커스텀 검색이 필요한 때: 표준 UI 대신 고객용 지식 베이스나 사내 제품 사이트 같은 커스텀 UI를 쓸 때"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "SOQL vs SOSL 고르기",
+          "headers": [
+            "SOQL",
+            "SOSL"
+          ],
+          "rows": [
+            [
+              "오브젝트와 필드를 알 때",
+              "어느 오브젝트·필드에 있는지 모를 때"
+            ],
+            [
+              "한 오브젝트나 관계있는 오브젝트",
+              "관계없는 여러 오브젝트"
+            ],
+            [
+              "개수 세기, 정렬, 숫자·날짜·체크박스 조건",
+              "필드 안의 단어 검색 (더 빠르고 관련도 높음)"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "title": "검색 API",
+          "headers": [
+            "API",
+            "용도"
+          ],
+          "rows": [
+            [
+              "Query (REST) / query() (SOAP)",
+              "SOQL 실행"
+            ],
+            [
+              "Search (REST) / search() (SOAP)",
+              "SOSL 실행"
+            ],
+            [
+              "Parameterized Search (REST)",
+              "검색 문자열 대신 URL 매개변수"
+            ],
+            [
+              "Suggested Records",
+              "입력하는 동안 자동 완성"
+            ],
+            [
+              "Federated Search",
+              "외부 검색 엔진 결과를 전역 검색에 (인덱스 기능 미적용)"
+            ],
+            [
+              "Apex",
+              "인라인 SOQL·SOSL, Search 클래스로 동적 SOSL"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Build Search for Common Use Cases",
+      "ko": "자주 쓰는 검색 만들기",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/search_solution_basics/search_solution_basics_building",
+      "blocks": [
+        {
+          "type": "code",
+          "code": "FIND {march 2016 email} RETURNING Campaign                       -- 한 오브젝트\nFIND {recycled materials} RETURNING Product2, ContentVersion, FeedItem   -- 여러 오브젝트\nFIND {pink hi\\-top} RETURNING Merchandise__c                       -- 커스텀 (하이픈은 \\ 로 이스케이프)",
+          "lang": "soql"
+        },
+        {
+          "type": "list",
+          "items": [
+            "RETURNING에 적지 않은 오브젝트는 결과에 나오지 않습니다.",
+            "SOQL은 인덱스를 쓰지 않으므로 'pink sneaker hi-top' 레코드를 'pink hi-top'으로 찾지 못합니다."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Optimize Search Results",
+      "ko": "검색 결과 최적화",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/search_solution_basics/search_solution_basics_optimizing",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "검색 대상이 많을수록, 결과가 많을수록 느려집니다. **검색 범위를 줄이고 결과 수를 줄이되** 너무 줄여 있는 레코드를 못 찾게 하지는 마세요."
+          ]
+        },
+        {
+          "type": "code",
+          "code": "FIND {jsmith@cloudkicks.com} IN EMAIL FIELDS RETURNING Contact\n\nFIND {Cloud Kicks} RETURNING Account (Name, Industry ORDER BY Name LIMIT 10 OFFSET 25)\n\nFIND {shoes} RETURNING Product2 WITH PRICEBOOK = '01sxx0000002MffAAE'",
+          "lang": "soql",
+          "title": "범위와 결과 줄이기"
+        },
+        {
+          "type": "table",
+          "title": "SOSL ↔ SOQL 대응",
+          "headers": [
+            "SOSL",
+            "SOQL"
+          ],
+          "rows": [
+            [
+              "IN SearchGroup",
+              "WHERE"
+            ],
+            [
+              "RETURNING 필드 목록",
+              "SELECT"
+            ],
+            [
+              "ORDER BY, LIMIT, OFFSET",
+              "같음"
+            ],
+            [
+              "WITH DATA CATEGORY",
+              "같음"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "WITH 필터: DIVISION, DATA CATEGORY, NETWORK, PRICEBOOK (미리 걸러 성능 향상)",
+            "관리자 설정: **동의어 그룹**(Setup > Synonyms, 그룹당 2~6개), Knowledge 기사의 **Promoted Search Terms**(용어당 100자, org당 2,000개)"
+          ]
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Search index",
+      "토큰으로 나눈 검색용 색인"
+    ],
+    [
+      "Federated Search",
+      "외부 검색 엔진을 전역 검색에 연결"
+    ],
+    [
+      "Synonym group",
+      "같은 뜻으로 검색되는 단어 묶음"
+    ]
+  ]
+}

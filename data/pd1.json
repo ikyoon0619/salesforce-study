@@ -34,7 +34,8 @@
      "url": "https://trailhead.salesforce.com/content/learn/modules/platform-developer-i-certification-prep-fundamentals-and-database-modeling",
      "minutes": 10,
      "kind": "module",
-     "topics": "공식 시험 가이드, 섹션 비중, 시험 정책, 이 섹션의 학습 목표"
+     "topics": "공식 시험 가이드, 섹션 비중, 시험 정책, 이 섹션의 학습 목표",
+     "note": "certprep_fundamentals"
     },
     {
      "title": "Data Modeling",
@@ -66,30 +67,34 @@
     {
      "title": "Apex & .NET Basics",
      "url": "https://trailhead.salesforce.com/content/learn/modules/apex_basics_dotnet",
-     "minutes": 35,
+     "minutes": 70,
      "kind": "module",
-     "topics": "멀티테넌트와 Governor Limit, Apex 문법을 다른 언어와 비교, 실행 컨텍스트"
+     "topics": "멀티테넌트와 Governor Limit, Apex 문법을 다른 언어와 비교, 실행 컨텍스트",
+     "note": "apex_basics_dotnet"
     },
     {
      "title": "Platform Event Basics",
      "url": "https://trailhead.salesforce.com/content/learn/modules/platform_events_basics",
      "minutes": 50,
      "kind": "module",
-     "topics": "이벤트 기반 아키텍처, Platform Event 정의·발행·구독"
+     "topics": "이벤트 기반 아키텍처, Platform Event 정의·발행·구독",
+     "note": "platform_events_basics"
     },
     {
-     "title": "Agentforce for Developers",
+     "title": "Agentforce Vibes Extension (옛 Agentforce for Developers)",
      "url": "https://trailhead.salesforce.com/content/learn/modules/einstein-for-developers",
-     "minutes": 45,
+     "minutes": 15,
      "kind": "module",
-     "topics": "VS Code의 AI 코딩 도우미: Apex·LWC·테스트 생성, 한계와 검토 책임"
+     "topics": "VS Code의 AI 개발 에이전트: Apex·LWC·테스트 생성, Rules·Skills, MCP, 한계와 검토 책임",
+     "note": "agentforce_vibes"
     },
     {
-     "title": "Create an Agent Using Agentforce DX",
+     "title": "Build an Agent Using Agentforce DX",
      "url": "https://trailhead.salesforce.com/content/learn/projects/create-an-agent-using-pro-code-tools",
-     "minutes": 40,
+     "minutes": 35,
      "kind": "project",
-     "topics": "Salesforce CLI와 VS Code로 에이전트 메타데이터를 만들고 배포"
+     "topics": "Salesforce CLI와 VS Code로 에이전트 메타데이터를 만들고 배포",
+     "note": "agentforce_dx"
     }
    ],
    "summary": [
@@ -173,7 +178,7 @@
     {
      "term": "Agentforce for Developers",
      "ko": "개발자용 AI 도우미",
-     "body": "VS Code 확장(Salesforce Extension Pack)과 Code Builder에서 쓰는 AI 도우미입니다. 자연어로 Apex·LWC 코드 생성, 코드 설명, **Apex 테스트 클래스 생성**, 인라인 자동완성을 해 줍니다.",
+     "body": "지금은 **Agentforce Vibes** 확장으로 이름이 바뀌었습니다. VS Code(Salesforce Extension Pack)와 Code Builder에서 쓰는 AI 개발 에이전트입니다. 자연어로 Apex·LWC 코드 생성, 코드 설명, **Apex 테스트 클래스 생성**, 인라인 자동완성을 해 줍니다.",
      "points": [
       "한계: 생성한 코드는 **항상 개발자가 검토·테스트** 해야 함. 정확성을 보장하지 않음",
       "org의 데이터가 아니라 코드와 메타데이터 맥락으로 동작",
@@ -363,56 +368,64 @@
      "url": "https://trailhead.salesforce.com/content/learn/modules/platform-developer-i-certification-prep-logic-and-process-automation",
      "minutes": 35,
      "kind": "module",
-     "topics": "선언형 자동화와 Apex 기본, SOQL·SOSL·DML, 클래스와 트리거, 저장 순서"
+     "topics": "선언형 자동화와 Apex 기본, SOQL·SOSL·DML, 클래스와 트리거, 저장 순서",
+     "note": "certprep_automation"
     },
     {
      "title": "Approve Records with Approval Processes",
      "url": "https://trailhead.salesforce.com/content/learn/modules/business_process_automation",
-     "minutes": 60,
+     "minutes": 30,
      "kind": "module",
-     "topics": "Approval Process 구성, 승인 단계와 동작"
+     "topics": "Approval Process 구성, 승인 단계와 동작",
+     "note": "approval_processes"
     },
     {
      "title": "Record-Triggered Flows",
      "url": "https://trailhead.salesforce.com/content/learn/modules/record-triggered-flows",
-     "minutes": 80,
+     "minutes": 65,
      "kind": "module",
-     "topics": "Before-save(Fast Field Updates)와 After-save, 진입 조건, 예약 경로"
+     "topics": "Before-save(Fast Field Updates)와 After-save, 진입 조건, 예약 경로",
+     "note": "record_triggered_flows"
     },
     {
      "title": "Apex Basics & Database",
      "url": "https://trailhead.salesforce.com/content/learn/modules/apex_database",
-     "minutes": 115,
+     "minutes": 165,
      "kind": "module",
-     "topics": "Apex 문법, sObject, DML, SOQL, SOSL"
+     "topics": "Apex 문법, sObject, DML, SOQL, SOSL",
+     "note": "apex_database"
     },
     {
      "title": "Database & .NET Basics",
      "url": "https://trailhead.salesforce.com/content/learn/modules/database_basics_dotnet",
-     "minutes": 40,
+     "minutes": 55,
      "kind": "module",
-     "topics": "관계형 DB와 비교한 Salesforce 데이터 모델, SOQL vs SQL"
+     "topics": "관계형 DB와 비교한 Salesforce 데이터 모델, SOQL vs SQL",
+     "note": "database_basics_dotnet"
     },
     {
      "title": "Search Solution Basics",
      "url": "https://trailhead.salesforce.com/content/learn/modules/search_solution_basics",
-     "minutes": 50,
+     "minutes": 35,
      "kind": "module",
-     "topics": "Salesforce 검색 구조, SOSL과 SOQL을 고르는 기준"
+     "topics": "Salesforce 검색 구조, SOSL과 SOQL을 고르는 기준",
+     "note": "search_solution_basics"
     },
     {
      "title": "Apex Triggers",
      "url": "https://trailhead.salesforce.com/content/learn/modules/apex_triggers",
-     "minutes": 60,
+     "minutes": 90,
      "kind": "module",
-     "topics": "트리거 문법, 컨텍스트 변수, Bulk 트리거 패턴"
+     "topics": "트리거 문법, 컨텍스트 변수, Bulk 트리거 패턴",
+     "note": "apex_triggers"
     },
     {
      "title": "Asynchronous Apex",
      "url": "https://trailhead.salesforce.com/content/learn/modules/asynchronous_apex",
-     "minutes": 160,
+     "minutes": 210,
      "kind": "module",
-     "topics": "Future, Batch, Queueable, Schedulable, 작업 모니터링"
+     "topics": "Future, Batch, Queueable, Schedulable, 작업 모니터링",
+     "note": "asynchronous_apex"
     }
    ],
    "summary": [
@@ -748,7 +761,8 @@
      "url": "https://trailhead.salesforce.com/content/learn/modules/platform-developer-i-certification-prep-user-interfaces",
      "minutes": 10,
      "kind": "module",
-     "topics": "Visualforce, Lightning Component Framework, UI 보안"
+     "topics": "Visualforce, Lightning Component Framework, UI 보안",
+     "note": "certprep_ui"
     },
     {
      "title": "Visualforce Basics",
@@ -1077,7 +1091,8 @@
      "url": "https://trailhead.salesforce.com/content/learn/modules/platform-developer-i-certification-prep-testing-debugging-and-deployment",
      "minutes": 20,
      "kind": "module",
-     "topics": "테스트 요구사항, 디버깅 도구, 배포"
+     "topics": "테스트 요구사항, 디버깅 도구, 배포",
+     "note": "certprep_testing"
     },
     {
      "title": "Apex Testing",
@@ -3090,6 +3105,6 @@
  "trail": {
   "title": "Study for the Platform Developer Exam + Prepare for Your Salesforce Platform Developer I Credential",
   "url": "https://trailhead.salesforce.com/content/learn/trails/platform-developer-i-certification-study-guide",
-  "hours": "약 33시간 50분"
+  "hours": "약 35시간 15분"
  }
 }

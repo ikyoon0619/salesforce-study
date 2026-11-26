@@ -1,0 +1,218 @@
+{
+  "intro": "SQL Server에 익숙한 개발자 관점에서 **SQL → SOQL**, 전문 검색 → **SOSL**, 쿼리 최적화(인덱스, Query Plan), **DML** 을 비교합니다. \"SOQL에서 안 되는 것\"을 정리하기 좋은 모듈입니다.",
+  "units": [
+    {
+      "title": "Move from SQL to SOQL",
+      "ko": "SQL에서 SOQL로",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/database_basics_dotnet/sql_to_soql",
+      "blocks": [
+        {
+          "type": "table",
+          "title": "용어 대응",
+          "headers": [
+            "SQL",
+            "Salesforce"
+          ],
+          "rows": [
+            [
+              "Table",
+              "Object (표준 / 커스텀 __c)"
+            ],
+            [
+              "Column / Row",
+              "Field / Record"
+            ],
+            [
+              "Primary key",
+              "Id (18자, 시스템 생성)"
+            ],
+            [
+              "Foreign key, JOIN",
+              "관계 필드, 관계 쿼리"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "title": "SQL과 다른 점",
+          "headers": [
+            "SQL",
+            "SOQL"
+          ],
+          "rows": [
+            [
+              "SELECT / INSERT / UPDATE / DELETE",
+              "**SELECT만**. 변경은 DML"
+            ],
+            [
+              "SELECT *",
+              "없음. `FIELDS(ALL)` 등"
+            ],
+            [
+              "JOIN",
+              "없음. 점 표기와 서브쿼리"
+            ],
+            [
+              "AS 별칭",
+              "오브젝트 별칭만. 필드 별칭은 GROUP BY 집계에서만"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "자식→부모 점 표기는 **최대 5단계** 까지 올라갈 수 있습니다.",
+            "부모→자식 서브쿼리의 관계 이름은 복수형(Contacts), 커스텀은 `__r`"
+          ]
+        },
+        {
+          "type": "code",
+          "code": "SELECT COUNT() FROM Account                 -- Integer 반환\nSELECT Industry, COUNT(Id) total FROM Account GROUP BY Industry   -- AggregateResult\nSELECT Industry, COUNT(Id) FROM Account GROUP BY Industry HAVING COUNT(Id) > 5",
+          "lang": "soql",
+          "title": "집계"
+        },
+        {
+          "type": "code",
+          "code": "List<AggregateResult> rs = [SELECT Industry, COUNT(Id) total FROM Account GROUP BY Industry];\nfor (AggregateResult r : rs) {\n    System.debug(r.get('Industry') + ': ' + r.get('total'));\n}",
+          "lang": "apex"
+        },
+        {
+          "type": "list",
+          "items": [
+            "집계 함수: AVG, COUNT, COUNT(필드), COUNT_DISTINCT, MIN, MAX, SUM. GROUP BY ROLLUP·CUBE, HAVING 지원"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Write SOSL Queries",
+      "ko": "SOSL 쿼리",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/database_basics_dotnet/sosl_queries",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "SOSL은 Lucene 기반 전문 검색입니다. 인덱스는 Salesforce가 관리하므로 설치·유지가 필요 없지만 세밀한 제어는 못 합니다.",
+            "인덱싱은 **비동기** 라서 방금 저장한 데이터가 바로 검색되지 않을 수 있습니다.",
+            "기본 검색 필드(표준·커스텀 오브젝트): name, email, phone, sidebar. ALL FIELDS를 지정해야 다른 텍스트 필드까지",
+            "**닉네임 검색**: 영어, Account·Contact·Lead·User에서만 ('joey' → Joseph)",
+            "SOQL은 관계있는 오브젝트끼리만 함께 조회. 관계없는 여러 오브젝트 → SOSL"
+          ]
+        },
+        {
+          "type": "code",
+          "code": "FIND {jos*} IN ALL FIELDS\nRETURNING Account(Name), Contact(LastName, FirstName), ContentVersion(Title)",
+          "lang": "soql",
+          "title": "Query Editor에서는 중괄호"
+        }
+      ]
+    },
+    {
+      "title": "Write Efficient Queries",
+      "ko": "효율적인 쿼리",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/database_basics_dotnet/writing_efficient_queries",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Salesforce는 자체 **Query Optimizer**(비용 기반)로 실행 계획을 고릅니다. 통계는 주 1회, 사전 쿼리는 1시간마다 캐시"
+          ]
+        },
+        {
+          "type": "table",
+          "title": "자동으로 인덱스가 있는 필드",
+          "headers": [
+            "필드"
+          ],
+          "rows": [
+            [
+              "Id, Name, OwnerId, CreatedDate, **SystemModStamp**, RecordType"
+            ],
+            [
+              "Lookup·Master-Detail 관계 필드"
+            ],
+            [
+              "Unique 필드, **External ID** 필드"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "title": "인덱스를 못 쓰게 만드는 조건 (피하기)",
+          "headers": [
+            "패턴",
+            "예"
+          ],
+          "rows": [
+            [
+              "null 비교",
+              "WHERE Field__c = null"
+            ],
+            [
+              "부정 연산자",
+              "!=, NOT LIKE, EXCLUDES"
+            ],
+            [
+              "앞쪽 와일드카드",
+              "LIKE '%smi%'"
+            ],
+            [
+              "텍스트 필드에 크기 비교",
+              "WHERE Order_Number__c > 10 (텍스트)"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "LastModifiedDate는 인덱스가 없으니 **SystemModStamp** 를 쓰세요.",
+            "**Query Plan 도구**: Developer Console > Help > Preferences > Enable Query Plan. TableScan이면 비효율. SOSL은 분석 불가",
+            "값이 시간에 따라 바뀌는 비결정적 Formula 필드는 조건에 쓰지 마세요."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "\"대량 데이터에서 느린 쿼리\" 문제는 선택적(selective) 조건, 즉 인덱스 필드와 긍정 조건으로 바꾸는 것이 정답입니다."
+        }
+      ]
+    },
+    {
+      "title": "Modify Records with DML",
+      "ko": "DML로 레코드 수정",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/database_basics_dotnet/manipulating_records",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Developer Console Query 결과 화면(Query Grid)에서 행을 추가·수정·삭제할 수도 있습니다. Id는 비워 두면 자동 생성됩니다.",
+            "DML 문: insert, update, upsert(지정 필드 또는 Id로 매칭), delete, undelete, merge(최대 3개 병합, 나머지 삭제·관련 레코드 재연결)"
+          ]
+        },
+        {
+          "type": "code",
+          "code": "Account acct = new Account(Name = 'Test Account', Phone = '(225)555-8989');\ninsert acct;                                          // 방법 1: DML 문\n\nDatabase.SaveResult[] r = Database.insert(new List<Account>{ acct2 }, false);  // 방법 2: 부분 성공",
+          "lang": "apex",
+          "title": "DML 두 가지 방법"
+        },
+        {
+          "type": "tip",
+          "text": "Database 메서드의 allOrNone 기본값은 **true** 라서, false를 주지 않으면 DML 문과 똑같이 예외를 던집니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Selective query",
+      "인덱스를 써서 적은 행만 읽는 쿼리"
+    ],
+    [
+      "Query Plan",
+      "SOQL 실행 계획과 비용을 보여 주는 도구"
+    ],
+    [
+      "AggregateResult",
+      "집계 SOQL의 결과 타입"
+    ]
+  ]
+}

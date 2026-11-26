@@ -1,0 +1,133 @@
+{
+  "intro": "Platform Developer 시험 안내와 첫 번째 섹션 **Developer Fundamentals(27%)** 의 학습 목표를 정리한 공식 Cert Prep 모듈입니다. 실제 내용은 아래에 연결된 모듈들(Data Modeling, Formulas, Apex & .NET Basics, Platform Events, Agentforce for Developers)에서 배웁니다.",
+  "units": [
+    {
+      "title": "Get Started with Platform Developer I Study Guide",
+      "ko": "시험 안내",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/platform-developer-i-certification-prep-fundamentals-and-database-modeling/pd1-1-get-started",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Platform Developer 자격증은 Lightning Platform의 **프로그래밍 도구(Apex, Visualforce, Lightning 컴포넌트)** 로 기본 업무 로직과 화면을 만들고 배포하는 사람을 위한 시험입니다. 공식 이름은 Salesforce Certified Platform Developer이고, Platform Developer II의 선수 자격입니다."
+        },
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 200\" role=\"img\" aria-label=\"Platform Developer 시험 섹션 비중\"><rect class=\"d-box\" x=\"20\" y=\"60\" width=\"177.6\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"108.8\" y=\"96.5\" text-anchor=\"middle\">27%</text><text class=\"d-sub\" x=\"108.8\" y=\"115.5\" text-anchor=\"middle\">Developer Fundamentals</text><rect class=\"d-accent\" x=\"203.6\" y=\"60\" width=\"184.4\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"295.8\" y=\"96.5\" text-anchor=\"middle\">28%</text><text class=\"d-sub\" x=\"295.8\" y=\"115.5\" text-anchor=\"middle\">Automation and Logic</text><rect class=\"d-box\" x=\"394.0\" y=\"60\" width=\"164.0\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"476.0\" y=\"96.5\" text-anchor=\"middle\">25%</text><text class=\"d-sub\" x=\"476.0\" y=\"115.5\" text-anchor=\"middle\">User Interface</text><rect class=\"d-warn\" x=\"564.0\" y=\"60\" width=\"130.0\" height=\"80\" rx=\"10\"/><text class=\"d-strong\" x=\"629.0\" y=\"96.5\" text-anchor=\"middle\">20%</text><text class=\"d-sub\" x=\"629.0\" y=\"115.5\" text-anchor=\"middle\">Testing·Debug·Deploy</text><text class=\"d-sub\" x=\"360\" y=\"34\" text-anchor=\"middle\">60문제 + 비채점 최대 5문제 · 105분 · 합격선 68%</text></svg>",
+          "caption": "네 섹션의 비중. Automation and Logic과 Fundamentals가 절반 이상입니다."
+        },
+        {
+          "type": "table",
+          "title": "시험 정보",
+          "headers": [
+            "항목",
+            "내용"
+          ],
+          "rows": [
+            [
+              "문항",
+              "채점 60문제 + 비채점 최대 5문제 (객관식)"
+            ],
+            [
+              "시간",
+              "105분"
+            ],
+            [
+              "합격선",
+              "68%"
+            ],
+            [
+              "응시료",
+              "US$200 (재응시 US$100), 세금 별도"
+            ],
+            [
+              "방식",
+              "시험장 또는 온라인 감독, 자료 참고 불가"
+            ],
+            [
+              "선수 조건",
+              "없음"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Salesforce가 승인한 학습 자료만 쓰세요. 시험 문제·답(덤프)을 공유하거나 요청하면 자격이 취소되거나 프로그램에서 제외될 수 있습니다.",
+            "자격 유지: 해마다 **릴리스 유지 관리(Maintenance) 모듈** 을 완료해야 합니다. 안 하면 만료됩니다."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "이 사이트의 퀴즈와 모의고사는 직접 만든 원본 문제입니다. 공식 Exam Guide의 목표 문장을 기준으로 출제했어요."
+        }
+      ]
+    },
+    {
+      "title": "Review Developer Fundamentals",
+      "ko": "Developer Fundamentals 목표",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/platform-developer-i-certification-prep-fundamentals-and-database-modeling/pd1-1-review-fundamentals",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "이 섹션은 네 가지를 봅니다."
+        },
+        {
+          "type": "table",
+          "title": "학습 목표와 볼 곳",
+          "headers": [
+            "목표",
+            "핵심",
+            "이 사이트에서"
+          ],
+          "rows": [
+            [
+              "멀티테넌트와 설계 프레임워크",
+              "Governor Limit이 생긴 이유, MVC, Lightning Component Framework",
+              "Apex & .NET Basics 노트"
+            ],
+            [
+              "선언형 vs 코드",
+              "Formula, Roll-Up Summary로 되는지 먼저, 한도 고려",
+              "Formulas and Validations 노트"
+            ],
+            [
+              "데이터 모델 설계와 접근",
+              "오브젝트·필드·관계·External ID",
+              "Data Modeling, Data Management 노트"
+            ],
+            [
+              "Agentforce for Developers",
+              "쓰임새와 한계",
+              "Agentforce for Developers 노트"
+            ]
+          ]
+        },
+        {
+          "type": "figure",
+          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 230\" role=\"img\" aria-label=\"MVC로 보는 Salesforce 개발\"><rect class=\"d-box\" x=\"20\" y=\"70\" width=\"200\" height=\"100\" rx=\"10\"/><text class=\"d-strong\" x=\"120.0\" y=\"108.5\" text-anchor=\"middle\">Model</text><text class=\"d-sub\" x=\"120.0\" y=\"127.5\" text-anchor=\"middle\">sObject: 오브젝트·필드·관계</text><text class=\"d-sub\" x=\"120.0\" y=\"143.5\" text-anchor=\"middle\">External ID</text><rect class=\"d-accent\" x=\"260\" y=\"70\" width=\"200\" height=\"100\" rx=\"10\"/><text class=\"d-strong\" x=\"360.0\" y=\"108.5\" text-anchor=\"middle\">Controller</text><text class=\"d-sub\" x=\"360.0\" y=\"127.5\" text-anchor=\"middle\">Apex 컨트롤러·Extension</text><text class=\"d-sub\" x=\"360.0\" y=\"143.5\" text-anchor=\"middle\">컴포넌트 JavaScript</text><rect class=\"d-warn\" x=\"500\" y=\"70\" width=\"200\" height=\"100\" rx=\"10\"/><text class=\"d-strong\" x=\"600.0\" y=\"108.5\" text-anchor=\"middle\">View</text><text class=\"d-sub\" x=\"600.0\" y=\"127.5\" text-anchor=\"middle\">Visualforce 페이지</text><text class=\"d-sub\" x=\"600.0\" y=\"143.5\" text-anchor=\"middle\">Aura·LWC 템플릿</text><line class=\"d-line\" x1=\"224\" y1=\"120\" x2=\"256\" y2=\"120\"/><polygon class=\"d-arrow\" points=\"256.0,120.0 247.9,123.9 247.9,116.1\"/><polygon class=\"d-arrow\" points=\"224.0,120.0 232.1,116.1 232.1,123.9\"/><line class=\"d-line\" x1=\"464\" y1=\"120\" x2=\"496\" y2=\"120\"/><polygon class=\"d-arrow\" points=\"496.0,120.0 487.9,123.9 487.9,116.1\"/><polygon class=\"d-arrow\" points=\"464.0,120.0 472.1,116.1 472.1,123.9\"/><text class=\"d-sub\" x=\"360\" y=\"40\" text-anchor=\"middle\">데이터 ↔ 로직 ↔ 화면</text></svg>",
+          "caption": "MVC에서 sObject는 Model, Apex·JS는 Controller, 페이지·템플릿은 View입니다."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Cert Prep이 추천하는 모듈: Data Modeling, Data Management, Formulas and Validations, Apex & .NET Basics, Platform Event Basics, Agentforce for Developers, Create an Agent Using Agentforce DX(프로젝트), Become an Agentblazer Champion(트레일)"
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "\"코드로 할까, 클릭으로 할까\" 문제는 이 섹션 전체에 깔려 있습니다. 같은 결과면 선언형이 정답입니다."
+        }
+      ]
+    }
+  ],
+  "terms": [
+    [
+      "Multi-tenant",
+      "여러 고객이 같은 인프라를 공유하는 구조"
+    ],
+    [
+      "MVC",
+      "Model(데이터) · View(화면) · Controller(로직)"
+    ]
+  ]
+}
