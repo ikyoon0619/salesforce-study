@@ -108,6 +108,55 @@ function sideNav(cert, activeId) {
   </nav>`;
 }
 
+function fmtMinutes(min) {
+  const h = Math.floor(min / 60);
+  const m = min % 60;
+  return h ? `${h}시간${m ? ` ${m}분` : ''}` : `${m}분`;
+}
+
+function trailProgress(cert, section) {
+  const list = section.trail ?? [];
+  return { done: list.filter((m) => store.isTrailDone(cert.id, m.url)).length, total: list.length };
+}
+
+/** 섹션의 Trailhead 모듈 목록 + 완료 체크 */
+function trailBlock(cert, section) {
+  const list = section.trail ?? [];
+  if (!list.length) return '';
+  const rows = list
+    .map((m, i) => {
+      const id = `trail-${section.id}-${i}`;
+      const done = store.isTrailDone(cert.id, m.url);
+      return `<li class="trail-item">
+        <input type="checkbox" id="${id}" data-url="${esc(m.url)}" ${done ? 'checked' : ''} aria-label="${esc(m.title)} 완료">
+        <div class="trail-body">
+          <a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.title)}</a>
+          <span class="trail-topics">${inline(m.topics)}</span>
+        </div>
+        <span class="trail-meta">${m.kind === 'project' ? '<span class="pill">실습</span>' : ''}<span class="mono">${fmtMinutes(m.minutes)}</span></span>
+      </li>`;
+    })
+    .join('');
+  const p = trailProgress(cert, section);
+  const total = list.reduce((a, m) => a + m.minutes, 0);
+  return `<section class="block" id="trail-block"><h2>Trailhead 모듈 <span class="en">TRAIL</span></h2>
+    <p class="muted">공식 준비 트레일에서 이 섹션에 해당하는 모듈이에요. 이 페이지의 요약은 아래 모듈 내용을 모두 반영합니다. 실습(Project)은 Trailhead Playground에서 직접 해 보세요.
+      <span class="mono" id="trail-count">${p.done} / ${p.total} 완료</span> · 합계 ${fmtMinutes(total)}</p>
+    <ul class="trail">${rows}</ul></section>`;
+}
+
+function bindTrail(cert, section) {
+  const box = app.querySelector('#trail-block');
+  if (!box) return;
+  box.addEventListener('change', (ev) => {
+    const input = ev.target.closest('input[data-url]');
+    if (!input) return;
+    store.setTrailDone(cert.id, input.dataset.url, input.checked);
+    const p = trailProgress(cert, section);
+    box.querySelector('#trail-count').textContent = `${p.done} / ${p.total} 완료`;
+  });
+}
+
 function sectionQuestions(cert, sectionId) {
   return cert.questions.filter((q) => q.section === sectionId);
 }
@@ -171,6 +220,7 @@ function renderOverview(cert) {
         }</span>
         <span class="pct">${s.weight}%</span>
         <span class="track"><span style="width:${s.weight}%"></span></span>
+        <span class="trail-note">Trailhead 모듈 ${trailProgress(cert, s).done} / ${trailProgress(cert, s).total} 완료</span>
       </a>`
     )
     .join('');
@@ -195,6 +245,12 @@ function renderOverview(cert) {
           <h2>섹션별 출제 비중 <span class="en">EXAM OUTLINE</span></h2>
           <div class="weights">${weights}</div>
         </section>
+        ${
+          cert.trail
+            ? `<section class="block"><h2>공식 준비 트레일 <span class="en">TRAILHEAD</span></h2>
+              <p><a href="${esc(cert.trail.url)}" target="_blank" rel="noopener">${esc(cert.trail.title)}</a> (${esc(cert.trail.hours)})의 모든 모듈을 섹션별로 나눠 각 섹션 페이지에 넣었어요. 모듈을 마치면 체크해 두세요.</p></section>`
+            : ''
+        }
         <section class="block">
           <h2>추천 학습 순서</h2>
           <p class="muted">비중이 큰 섹션부터 공부하면 같은 시간에 점수를 더 많이 올릴 수 있어요.</p>
@@ -223,9 +279,11 @@ function renderSection(cert, sectionId) {
         <div class="content">
           <header><p class="eyebrow">시험 비중 ${s.weight}%</p><h1>${esc(s.title)}</h1><p class="lead">${inline(s.ko)}</p></header>
           ${s.objectives?.length ? `<section class="block"><h2>공식 출제 목표 <span class="en">OBJECTIVES</span></h2><ul class="objectives">${s.objectives.map((o) => `<li>${inline(o)}</li>`).join('')}</ul></section>` : ''}
-          <div class="draft-note">이 섹션의 요약과 문제는 작성 중이에요.</div>
+          <div class="draft-note">이 섹션의 요약과 문제는 작성 중이에요. 그동안 아래 Trailhead 모듈로 공부할 수 있어요.</div>
+          ${trailBlock(cert, s)}
         </div>
       </div>`;
+    bindTrail(cert, s);
     return;
   }
 
@@ -274,6 +332,8 @@ function renderSection(cert, sectionId) {
       <ul class="traps">${s.traps.map((t) => `<li>${inline(t)}</li>`).join('')}</ul></section>`);
   }
 
+  blocks.push(trailBlock(cert, s));
+
   if (s.links?.length) {
     blocks.push(`<section class="block"><h2>더 공부할 자료</h2>
       <ul class="links">${s.links.map((l) => `<li><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.title)}</a></li>`).join('')}</ul></section>`);
@@ -299,6 +359,7 @@ function renderSection(cert, sectionId) {
       </div>
     </div>`;
 
+  bindTrail(cert, s);
   app.querySelector(`#done-${CSS.escape(s.id)}`).addEventListener('change', (ev) => {
     store.setDone(cert.id, s.id, ev.target.checked);
     const link = app.querySelector(`.side a[href="#/c/${cert.id}/s/${s.id}"]`);

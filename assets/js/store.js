@@ -33,8 +33,9 @@ function save() {
 /** @returns {CertState} */
 function cert(certId) {
   if (!state.certs[certId]) {
-    state.certs[certId] = { done: {}, wrong: {}, attempts: [] };
+    state.certs[certId] = { done: {}, wrong: {}, attempts: [], trail: {} };
   }
+  state.certs[certId].trail ??= {};
   return state.certs[certId];
 }
 
@@ -48,6 +49,15 @@ export const store = {
   },
   doneCount(certId) {
     return Object.values(cert(certId).done).filter(Boolean).length;
+  },
+
+  /** Trailhead 모듈 완료 표시 (키 = 모듈 URL) */
+  isTrailDone(certId, url) {
+    return Boolean(cert(certId).trail[url]);
+  },
+  setTrailDone(certId, url, value) {
+    cert(certId).trail[url] = Boolean(value);
+    save();
   },
 
   /** 문제를 맞혔는지 틀렸는지 기록. 틀리면 오답노트에 넣고, 오답노트에 있던 문제를 맞히면 뺀다. */

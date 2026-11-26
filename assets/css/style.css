@@ -190,6 +190,7 @@ a.cert-card:hover { border-color: var(--accent); box-shadow: var(--shadow); }
 .weight-row .pct { font-family: var(--font-mono); font-weight: 500; text-align: right; color: var(--weight); font-variant-numeric: tabular-nums; }
 .weight-row .track { grid-column: 1 / -1; height: 10px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
 .weight-row .track > span { display: block; height: 100%; background: var(--weight); border-radius: 3px; }
+.weight-row .trail-note { grid-column: 1 / -1; font-size: var(--fs-xs); color: var(--ink-2); font-variant-numeric: tabular-nums; }
 a.weight-row:hover .label { color: var(--accent); }
 
 /* 섹션 본문 */
@@ -226,6 +227,19 @@ tbody th { font-weight: 600; white-space: nowrap; }
 .traps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .traps li { background: var(--bad-soft); border-radius: var(--radius); padding: 12px 16px; font-size: var(--fs-sm); }
 .traps li strong { color: var(--bad); }
+.trail { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.trail-item { display: grid; grid-template-columns: 20px minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 12px 16px; }
+.trail-item + .trail-item { border-top: 1px solid var(--line); }
+.trail-item input { width: 18px; height: 18px; margin-top: 4px; accent-color: var(--accent); }
+.trail-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.trail-body a { font-weight: 600; font-size: var(--fs-sm); }
+.trail-topics { font-size: var(--fs-xs); color: var(--ink-2); }
+.trail-meta { display: flex; gap: 6px; align-items: center; font-size: var(--fs-xs); color: var(--ink-2); white-space: nowrap; }
+.trail-item:has(input:checked) .trail-body a { color: var(--ink-2); text-decoration: line-through; }
+@media (max-width: 520px) {
+  .trail-item { grid-template-columns: 20px minmax(0, 1fr); }
+  .trail-meta { grid-column: 2; }
+}
 .links { margin: 0; padding-left: 20px; font-size: var(--fs-sm); }
 
 .cta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; padding: 20px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }

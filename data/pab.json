@@ -28,6 +28,57 @@
         "오브젝트, 레코드, 필드 접근을 제한하거나 넓히는 기능을 적용한다.",
         "업무 요구사항에 맞는 공유(sharing) 방식을 고른다.",
         "리포트, 리포트 타입(report type), 대시보드의 기능을 안다."
+      ],
+      "trail": [
+        {
+          "title": "App Customization Lite",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/lex_migration_customization",
+          "minutes": 25,
+          "kind": "module",
+          "topics": "선언형 커스터마이징 기본, 클릭으로 가능한 것과 코드가 필요한 것"
+        },
+        {
+          "title": "App Development with Salesforce DX",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/sfdx_app_dev",
+          "minutes": 150,
+          "kind": "module",
+          "topics": "Salesforce DX, Scratch Org, Salesforce CLI로 앱 개발"
+        },
+        {
+          "title": "AgentExchange Basics",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/appexchange_basics",
+          "minutes": 55,
+          "kind": "module",
+          "topics": "AgentExchange(구 AppExchange)에서 앱·컴포넌트 찾기, 설치 전 검토"
+        },
+        {
+          "title": "Data Security",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/data_security",
+          "minutes": 110,
+          "kind": "module",
+          "topics": "Org·Object·Field·Record 단계 보안, Profile, Permission Set, OWD, Role Hierarchy, Sharing Rule"
+        },
+        {
+          "title": "User Management",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/lex_implementation_user_setup_mgmt",
+          "minutes": 45,
+          "kind": "module",
+          "topics": "사용자 생성·비활성화, 라이선스, 프로필"
+        },
+        {
+          "title": "User Access Policies",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/user-access-policies",
+          "minutes": 70,
+          "kind": "module",
+          "topics": "조건에 맞는 사용자에게 Permission Set·Group 등을 자동 부여/회수"
+        },
+        {
+          "title": "Reports & Dashboards for Lightning Experience",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/lex_implementation_reports_dashboards",
+          "minutes": 110,
+          "kind": "module",
+          "topics": "리포트 형식, Report Type, 필터, 대시보드, Running User"
+        }
       ]
     },
     {
@@ -45,7 +96,7 @@
       "summary": [
         "관계는 두 가지가 핵심입니다. **Lookup** 은 느슨한 연결(각자 소유자·공유), **Master-Detail** 은 강한 연결(자식이 부모의 공유·삭제를 따라가고 **Roll-Up Summary** 가능).",
         "다대다(many-to-many)는 Master-Detail 두 개를 가진 **Junction Object** 로 만듭니다.",
-        "데이터 넣기는 5만 건 이하·간단하면 **Data Import Wizard**, 그 이상이거나 삭제·내보내기·자동화가 필요하면 **Data Loader**. 외부 시스템 키로 맞추려면 **External ID** + upsert."
+        "데이터 넣기는 5만 건 이하·간단하면 **Data Import Wizard**, 그 이상이거나 삭제·내보내기·자동화가 필요하면 **Data Loader**. 외부 시스템 키로 맞추려면 **External ID** + upsert. 스프레드시트에서 오브젝트를 통째로 만들 때는 **Lightning Object Creator**, 외부 API를 Flow에서 부를 때는 **External Services**."
       ],
       "concepts": [
         {
@@ -130,7 +181,9 @@
           "points": [
             "Controlling field: Picklist 또는 **Checkbox**",
             "**Multi-Select Picklist는 Controlling field가 될 수 없음** (Dependent는 가능)",
-            "**Restricted Picklist**: API로도 목록에 없는 값 입력 금지"
+            "**Restricted Picklist**: API로도 목록에 없는 값 입력 금지",
+            "값 **비활성화(Deactivate)**: 기존 레코드의 값은 남고, 새로 고를 때만 안 보임",
+            "값 **삭제(Delete)**: 기존 레코드 값을 다른 값으로 바꾸거나(replace) 비우도록 선택해야 함"
           ]
         },
         {
@@ -176,6 +229,34 @@
           "points": [
             "**External Lookup**: 부모가 External Object일 때 (External ID로 연결)",
             "**Indirect Lookup**: 자식 External Object → 부모 표준/커스텀 오브젝트 (부모의 고유 External ID 필드로 연결)"
+          ]
+        },
+        {
+          "term": "Lightning Object Creator",
+          "ko": "스프레드시트로 오브젝트 만들기",
+          "body": "Excel, CSV, Google Sheets 파일을 올리면 **커스텀 오브젝트, 필드, 데이터를 한 번에** 만들어 줍니다. 열(column)마다 필드 타입을 추정해 주고, 고쳐서 확정할 수 있습니다.",
+          "points": [
+            "스프레드시트로 관리하던 업무를 빠르게 Salesforce로 옮길 때",
+            "오브젝트 탭과 앱 메뉴 추가까지 이어서 설정 가능"
+          ]
+        },
+        {
+          "term": "Data Export Service",
+          "ko": "정기 데이터 내보내기(백업)",
+          "body": "Setup에서 org 데이터를 CSV 묶음(zip)으로 내보내는 기능입니다. 지금 바로 내보내거나 **주간(weekly) 또는 월간(monthly)** 으로 예약할 수 있어 간단한 백업에 씁니다.",
+          "points": [
+            "에디션에 따라 주간 또는 월간 주기 제공",
+            "만들어진 파일은 정해진 기간(48시간) 안에 내려받아야 함",
+            "특정 조건만 골라 내보내려면 Data Loader export"
+          ]
+        },
+        {
+          "term": "External Services",
+          "ko": "외부 API를 클릭으로 연결",
+          "body": "외부 시스템의 REST API를 **OpenAPI 명세(schema)** 로 등록하면, 그 API의 작업들이 **Flow에서 호출할 수 있는 액션(invocable action)** 으로 바뀝니다. 코드 없이 외부 서비스를 부릅니다.",
+          "points": [
+            "인증과 주소는 Named Credential로 관리",
+            "데이터를 가져와 보여 주기만 하면 Salesforce Connect, 외부 작업을 실행하려면 External Services"
           ]
         }
       ],
@@ -337,6 +418,18 @@
         {
           "label": "Data Import Wizard",
           "path": "Setup > Data Import Wizard"
+        },
+        {
+          "label": "Lightning Object Creator",
+          "path": "Setup > Object Manager > Create > Custom Object from Spreadsheet"
+        },
+        {
+          "label": "정기 데이터 내보내기",
+          "path": "Setup > Data Export"
+        },
+        {
+          "label": "External Services",
+          "path": "Setup > Integrations > External Services"
         }
       ],
       "traps": [
@@ -360,6 +453,57 @@
           "title": "공식 Exam Guide",
           "url": "https://help.salesforce.com/s/articleView?id=005298964&language=en_US&type=1"
         }
+      ],
+      "trail": [
+        {
+          "title": "Data Modeling",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/data_modeling",
+          "minutes": 45,
+          "kind": "module",
+          "topics": "Standard/Custom Object, Lookup, Master-Detail, Junction Object, Schema Builder"
+        },
+        {
+          "title": "Quick Start: Customize an App with Lightning Object Creator",
+          "url": "https://trailhead.salesforce.com/content/learn/projects/quick-start-customize-an-app-with-lightning-object-creator",
+          "minutes": 15,
+          "kind": "project",
+          "topics": "스프레드시트로 커스텀 오브젝트와 데이터를 한 번에 만들기"
+        },
+        {
+          "title": "Picklist Administration",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/picklist_admin",
+          "minutes": 50,
+          "kind": "module",
+          "topics": "Picklist 값 관리, Global Value Set, Dependent Picklist, 값 비활성화·삭제·교체"
+        },
+        {
+          "title": "Data Management",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/lex_implementation_data_management",
+          "minutes": 35,
+          "kind": "module",
+          "topics": "Data Import Wizard, Data Loader, Data Export Service"
+        },
+        {
+          "title": "Import and Export with Data Management Tools",
+          "url": "https://trailhead.salesforce.com/content/learn/projects/import-and-export-with-data-management-tools",
+          "minutes": 45,
+          "kind": "project",
+          "topics": "가져오기·내보내기 실습"
+        },
+        {
+          "title": "Build a Data Model for a Recruiting App",
+          "url": "https://trailhead.salesforce.com/content/learn/projects/build-a-data-model-for-a-recruiting-app",
+          "minutes": 75,
+          "kind": "project",
+          "topics": "채용 앱 데이터 모델 실습 (오브젝트, 관계, Schema Builder)"
+        },
+        {
+          "title": "External Services",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/external-services",
+          "minutes": 25,
+          "kind": "module",
+          "topics": "OpenAPI 명세로 외부 API를 등록하고 Flow에서 클릭으로 호출"
+        }
       ]
     },
     {
@@ -377,6 +521,57 @@
         "상황에 맞는 Flow 유형을 고른다.",
         "Flow를 유지·모니터링·문제 해결한다.",
         "Agentforce로 업무 프로세스를 자동화하는 기능과 사용처를 안다."
+      ],
+      "trail": [
+        {
+          "title": "Formulas and Validations",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/point_click_business_logic",
+          "minutes": 60,
+          "kind": "module",
+          "topics": "Formula 필드, Cross-Object Formula, Roll-Up Summary, Validation Rule 기본"
+        },
+        {
+          "title": "Validation Rules",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/validation-rules",
+          "minutes": 75,
+          "kind": "module",
+          "topics": "Validation Rule 작성, 자주 쓰는 함수, 오류 메시지 위치"
+        },
+        {
+          "title": "Automate Business Processes for a Recruiting App",
+          "url": "https://trailhead.salesforce.com/content/learn/projects/automate-business-processes-recruiting-app",
+          "minutes": 105,
+          "kind": "project",
+          "topics": "채용 앱 자동화 실습 (Flow, Approval)"
+        },
+        {
+          "title": "Add Business Logic to a Travel Approval App",
+          "url": "https://trailhead.salesforce.com/content/learn/projects/add-business-logic-to-a-travel-approval-app",
+          "minutes": 75,
+          "kind": "project",
+          "topics": "출장 승인 앱 비즈니스 로직 실습"
+        },
+        {
+          "title": "Customize a Salesforce Object",
+          "url": "https://trailhead.salesforce.com/content/learn/projects/customize-a-salesforce-object",
+          "minutes": 105,
+          "kind": "project",
+          "topics": "오브젝트 커스터마이징 실습 (필드, 수식, 검증)"
+        },
+        {
+          "title": "Build a Space Station App",
+          "url": "https://trailhead.salesforce.com/content/learn/projects/workshop-battle-station",
+          "minutes": 125,
+          "kind": "project",
+          "topics": "앱 전체를 만들며 오브젝트·자동화 복습"
+        },
+        {
+          "title": "Setup with Agentforce for Admins",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/setup-with-agentforce-for-admins",
+          "minutes": 100,
+          "kind": "module",
+          "topics": "Agentforce로 관리 작업·업무 프로세스 자동화"
+        }
       ]
     },
     {
@@ -391,6 +586,50 @@
         "Lightning 컴포넌트를 앱에 넣는 선언형 방법을 고른다.",
         "커스텀 Lightning 컴포넌트를 넣는 코드 방식을 안다.",
         "요구사항에 맞는 전역(global)·오브젝트별(object-specific) 액션과 레이아웃을 고른다. 모바일 사용 경험 포함."
+      ],
+      "trail": [
+        {
+          "title": "Lightning Experience Customization",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/lex_customization",
+          "minutes": 180,
+          "kind": "module",
+          "topics": "Lightning 앱, 레코드 페이지, 액션, 리스트 뷰, Path, 레이아웃"
+        },
+        {
+          "title": "Lightning App Builder",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/lightning_app_builder",
+          "minutes": 170,
+          "kind": "module",
+          "topics": "App/Home/Record Page, 컴포넌트, 페이지 할당, Dynamic Forms"
+        },
+        {
+          "title": "Lightning Web Components Basics",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/lightning-web-components-basics",
+          "minutes": 70,
+          "kind": "module",
+          "topics": "LWC 구조와 App Builder에 노출하는 방법"
+        },
+        {
+          "title": "Salesforce Mobile App Customization",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/salesforce1_mobile_app",
+          "minutes": 95,
+          "kind": "module",
+          "topics": "모바일 앱 탐색, Compact Layout, 글로벌/오브젝트 액션"
+        },
+        {
+          "title": "Customize the User Interface for a Travel Approval App",
+          "url": "https://trailhead.salesforce.com/content/learn/projects/customize-the-user-interface-for-a-travel-approval-app",
+          "minutes": 60,
+          "kind": "project",
+          "topics": "출장 승인 앱 화면 실습"
+        },
+        {
+          "title": "Customize the User Interface for a Recruiting App",
+          "url": "https://trailhead.salesforce.com/content/learn/projects/customize-the-ui-for-a-recruiting-app",
+          "minutes": 105,
+          "kind": "project",
+          "topics": "채용 앱 화면 실습"
+        }
       ]
     },
     {
@@ -404,6 +643,50 @@
         "Change Set 사용 가능 여부와 문제 해결을 안다.",
         "Unmanaged / Managed Package의 사용처와 고려 사항을 안다.",
         "상황에 맞는 배포 계획을 세운다."
+      ],
+      "trail": [
+        {
+          "title": "Salesforce Sandboxes: Quick Look",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/salesforce-sandboxes-quick-look",
+          "minutes": 5,
+          "kind": "module",
+          "topics": "Sandbox 종류와 용도"
+        },
+        {
+          "title": "Lifecycle Center: Quick Look",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/devops-center-quick-look",
+          "minutes": 5,
+          "kind": "module",
+          "topics": "클릭 기반 변경 추적·배포 파이프라인"
+        },
+        {
+          "title": "Org Development Model",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/org-development-model",
+          "minutes": 30,
+          "kind": "module",
+          "topics": "Sandbox, Change Set, 애플리케이션 수명 주기"
+        },
+        {
+          "title": "Package Development Model",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/sfdx_dev_model",
+          "minutes": 35,
+          "kind": "module",
+          "topics": "패키지 단위 개발, 버전 관리 중심 개발"
+        },
+        {
+          "title": "Second-Generation Managed Packages",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/second-generation-managed-packages",
+          "minutes": 30,
+          "kind": "module",
+          "topics": "2GP Managed Package, 네임스페이스, 배포·업그레이드"
+        },
+        {
+          "title": "Unlocked Packages for Customers",
+          "url": "https://trailhead.salesforce.com/content/learn/modules/unlocked-packages-for-customers",
+          "minutes": 55,
+          "kind": "module",
+          "topics": "사내용 Unlocked Package"
+        }
       ]
     }
   ],
@@ -745,6 +1028,95 @@
         "Formula는 자식 여러 개를 셀 수 없습니다.",
         "Validation Rule은 계산하지 않습니다."
       ]
+    },
+    {
+      "id": "dm-17",
+      "section": "data-modeling",
+      "q": "인사팀은 교육 일정을 Excel 파일로 관리해 왔습니다. 이 파일을 바탕으로 커스텀 오브젝트, 필드, 기존 데이터를 가장 빠르게 Salesforce에 만들고 싶습니다. 무엇을 쓰나요?",
+      "options": [
+        "Schema Builder로 오브젝트를 만들고 Data Loader로 가져온다",
+        "Lightning Object Creator",
+        "Data Import Wizard",
+        "External Services"
+      ],
+      "answer": [
+        1
+      ],
+      "explain": "스프레드시트 한 개로 오브젝트·필드·데이터를 한 번에 만드는 기능이 Lightning Object Creator입니다.",
+      "notes": [
+        "가능하지만 두 단계로 나뉘어 가장 빠른 방법은 아닙니다.",
+        "오브젝트, 필드(타입 추정), 데이터를 한 번에 만듭니다.",
+        "이미 있는 오브젝트에 데이터를 넣을 뿐 오브젝트를 만들지 않습니다.",
+        "외부 API를 Flow에서 호출하는 기능입니다."
+      ]
+    },
+    {
+      "id": "dm-18",
+      "section": "data-modeling",
+      "q": "배송 업체가 OpenAPI 명세가 있는 REST API를 제공합니다. 관리자는 코드 없이 Flow에서 배송 조회 API를 호출하고 싶습니다. 가장 알맞은 기능은?",
+      "options": [
+        "Salesforce Connect와 External Object",
+        "External Services",
+        "Data Loader",
+        "Outbound Message가 있는 Workflow Rule"
+      ],
+      "answer": [
+        1
+      ],
+      "explain": "OpenAPI 명세를 등록하면 API 작업이 Flow 액션으로 생기는 기능이 External Services입니다.",
+      "notes": [
+        "외부 데이터를 오브젝트처럼 보여 주는 기능이지, 임의의 API 작업을 Flow에서 실행하는 기능이 아닙니다.",
+        "Named Credential + OpenAPI 명세로 Flow에서 호출합니다.",
+        "파일 기반 데이터 이동 도구입니다.",
+        "Workflow Rule은 지원이 끝난 기능이고 외부 API 응답을 받아 쓸 수 없습니다."
+      ]
+    },
+    {
+      "id": "dm-19",
+      "section": "data-modeling",
+      "q": "Lead Source Picklist에서 \"Fax\" 값을 더 이상 쓰지 않습니다. 이미 \"Fax\"인 레코드들은 \"Other\"로 바꾸고 싶습니다. 가장 알맞은 방법은?",
+      "options": [
+        "\"Fax\" 값을 비활성화(Deactivate)한다",
+        "\"Fax\" 값을 삭제하고, 기존 값을 \"Other\"로 교체(replace)하도록 선택한다",
+        "Picklist를 Text 필드로 바꾼다",
+        "Validation Rule로 \"Fax\" 저장을 막는다"
+      ],
+      "answer": [
+        1
+      ],
+      "explain": "값을 삭제하면 기존 레코드의 그 값을 다른 값으로 바꾸거나 비우도록 고르게 됩니다. 비활성화는 기존 값을 그대로 남깁니다.",
+      "notes": [
+        "새로 고를 수 없게 할 뿐 기존 레코드의 \"Fax\"는 그대로 남습니다.",
+        "삭제 시 교체 값을 지정할 수 있습니다.",
+        "데이터 품질이 떨어지고 요구사항과 무관합니다.",
+        "새 저장만 막을 뿐 기존 값을 바꾸지 않습니다."
+      ]
+    },
+    {
+      "id": "dm-20",
+      "section": "data-modeling",
+      "q": "소규모 회사가 별도 도구 없이 매주 org 전체 데이터를 CSV로 백업받고 싶어 합니다. 가장 간단한 방법은?",
+      "options": [
+        "Data Import Wizard",
+        "Setup의 Data Export Service로 주간 내보내기 예약",
+        "Schema Builder에서 내보내기",
+        "Field History Tracking"
+      ],
+      "answer": [
+        1
+      ],
+      "explain": "Data Export Service는 org 데이터를 CSV 묶음으로 주간·월간 예약 내보내기 합니다.",
+      "notes": [
+        "가져오기 전용입니다.",
+        "설치 없이 주기적인 백업이 가능합니다.",
+        "Schema Builder는 데이터를 내보내지 않습니다.",
+        "필드 변경 기록일 뿐 백업이 아닙니다."
+      ]
     }
-  ]
+  ],
+  "trail": {
+    "title": "Prepare for Your Salesforce Platform App Builder Certification",
+    "url": "https://trailhead.salesforce.com/content/learn/trails/prepare-for-your-salesforce-platform-app-builder-certification",
+    "hours": "약 39시간 20분"
+  }
 }
